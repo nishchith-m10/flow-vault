@@ -1,0 +1,9 @@
+{
+  "name": "n8n-deployment-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix dashboard run dev",
+    "dev:dashboard": "npm --prefix dashboard run dev",
+    "dev:auto": "node ./scripts/next-dev-auto-port.js"
+  }
+}

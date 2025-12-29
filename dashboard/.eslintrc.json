@@ -1,0 +1,18 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "@compiler/react-hooks/set-state-in-effect": "off",
+    "@compiler/react-hooks/preserve-manual-memoization": "off",
+    "react/no-unescaped-entities": "off",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@compiler/react-hooks/set-state-in-effect": "off",
+        "@compiler/react-hooks/preserve-manual-memoization": "off"
+      }
+    }
+  ]
+}
