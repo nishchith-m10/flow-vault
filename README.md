@@ -1,43 +1,36 @@
-# Import Dashboard
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Universal n8n workflow deployment tools - import any JSON workflows with one click.
+## Getting Started
 
-## Files
-
-| File                 | Description                       |
-| -------------------- | --------------------------------- |
-| `n8n_deploy_ui.html` | Web UI - drag & drop interface    |
-| `n8n_deploy.sh`      | CLI script - command line version |
-
-## Quick Start
-
-### Web UI (Easiest)
+First, run the development server:
 
 ```bash
-open n8n_deploy_ui.html
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then drag-drop your JSON files and click Deploy.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### CLI
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-export N8N_API_KEY='your-key'
-export N8N_URL='https://your-n8n.com'
-./n8n_deploy.sh /path/to/workflows "Tag Name"
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Features
+## Learn More
 
-- ✅ Import any n8n workflow JSON files
-- ✅ Automatic JSON cleaning for API compatibility
-- ✅ Optional tagging for organization
-- ✅ Works with any n8n instance (cloud or self-hosted)
+To learn more about Next.js, take a look at the following resources:
 
-## Sharing
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Zip this folder and send to anyone:
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-```bash
-zip -r import-dashboard.zip import-dashboard/
-```
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
