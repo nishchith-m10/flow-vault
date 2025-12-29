@@ -321,22 +321,26 @@ function SettingsPanel({
 // Main Dashboard Layout
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const [n8nUrl, setN8nUrl] = useState(() => {
-    if (typeof window === 'undefined') return '';
-    return localStorage.getItem('n8n_url') || '';
-  });
-  const [apiKey, setApiKey] = useState(() => {
-    if (typeof window === 'undefined') return '';
-    return localStorage.getItem('n8n_api_key') || '';
-  });
+  const [n8nUrl, setN8nUrl] = useState('');
+  const [apiKey, setApiKey] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    setN8nUrl(localStorage.getItem('n8n_url') || '');
+    setApiKey(localStorage.getItem('n8n_api_key') || '');
+    setIsMounted(true);
+  }, []);
 
   // Save to localStorage when changed
   useEffect(() => {
-    if (n8nUrl) localStorage.setItem('n8n_url', n8nUrl);
-    if (apiKey) localStorage.setItem('n8n_api_key', apiKey);
-  }, [n8nUrl, apiKey]);
+    if (isMounted) {
+      if (n8nUrl) localStorage.setItem('n8n_url', n8nUrl);
+      if (apiKey) localStorage.setItem('n8n_api_key', apiKey);
+    }
+  }, [n8nUrl, apiKey, isMounted]);
 
   // Close mobile menu on route change
   useEffect(() => {
