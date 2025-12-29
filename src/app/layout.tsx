@@ -12,6 +12,7 @@ import { ModalProvider } from "@/components/Modal";
 import { ToastProvider } from "@/components/Toast";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPaletteProvider } from "@/components/CommandPalette";
+import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
 
 export const metadata: Metadata = {
   title: "FlowVault - n8n Workflow Manager",
@@ -45,15 +46,17 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased" suppressHydrationWarning>
-        <ThemeProvider>
-          <ToastProvider>
-            <ModalProvider>
-              <CommandPaletteProvider>
-                <DashboardLayout>{children}</DashboardLayout>
-              </CommandPaletteProvider>
-            </ModalProvider>
-          </ToastProvider>
-        </ThemeProvider>
+        <GlobalErrorBoundary>
+          <ThemeProvider>
+            <ToastProvider>
+              <ModalProvider>
+                <CommandPaletteProvider>
+                  <DashboardLayout>{children}</DashboardLayout>
+                </CommandPaletteProvider>
+              </ModalProvider>
+            </ToastProvider>
+          </ThemeProvider>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );
