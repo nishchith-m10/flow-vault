@@ -30,11 +30,18 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProviderProps) {
   const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return defaultTheme;
-    const stored = localStorage.getItem('flowvault-theme') as Theme | null;
-    return (stored && ['dark', 'light'].includes(stored)) ? stored : defaultTheme;
-  });
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+
+  // Load theme from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('flowvault-theme') as Theme | null;
+      if (stored && ['dark', 'light'].includes(stored)) {
+        setTheme(stored);
+      }
+    }
+    setMounted(true);
+  }, []);
 
   // Set mounted flag on first render
   useEffect(() => {
