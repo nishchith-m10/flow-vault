@@ -1,0 +1,50 @@
+# .github/workflows/task8-security.yml
+name: Task 8 Security CI
+
+on:
+  push:
+    branches:
+      - feat/security/task-8-rls-key-rotation
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm test -- --testPathIgnorePatterns=__tests__/rls.test.ts
+
+  test-db:
+    runs-on: ubuntu-latest
+    # This job only runs if the secret is available
+    if: secrets.SUPABASE_SERVICE_ROLE_KEY != ''
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - name: Run DB-dependent tests
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        run: npm test -- __tests__/rls.test.ts
