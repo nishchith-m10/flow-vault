@@ -876,6 +876,325 @@ graph TB
 
 ---
 
+## 7. Security Enhancements for B2C Production
+
+### Critical Security Implementation (Pre-Launch Requirements)
+
+**Current Security Status (Testing Phase)**:
+
+- ✅ Device-isolated storage (localStorage per browser)
+- ✅ HTTPS encryption in transit
+- ❌ No user authentication
+- ❌ Credentials stored in plain text (visible in browser DevTools)
+- ❌ Vulnerable to XSS attacks
+
+**Required for B2C Launch**:
+
+### 7.1 Option 1: Session-Based Authentication (RECOMMENDED)
+
+**Implementation**: Secure server-side credential storage with user authentication
+
+**Architecture**:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Client (Browser)
+    participant A as API Route (Server)
+    participant DB as Supabase (Encrypted)
+    participant N as n8n API
+
+    U->>C: Login with email/password
+    C->>A: POST /api/auth/login
+    A->>DB: Verify credentials
+    DB-->>A: User session token
+    A-->>C: Set HTTP-only cookie
+
+    U->>C: Configure n8n credentials
+    C->>A: POST /api/credentials
+    A->>DB: Store encrypted(n8n_url, api_key)
+
+    U->>C: Archive workflow
+    C->>A: POST /api/n8n (with session cookie)
+    A->>DB: Fetch encrypted credentials
+    DB-->>A: Encrypted credentials
+    A->>A: Decrypt with server secret
+    A->>N: PATCH /workflows/{id}
+    N-->>A: Success
+    A-->>C: UI update
+```
+
+**Implementation Steps**:
+
+1. **Authentication Layer** (Supabase Auth):
+
+```typescript
+// /api/auth/login/route.ts
+import { createClient } from "@supabase/supabase-js";
+
+export async function POST(req: Request) {
+  const { email, password } = await req.json();
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_KEY!
+  );
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) return Response.json({ error }, { status: 401 });
+
+  // Set HTTP-only cookie
+  const response = Response.json({ success: true });
+  response.headers.set(
+    "Set-Cookie",
+    `session=${data.session.access_token}; HttpOnly; Secure; SameSite=Strict; Path=/`
+  );
+  return response;
+}
+```
+
+2. **Credential Storage** (Server-Side Encryption):
+
+```typescript
+// /api/credentials/route.ts
+import { encrypt, decrypt } from "@/lib/crypto";
+
+export async function POST(req: Request) {
+  const session = await getSession(req); // From cookie
+  if (!session)
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { n8nUrl, apiKey } = await req.json();
+
+  // Encrypt with server-side secret
+  const encrypted = {
+    url: encrypt(n8nUrl, process.env.ENCRYPTION_KEY!),
+    key: encrypt(apiKey, process.env.ENCRYPTION_KEY!),
+  };
+
+  await supabase.from("user_credentials").upsert({
+    user_id: session.userId,
+    encrypted_n8n_url: encrypted.url,
+    encrypted_api_key: encrypted.key,
+  });
+
+  return Response.json({ success: true });
+}
+```
+
+3. **Middleware** (Session Validation):
+
+```typescript
+// middleware.ts
+import { NextResponse } from "next/server";
+
+export async function middleware(req: Request) {
+  const cookie = req.headers.get("cookie");
+  const session = parseSessionCookie(cookie);
+
+  if (!session && req.url.includes("/api/")) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/api/n8n/:path*", "/api/credentials/:path*"],
+};
+```
+
+**Security Benefits**:
+
+- ✅ Credentials NEVER touch client-side
+- ✅ HTTP-only cookies (immune to XSS)
+- ✅ Server-side encryption at rest
+- ✅ Session expiry (auto-logout)
+- ✅ CSRF protection with SameSite cookies
+
+**Implementation Timeline**: 2-3 weeks  
+**Complexity**: High  
+**Cost**: Supabase Pro required (~$25/month)
+
+---
+
+### 7.2 Option 3: Client-Side Encryption + Browser Storage
+
+**Implementation**: Encrypt credentials before storing in localStorage
+
+**Architecture**:
+
+```mermaid
+graph LR
+    A[User Input] -->|n8n URL + API Key| B[Encryption Layer]
+    B -->|AES-256 Encrypt| C[localStorage]
+    C -->|Read| D[Decryption Layer]
+    D -->|Decrypt in memory| E[API Calls]
+    E -->|Never persisted| F[Garbage Collected]
+```
+
+**Implementation Steps**:
+
+1. **Master Password Setup**:
+
+```typescript
+// /lib/encryption.ts
+import CryptoJS from "crypto-js";
+
+export async function setMasterPassword(password: string) {
+  // Derive encryption key from master password
+  const key = CryptoJS.PBKDF2(password, "flowvault-salt", {
+    keySize: 256 / 32,
+    iterations: 10000,
+  });
+
+  sessionStorage.setItem("_fv_key", key.toString());
+  return key;
+}
+
+export function encryptCredential(plaintext: string): string {
+  const key = sessionStorage.getItem("_fv_key");
+  if (!key) throw new Error("Not authenticated");
+
+  return CryptoJS.AES.encrypt(plaintext, key).toString();
+}
+
+export function decryptCredential(ciphertext: string): string {
+  const key = sessionStorage.getItem("_fv_key");
+  if (!key) throw new Error("Not authenticated");
+
+  const decrypted = CryptoJS.AES.decrypt(ciphertext, key);
+  return decrypted.toString(CryptoJS.enc.Utf8);
+}
+```
+
+2. **Credential Management**:
+
+```typescript
+// /lib/credentials.ts
+export function saveCredentials(n8nUrl: string, apiKey: string) {
+  const encryptedUrl = encryptCredential(n8nUrl);
+  const encryptedKey = encryptCredential(apiKey);
+
+  localStorage.setItem("n8n_url_enc", encryptedUrl);
+  localStorage.setItem("n8n_key_enc", encryptedKey);
+}
+
+export function loadCredentials(): { n8nUrl: string; apiKey: string } | null {
+  try {
+    const encryptedUrl = localStorage.getItem("n8n_url_enc");
+    const encryptedKey = localStorage.getItem("n8n_key_enc");
+
+    if (!encryptedUrl || !encryptedKey) return null;
+
+    return {
+      n8nUrl: decryptCredential(encryptedUrl),
+      apiKey: decryptCredential(encryptedKey),
+    };
+  } catch {
+    // Decryption failed (wrong password or corrupted data)
+    return null;
+  }
+}
+```
+
+3. **Lock Screen Component**:
+
+```typescript
+// /components/LockScreen.tsx
+"use client";
+
+export function LockScreen() {
+  const [password, setPassword] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+
+  const handleUnlock = async () => {
+    try {
+      await setMasterPassword(password);
+      const creds = loadCredentials();
+
+      if (creds) {
+        setUnlocked(true);
+      } else {
+        alert("Incorrect password or no credentials found");
+      }
+    } catch {
+      alert("Failed to unlock");
+    }
+  };
+
+  if (unlocked) return <Dashboard />;
+
+  return (
+    <div className="lock-screen">
+      <h1>Enter Master Password</h1>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Master password"
+      />
+      <button onClick={handleUnlock}>Unlock</button>
+    </div>
+  );
+}
+```
+
+**Security Benefits**:
+
+- ✅ Credentials encrypted at rest in localStorage
+- ✅ Decryption key stored in sessionStorage (cleared on tab close)
+- ✅ Master password never sent to server
+- ✅ Zero-knowledge architecture
+- ⚠️ Still vulnerable to XSS (if attacker runs code, can read sessionStorage)
+
+**Security Limitations**:
+
+- ❌ Vulnerable to XSS attacks (if attacker injects script)
+- ❌ Master password can be keylogged
+- ❌ No server-side validation
+- ❌ Users can forget master password (unrecoverable)
+
+**Implementation Timeline**: 1 week  
+**Complexity**: Medium  
+**Cost**: $0 (client-side only)
+
+---
+
+### 7.3 Recommendation: Hybrid Approach
+
+**For B2C Launch, implement BOTH**:
+
+1. **Default (Free Tier)**: Option 3 (Client-Side Encryption)
+
+   - Master password locks credentials
+   - No server dependency
+   - Good for privacy-conscious users
+
+2. **Premium Tier**: Option 1 (Session-Based Auth)
+   - Cloud sync of encrypted credentials
+   - Multi-device access
+   - Better security guarantees
+
+**Phased Rollout**:
+
+- **Phase 1 (Week 1-2)**: Implement Option 3 for immediate security improvement
+- **Phase 2 (Week 3-5)**: Add Option 1 for premium users with Supabase integration
+- **Phase 3 (Post-launch)**: Add 2FA, SSO for enterprise tier
+
+**Additional Hardening**:
+
+- Content Security Policy (CSP) headers
+- Subresource Integrity (SRI) for CDN assets
+- Rate limiting on API routes
+- IP-based anomaly detection (via Vercel Analytics)
+- Audit logging for sensitive operations
+
+---
+
 **Document Status**: Draft v1.0  
-**Last Updated**: December 23, 2024  
-**Next Review**: After beta testing (Week 7)
+**Last Updated**: December 28, 2024  
+**Next Review**: Before B2C production launch
