@@ -38,7 +38,6 @@ const rows = csvParse(CSV, { columns: true, skip_empty_lines: true, relax_column
   flags?: string;
 }>;
 
-// Helpers
 function run(cmd: string) {
   try {
     return execSync(cmd, { stdio: "pipe", cwd: ROOT }).toString().trim();

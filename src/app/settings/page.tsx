@@ -315,7 +315,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-// Make `updatedAt` optional to reflect DB behavior
-
-// Improve name/tag prompts for users

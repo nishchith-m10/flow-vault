@@ -27,5 +27,3 @@ export type {
   RestoreResult,
   WorkflowValidationResult,
 } from './restore';
-
-// Add test ensuring deduplicator ignores updated_at fields

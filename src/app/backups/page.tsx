@@ -251,9 +251,3 @@ export default function BackupsPage() {
     </div>
   );
 }
-
-// Add aria-labels to download/export buttons
-
-// Correct props and add test
-
-// Warn users before exporting large backups

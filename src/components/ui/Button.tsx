@@ -6,7 +6,6 @@ import { motion, HTMLMotionProps } from 'framer-motion';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-// Omit conflicting props between HTMLButtonElement and framer-motion
 type MotionButtonProps = Omit<HTMLMotionProps<'button'>, 'ref'>;
 type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart'>;
 
@@ -94,5 +93,3 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 export default Button;
-
-// Add explicit prop type and small JSDoc

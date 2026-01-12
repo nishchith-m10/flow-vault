@@ -33,7 +33,6 @@ const ModalContext = createContext<ModalContextType>({
 
 export const useModal = () => useContext(ModalContext);
 
-// Helper functions for common modal types
 export const useConfirmDelete = () => {
   const { showModal } = useModal();
   
@@ -178,7 +177,3 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     </ModalContext.Provider>
   );
 }
-
-// Add event stop propagation and document behavior
-
-// Add unit test ensuring backdrop click closes modal

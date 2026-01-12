@@ -73,4 +73,3 @@ $$ LANGUAGE plpgsql;
 -- Final sanity checks
 COMMENT ON TABLE public.flowvault_user_settings IS 'Renamed from user_settings by 004_rename_to_flowvault.sql';
 COMMENT ON TABLE public.flowvault_workflow_backups IS 'Renamed from workflow_backups by 004_rename_to_flowvault.sql';
-

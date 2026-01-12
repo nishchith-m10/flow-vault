@@ -97,5 +97,4 @@ async function handleExport(
   }
 }
 
-// Wrap handler with rate-limiter: 50 requests/hour for exports
 export const GET = withRateLimit('backup:export')(handleExport);

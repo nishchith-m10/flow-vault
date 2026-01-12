@@ -1,4 +1,3 @@
-// Trash storage utilities using localStorage
 
 export interface TrashedWorkflow {
   id: string;
@@ -44,5 +43,3 @@ export function clearTrash(): void {
 export function getTrashCount(): number {
   return getTrash().length;
 }
-
-// Document fallback to env var and add test hook

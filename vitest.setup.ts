@@ -1,12 +1,10 @@
 import { vi } from 'vitest';
 
-// Set up environment variables for tests
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
 process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = 'test-clerk-key';
 process.env.CLERK_SECRET_KEY = 'test-clerk-secret';
 
-// Mock Next.js server modules
 vi.mock('next/server', () => ({
   NextRequest: vi.fn(),
   NextResponse: {
@@ -15,7 +13,6 @@ vi.mock('next/server', () => ({
   },
 }));
 
-// Mock Next.js navigation
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(() => ({
     push: vi.fn(),
@@ -27,7 +24,6 @@ vi.mock('next/navigation', () => ({
   useParams: vi.fn(() => ({})),
 }));
 
-// Mock Clerk authentication
 vi.mock('@clerk/nextjs/server', () => ({
   auth: vi.fn(() => ({
     userId: 'test-user-id',
@@ -45,7 +41,6 @@ vi.mock('@clerk/nextjs', () => ({
   })),
 }));
 
-// Mock Supabase client
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn(() => ({
     from: vi.fn(() => ({
@@ -64,7 +59,6 @@ vi.mock('@supabase/supabase-js', () => ({
   })),
 }));
 
-// Global test utilities
 global.console = {
   ...console,
   error: vi.fn(),

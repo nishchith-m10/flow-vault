@@ -1,5 +1,3 @@
-// FlowVault UI Components
-// Export all UI components from a single entry point
 
 export { default as Button } from './Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button';
@@ -29,8 +27,3 @@ export type { PaginationProps } from './Pagination';
 
 export { FloatingActionBar } from './FloatingActionBar';
 export type { FloatingActionBarProps, FloatingAction } from './FloatingActionBar';
-
-
-// Sort exports and add one-line doc
-
-// Ensure Badge is exported from UI index

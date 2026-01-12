@@ -21,22 +21,15 @@ function run(cmd) {
 function removeLastComment(filePath) {
   let content = fs.readFileSync(filePath, "utf8");
   const lines = content.split("\n");
-  const lastLine = lines[lines.length - 1];
-  if (lastLine.startsWith("// ") || lastLine.startsWith("<!-- ")) {
-    lines.pop();
-    // Also remove empty lines at end
-    while (lines.length > 0 && lines[lines.length - 1].trim() === "") {
-      lines.pop();
-    }
-    content = lines.join("\n") + "\n";
-  }
-  // Also remove inline comments in markdown
-  content = content.replace(/\n<!-- .* -->\n/g, "\n");
+  // Remove lines that start with "// " or "<!-- "
+  const filtered = lines.filter(line => !line.startsWith("// ") && !line.startsWith("<!-- "));
+  content = filtered.join("\n");
+  // Remove trailing empty lines
+  content = content.trimEnd() + "\n";
   fs.writeFileSync(filePath, content, "utf8");
-  console.log(`Removed comment from ${filePath}`);
+  console.log(`Removed comments from ${filePath}`);
 }
 
-// Get list of modified files
 const modifiedFiles = run("git diff --name-only HEAD~67").split("\n").filter(f => f);
 
 for (const file of modifiedFiles) {

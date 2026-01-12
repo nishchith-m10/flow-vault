@@ -330,7 +330,6 @@ sequenceDiagram
 **Manifest V3 Structure**:
 
 ```typescript
-// manifest.json
 {
   "manifest_version": 3,
   "name": "FlowVault for n8n",
@@ -560,7 +559,6 @@ graph TD
 **Our Strategy**:
 
 ```typescript
-// Sliding window rate limiter (client-side)
 class RateLimiter {
   private queue: Array<() => Promise<any>> = [];
   private processing = false;
@@ -593,7 +591,6 @@ class RateLimiter {
 **API Routes** (`/api/n8n`):
 
 ```typescript
-// Vercel Edge rate limiting
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
@@ -603,7 +600,6 @@ const ratelimit = new Ratelimit({
   prefix: "flowvault",
 });
 
-// Per user limits
 const limits = {
   free: "20 requests/minute",
   pro: "100 requests/minute",
@@ -628,10 +624,8 @@ const limits = {
 **API Key Storage**:
 
 ```typescript
-// FREE TIER: localStorage (encrypted in transit via HTTPS)
 localStorage.setItem("n8n_api_key", apiKey); // ⚠️ Visible in DevTools
 
-// PREMIUM: Supabase (encrypted at rest)
 await supabase.from("user_credentials").insert({
   user_id: userId,
   encrypted_key: encrypt(apiKey, userSecret),
@@ -929,7 +923,6 @@ sequenceDiagram
 1. **Authentication Layer** (Supabase Auth):
 
 ```typescript
-// /api/auth/login/route.ts
 import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
@@ -959,7 +952,6 @@ export async function POST(req: Request) {
 2. **Credential Storage** (Server-Side Encryption):
 
 ```typescript
-// /api/credentials/route.ts
 import { encrypt, decrypt } from "@/lib/crypto";
 
 export async function POST(req: Request) {
@@ -988,7 +980,6 @@ export async function POST(req: Request) {
 3. **Middleware** (Session Validation):
 
 ```typescript
-// middleware.ts
 import { NextResponse } from "next/server";
 
 export async function middleware(req: Request) {
@@ -1041,7 +1032,6 @@ graph LR
 1. **Master Password Setup**:
 
 ```typescript
-// /lib/encryption.ts
 import CryptoJS from "crypto-js";
 
 export async function setMasterPassword(password: string) {
@@ -1074,7 +1064,6 @@ export function decryptCredential(ciphertext: string): string {
 2. **Credential Management**:
 
 ```typescript
-// /lib/credentials.ts
 export function saveCredentials(n8nUrl: string, apiKey: string) {
   const encryptedUrl = encryptCredential(n8nUrl);
   const encryptedKey = encryptCredential(apiKey);
@@ -1104,7 +1093,6 @@ export function loadCredentials(): { n8nUrl: string; apiKey: string } | null {
 3. **Lock Screen Component**:
 
 ```typescript
-// /components/LockScreen.tsx
 "use client";
 
 export function LockScreen() {

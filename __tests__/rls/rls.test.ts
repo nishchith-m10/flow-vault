@@ -16,7 +16,6 @@ import type { Database } from '@/lib/supabase/types';
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Skip if service role key not available
 const describeIfServiceRole = SUPABASE_SERVICE_ROLE_KEY ? describe : describe.skip;
 
 describeIfServiceRole('RLS Policies', () => {
@@ -120,5 +119,3 @@ describe('RLS Tests (without service role)', () => {
     expect(true).toBe(true);
   });
 });
-
-// Add skip explanation and create mock-friendly tests

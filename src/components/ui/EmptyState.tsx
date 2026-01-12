@@ -10,7 +10,6 @@ export interface EmptyStateAction {
   variant?: 'primary' | 'secondary' | 'ghost';
 }
 
-// Type for both regular components and forwardRef components
 type IconType = ComponentType<LucideProps> | React.ForwardRefExoticComponent<LucideProps & React.RefAttributes<SVGSVGElement>>;
 
 export interface EmptyStateProps {
@@ -22,7 +21,6 @@ export interface EmptyStateProps {
   className?: string;
 }
 
-// Helper to check if something is a component (function or forwardRef)
 function isComponent(value: unknown): value is IconType {
   if (typeof value === 'function') return true;
   // Check for forwardRef (has $$typeof and render properties)
@@ -84,7 +82,3 @@ export function EmptyState({
 }
 
 export default EmptyState;
-
-// Accessibility: add `aria-label` and prop docs
-
-// Ensure spacing remains consistent

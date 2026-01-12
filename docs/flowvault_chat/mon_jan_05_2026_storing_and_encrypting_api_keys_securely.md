@@ -107,26 +107,22 @@ Yes, that's exactly right! To make the storage of the n8n API key secure, you sh
 ### 5. **Example (Simplified) Flow**
 **Storing:**
 ```js
-// Frontend
 fetch('/api/store-key', {
   method: 'POST',
   headers: {'Authorization': 'Bearer <token>'},
   body: JSON.stringify({ apiKey })
 })
 
-// Backend (pseudo-code)
 const encryptedKey = encrypt(apiKey, serverSecret)
 db.save({ userId, encryptedKey })
 ```
 
 **Retrieving:**
 ```js
-// Frontend
 fetch('/api/get-key', {
   headers: {'Authorization': 'Bearer <token>'}
 })
 
-// Backend (pseudo-code)
 const encryptedKey = db.find({ userId })
 const decryptedKey = decrypt(encryptedKey, serverSecret)
 return decryptedKey
@@ -172,11 +168,9 @@ You can encrypt the API key **in the browser before storing it** in localStorage
 
 #### Simple Illustrative Example (using [CryptoJS](https://cryptojs.gitbook.io/docs/)):
 ```js
-// Encrypting
 const encryptedApiKey = CryptoJS.AES.encrypt(apiKey, userPassphrase).toString();
 localStorage.setItem('n8n_api_key_encrypted', encryptedApiKey);
 
-// Decrypting
 const decryptedBytes = CryptoJS.AES.decrypt(localStorage.getItem('n8n_api_key_encrypted'), userPassphrase);
 const decryptedApiKey = decryptedBytes.toString(CryptoJS.enc.Utf8);
 ```

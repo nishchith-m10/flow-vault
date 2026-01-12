@@ -99,12 +99,9 @@ export function captureMessage(message: string, level: 'info' | 'warning' | 'err
   }
 }
 
-// Auto-initialize on import (safe no-op if DSN missing)
 if (typeof window === 'undefined') {
   // Server-side only
   (async () => {
     await initSentry();
   })();
 }
-
-// Skip Sentry init if DSN absent to avoid throwing

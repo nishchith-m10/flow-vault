@@ -55,7 +55,6 @@ const rows = csvParse(CSV, { columns: true, skip_empty_lines: true }) as Array<{
   flags?: string;
 }>;
 
-// Helpers
 function slugify(text: string) {
   return text
     .toLowerCase()

@@ -14,8 +14,6 @@ interface RateLimitState {
 
 const rateLimitStates = new Map<string, RateLimitState>();
 
-// n8n API rate limit: 120 req/min
-// We use 100 req/min for safety margin
 const N8N_RATE_LIMIT: RateLimitConfig = {
   maxRequests: 100,
   windowMs: 60 * 1000, // 1 minute

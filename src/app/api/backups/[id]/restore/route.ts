@@ -120,7 +120,6 @@ async function handleRestore(
   }
 }
 
-// Wrap handler with rate-limiter: 20 requests/hour with cost=2
 export const POST = withRateLimit('backup:restore', 2)(handleRestore);
 
 /**

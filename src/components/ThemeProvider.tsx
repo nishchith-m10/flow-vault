@@ -72,7 +72,6 @@ export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProvider
   );
 }
 
-// Theme toggle component
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
@@ -108,5 +107,3 @@ export function ThemeToggle() {
     </button>
   );
 }
-
-// Guard localStorage writes and add JSDoc

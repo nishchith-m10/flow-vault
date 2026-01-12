@@ -18,7 +18,6 @@ export interface RateLimitConfig {
   maxRequests: number; // Max requests per window
 }
 
-// Default rate limit configs per action type
 const DEFAULT_LIMITS: Record<string, RateLimitConfig> = {
   'backup:trigger': { windowMs: 60 * 60 * 1000, maxRequests: 100 }, // 100/hour
   'backup:restore': { windowMs: 60 * 60 * 1000, maxRequests: 20 }, // 20/hour

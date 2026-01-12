@@ -449,7 +449,3 @@ export default function ImportPage() {
     </div>
   );
 }
-
-// Make success toast more informative
-
-// Prevent duplicate submissions

@@ -3518,7 +3518,6 @@ const subscription = supabaseClient
   )
   .subscribe()
 
-// Cleanup
 subscription.unsubscribe()
 ```
 
@@ -3544,7 +3543,6 @@ export const backupRateLimit = new Ratelimit({
   analytics: true
 })
 
-// Usage
 const identifier = `backup:manual:${clerk_user_id}`
 const { success, limit, remaining, reset } = await backupRateLimit.limit(identifier)
 
@@ -3585,7 +3583,6 @@ async function releaseLock(key: string): Promise<void> {
   await redis.del(`lock:${key}`)
 }
 
-// Usage in backup operation
 const lockKey = `backup:${clerk_user_id}:${workflow_id}`
 const locked = await acquireLock(lockKey, 30)
 
@@ -3664,7 +3661,6 @@ Middleware Implementation:
 ```
 export default clerkMiddleware()
 
-// In API route
 import { auth } from '@clerk/nextjs/server'
 
 export async function GET(request: Request) {
@@ -3740,13 +3736,11 @@ Clear decrypted key from memory immediately
 
 Every database query filters by clerk_user_id:
 ```
-// WRONG - Vulnerable to unauthorized access
 const backup = await db.from('flowvault_workflow_backups')
   .select('*')
   .eq('id', backupId)
   .single()
 
-// CORRECT - Enforces ownership
 const backup = await db.from('flowvault_workflow_backups')
   .select('*')
   .eq('id', backupId)
@@ -3805,7 +3799,6 @@ const CreateBackupSchema = z.object({
   backup_type: z.enum(['manual', 'scheduled']).default('manual')
 })
 
-// API route
 const body = await request.json()
 const validated = CreateBackupSchema.safeParse(body)
 
@@ -3823,7 +3816,6 @@ URL Parameter Validation:
 ```
 const WorkflowIdSchema = z.string().min(1).max(200)
 
-// In API route
 const workflowId = WorkflowIdSchema.parse(params.id)
 ```
 
@@ -3831,7 +3823,6 @@ const workflowId = WorkflowIdSchema.parse(params.id)
 
 Supabase client uses parameterized queries automatically:
 ```
-// Safe - Parameters escaped
 await db.from('flowvault_workflow_backups')
   .select('*')
   .eq('workflow_id', userInput) // userInput safely escaped
@@ -3839,7 +3830,6 @@ await db.from('flowvault_workflow_backups')
 
 Never construct raw SQL with user input:
 ```
-// DANGEROUS - Don't do this
 const query = `SELECT * FROM flowvault_workflow_backups WHERE workflow_id = '${userInput}'`
 ```
 
@@ -3847,13 +3837,11 @@ const query = `SELECT * FROM flowvault_workflow_backups WHERE workflow_id = '${u
 
 React Automatic Escaping:
 ```
-// Safe - React escapes HTML
 <div>{userWorkflowName}</div>
 ```
 
 Dangerous HTML Rendering (avoid):
 ```
-// DANGEROUS - Don't use dangerouslySetInnerHTML with user content
 <div dangerouslySetInnerHTML={{ __html: userInput }} />
 ```
 
@@ -3889,7 +3877,6 @@ Master Key Generation:
 ```
 const crypto = require('crypto')
 const masterKey = crypto.randomBytes(32).toString('base64')
-// Store in ENCRYPTION_KEY environment variable
 ```
 
 Key Storage:
@@ -4007,7 +3994,6 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 Next.js Configuration:
 ```typescript
-// next.config.ts
 const nextConfig = {
   async headers() {
     return [

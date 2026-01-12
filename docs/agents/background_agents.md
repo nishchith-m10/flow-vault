@@ -16,7 +16,6 @@ Monitor the Next.js development server and surface compilation errors, runtime e
 ### Job Definition
 
 ```typescript
-// Job: DevWatcher
 {
   name: "dev-watcher",
   type: "long-running",
@@ -100,7 +99,6 @@ Periodically test the backup system without writing to production database. Vali
 ### Job Definition
 
 ```typescript
-// Job: BackupDryRun
 {
   name: "backup-dryrun",
   type: "scheduled",
@@ -174,7 +172,6 @@ Monitor n8n instance health, API availability, and workflow execution status. Al
 ### Job Definition
 
 ```typescript
-// Job: HealthCheck
 {
   name: "health-check",
   type: "scheduled",
@@ -289,15 +286,12 @@ Configure in `vercel.json`:
 
 #### Alternative: Node-Cron
 ```typescript
-// src/lib/scheduler/index.ts
 import cron from 'node-cron';
 import { runBackupDryRun } from './jobs/backupDryRun';
 import { runHealthCheck } from './jobs/healthCheck';
 
-// Every 12 hours
 cron.schedule('0 */12 * * *', runBackupDryRun);
 
-// Every 15 minutes
 cron.schedule('*/15 * * * *', runHealthCheck);
 ```
 
@@ -327,7 +321,6 @@ CREATE TABLE agent_audit_log (
 ### Viewing Logs
 
 ```typescript
-// Query recent background agent activity
 const { data: logs } = await supabase
   .from('agent_audit_log')
   .select('*')
@@ -355,7 +348,6 @@ export AGENTS_DISABLED=true
 ### Graceful Shutdown
 
 ```typescript
-// src/lib/scheduler/index.ts
 process.on('SIGTERM', () => {
   console.log('Stopping background agents...');
   cron.getTasks().forEach(task => task.stop());

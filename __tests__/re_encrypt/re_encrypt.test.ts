@@ -79,5 +79,3 @@ describe('Re-encryption workflow', () => {
     expect(JSON.parse(dec2.plaintext!)).toEqual(JSON.parse(largeData));
   });
 });
-
-// Test dry-run output without requiring secrets

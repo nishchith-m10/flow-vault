@@ -12,7 +12,6 @@ const paddingClasses: Record<CardPadding, string> = {
   lg: 'p-6',
 };
 
-// Omit conflicting props between HTMLDivElement and framer-motion
 type MotionDivProps = Omit<HTMLMotionProps<'div'>, 'ref'>;
 type BaseCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart'>;
 
@@ -118,7 +117,6 @@ export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
 
 CardBody.displayName = 'CardBody';
 
-// Alias for backward compatibility
 export const CardContent = CardBody;
 
 export type CardFooterProps = HTMLAttributes<HTMLDivElement>;
@@ -133,7 +131,6 @@ export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
 
 CardFooter.displayName = 'CardFooter';
 
-// Stat Card variant
 export interface StatCardProps {
   label: string;
   value: string | number;
@@ -179,5 +176,3 @@ export function StatCard({ label, value, trend, icon, className = '' }: StatCard
 }
 
 export default Card;
-
-// Ensure nested cards spacing is correct

@@ -6,7 +6,6 @@ import { NextResponse } from 'next/server';
 import { FlowVaultError } from './errors';
 import sentry from '@/lib/sentry';
 
-// Initialize Sentry if configured
 (async () => {
   await sentry.initSentry();
 })();

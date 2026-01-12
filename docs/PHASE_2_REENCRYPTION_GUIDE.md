@@ -487,7 +487,6 @@ SELECT * FROM reencryption_progress;
 ### Add application metrics
 
 ```typescript
-// In src/lib/backup/runner.ts - track key versions used
 export async function trackEncryptionKeyUsage(keyVersion: string) {
   // Send to monitoring service (e.g., Sentry, Datadog)
   console.log(`[METRICS] Backup encrypted with key: ${keyVersion}`);

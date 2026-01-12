@@ -28,7 +28,6 @@ import Button from './ui/Button';
 import { ThemeToggle } from './ThemeProvider';
 import { useCommandPalette } from './CommandPalette';
 
-// Credentials Context
 interface CredentialsContextType {
   n8nUrl: string;
   apiKey: string;
@@ -47,7 +46,6 @@ const CredentialsContext = createContext<CredentialsContextType>({
 
 export const useCredentials = () => useContext(CredentialsContext);
 
-// Navigation Items
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/workflows', label: 'Workflows', icon: FolderOpen },
@@ -60,7 +58,6 @@ const navItems = [
   { href: '/trash', label: 'Trash', icon: Trash2 },
 ];
 
-// Nav Item Component
 interface NavItemProps {
   href: string;
   label: string;
@@ -83,7 +80,6 @@ function NavItem({ href, label, icon: Icon, indent, isActive, onClick }: NavItem
   );
 }
 
-// Mobile Header
 interface MobileHeaderProps {
   onMenuClick: () => void;
   isConfigured: boolean;
@@ -122,7 +118,6 @@ function MobileHeader({ onMenuClick, isConfigured }: MobileHeaderProps) {
   );
 }
 
-// Sidebar Component
 interface SidebarProps {
   pathname: string;
   isConfigured: boolean;
@@ -231,7 +226,6 @@ function Sidebar({
   );
 }
 
-// Settings Panel
 interface SettingsPanelProps {
   n8nUrl: string;
   apiKey: string;
@@ -318,7 +312,6 @@ function SettingsPanel({
   );
 }
 
-// Main Dashboard Layout
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [n8nUrl, setN8nUrl] = useState('');
@@ -395,7 +388,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </CredentialsContext.Provider>
   );
 }
-
-// Document header slot usage
-
-// Add simple render test

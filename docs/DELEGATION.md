@@ -178,7 +178,6 @@ Jules (assistant): "Committed. Commit hash: abc123f" — Copilot has recorded th
 Set approval requirements in config:
 
 ```json
-// background_agents.config.json
 {
   "jobs": [
     {
@@ -237,7 +236,6 @@ kill -9 <PID>
 Add a kill-switch button in UI:
 
 ```typescript
-// src/app/settings/agents/page.tsx
 async function toggleKillSwitch() {
   await fetch('/api/agents/kill-switch', {
     method: 'POST',
@@ -292,7 +290,6 @@ curl -X POST /api/credentials \
 All agent actions logged to `agent_audit_log` table:
 
 ```typescript
-// Log agent action
 await supabase.from('agent_audit_log').insert({
   agent_type: 'jules',
   job_name: 'backup-scheduler',
@@ -310,14 +307,12 @@ await supabase.from('agent_audit_log').insert({
 ### Querying Audit Logs
 
 ```typescript
-// Get recent agent activity
 const { data: logs } = await supabase
   .from('agent_audit_log')
   .select('*')
   .order('created_at', { ascending: false })
   .limit(100);
 
-// Filter by agent type
 const { data: julesLogs } = await supabase
   .from('agent_audit_log')
   .select('*')
@@ -330,7 +325,6 @@ const { data: julesLogs } = await supabase
 Monitor for suspicious activity:
 
 ```typescript
-// Alert on too many failures
 const { count } = await supabase
   .from('agent_audit_log')
   .select('*', { count: 'exact' })

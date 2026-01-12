@@ -52,5 +52,4 @@ async function handleTriggerBackup() {
   }
 }
 
-// Wrap with rate-limiter: 100 requests/hour for backup:trigger action
 export const POST = withRateLimit('backup:trigger')(handleTriggerBackup);

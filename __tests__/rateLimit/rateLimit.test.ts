@@ -6,7 +6,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { checkRateLimit, getRateLimitStatus } from '@/lib/rateLimit';
 
-// Mock Supabase client
 vi.mock('@/lib/database/client', () => ({
   createUserClient: vi.fn(() => ({
     rpc: vi.fn(),
@@ -161,5 +160,3 @@ describe('Rate Limiter', () => {
     });
   });
 });
-
-// Add explicit messages to failing expectations

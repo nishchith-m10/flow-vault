@@ -177,7 +177,3 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 Select.displayName = 'Select';
 
 export default Input;
-
-// Add clearer label text and small JSDoc
-
-// Improve accessibility docs

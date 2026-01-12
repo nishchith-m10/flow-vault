@@ -157,19 +157,3 @@ export function computeHash(data: string | object): string {
 export function isValidEncryptionKey(key: string): boolean {
   return typeof key === 'string' && key.length === 64 && /^[0-9a-fA-F]+$/.test(key);
 }
-
-// Example usage (for testing only - remove in production):
-// const key = generateEncryptionKey();
-// console.log('Generated key:', key);
-// const encrypted = encrypt('my-secret-data', key);
-// console.log('Encrypted:', encrypted);
-// const decrypted = decrypt(encrypted, key);
-// console.log('Decrypted:', decrypted);
-
-// Add `isValidEncryptionKey` helper and document usage
-
-// Add docs and ensure functions validate empty keys
-
-// Narrow types and add TODOs
-
-// Add tests ensuring invalid keys are rejected

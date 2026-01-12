@@ -23,5 +23,3 @@ export {
   withErrorHandling,
   type ErrorResponse,
 } from './handlers';
-
-// Make error messages consistent and include context

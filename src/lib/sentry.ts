@@ -52,4 +52,3 @@ const sentry = {
 };
 
 export default sentry;
-// Narrow types and add inline TODOs

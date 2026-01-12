@@ -12,7 +12,6 @@ import fs from 'fs';
 import path from 'path';
 import { config } from 'dotenv';
 
-// Load .env.local if present
 const dotenvPath = path.resolve(process.cwd(), '.env.local');
 if (fs.existsSync(dotenvPath)) {
   config({ path: dotenvPath });
@@ -94,5 +93,3 @@ if (failOnMissing && missingRequired.length > 0) {
 
 console.log('\n\x1b[2m%s\x1b[0m', "Tip: run 'node scripts/check_env.js --fail' in CI to fail builds if required env vars are missing.");
 process.exit(0);
-
-// Support `--sample` to print a starter `.env` template

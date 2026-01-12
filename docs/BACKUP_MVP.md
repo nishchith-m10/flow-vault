@@ -66,11 +66,9 @@ FlowVault's automated backup system periodically backs up n8n workflows with sma
 **Implementation**:
 
 ```typescript
-// src/lib/scheduler/backupScheduler.ts
 import cron from 'node-cron';
 import { runBackup } from './jobs/backup';
 
-// Run daily (every 24 hours)
 cron.schedule('0 0 * * *', async () => {
   console.log('Running scheduled backup...');
   await runBackup();
@@ -91,7 +89,6 @@ cron.schedule('0 0 * * *', async () => {
 **Implementation**:
 
 ```json
-// vercel.json
 {
   "crons": [
     {
@@ -103,7 +100,6 @@ cron.schedule('0 0 * * *', async () => {
 ```
 
 ```typescript
-// src/app/api/cron/backup/route.ts
 export async function GET(req: NextRequest) {
   // Verify cron secret
   if (req.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {

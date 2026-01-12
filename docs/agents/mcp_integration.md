@@ -144,7 +144,6 @@ const server = new MCPServer({
   version: '1.0.0',
 });
 
-// Tool: Get encrypted credentials
 server.tool('get_credentials', async ({ user_id, instance_id }) => {
   const { data, error } = await supabase
     .from('encrypted_credentials')
@@ -165,7 +164,6 @@ server.tool('get_credentials', async ({ user_id, instance_id }) => {
   };
 });
 
-// Tool: Coordinate backup across instances
 server.tool('coordinate_backup', async ({ user_id, instances }) => {
   const results = [];
 
@@ -215,7 +213,6 @@ server.tool('coordinate_backup', async ({ user_id, instances }) => {
   return { results };
 });
 
-// Start server
 server.listen();
 ```
 
@@ -226,21 +223,12 @@ server.listen();
 ### Scenario: Backup Prod, Stage, and Dev
 
 ```typescript
-// Call MCP tools from GitHub Copilot, Jules, or Background Agent (tool-calling from VS Code)
 const result = await mcpClient.callTool('coordinate_backup', {
   user_id: 'user_123',
   instances: ['prod', 'stage', 'dev'],
 });
 
 console.log(result);
-// Output:
-// {
-//   results: [
-//     { instance_id: 'prod', workflow_id: 'wf_1', backed_up: true },
-//     { instance_id: 'stage', workflow_id: 'wf_1', backed_up: false, reason: 'no changes' },
-//     { instance_id: 'dev', workflow_id: 'wf_2', backed_up: true },
-//   ]
-// }
 ```
 
 ### Deduplication Across Instances
@@ -257,7 +245,6 @@ MCP server maintains a global view of all backups, enabling:
 ### Store Credentials
 
 ```typescript
-// MCP tool: store_credentials
 server.tool('store_credentials', async ({ user_id, instance_id, n8n_url, api_key }) => {
   const encrypted_url = encrypt(n8n_url, process.env.ENCRYPTION_KEY!);
   const encrypted_key = encrypt(api_key, process.env.ENCRYPTION_KEY!);
@@ -276,7 +263,6 @@ server.tool('store_credentials', async ({ user_id, instance_id, n8n_url, api_key
 ### Rotate API Keys
 
 ```typescript
-// MCP tool: rotate_api_key
 server.tool('rotate_api_key', async ({ user_id, instance_id, new_api_key }) => {
   const encrypted_key = encrypt(new_api_key, process.env.ENCRYPTION_KEY!);
 
@@ -306,7 +292,6 @@ server.tool('rotate_api_key', async ({ user_id, instance_id, new_api_key }) => {
 ### Detect Conflicts
 
 ```typescript
-// MCP tool: detect_conflicts
 server.tool('detect_conflicts', async ({ user_id, workflow_id }) => {
   const { data: backups } = await supabase
     .from('workflow_backups')
@@ -380,7 +365,6 @@ node scripts/test_mcp.js
 ### 2. Dry-Run Mode
 
 ```typescript
-// Enable dry-run in MCP config
 {
   "dryRun": true, // Don't write to DB, just log what would happen
   "verbose": true // Detailed logging

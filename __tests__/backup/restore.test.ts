@@ -11,7 +11,6 @@ import {
 import type { N8nWorkflow } from '@/lib/backup/types';
 import type { EncryptedData } from '@/lib/encryption';
 
-// Mock encryption module
 vi.mock('@/lib/encryption', () => ({
   decrypt: vi.fn(),
 }));
@@ -329,5 +328,3 @@ describe('Workflow Restore', () => {
     });
   });
 });
-
-// Test restore behavior when workflow is empty or has missing fields

@@ -239,7 +239,3 @@ export function CommandPaletteProvider({ children }: CommandPaletteProviderProps
 }
 
 export default CommandPaletteProvider;
-
-// Cleanup event listeners on unmount
-
-// Add JSDoc explaining keybinding overrides
