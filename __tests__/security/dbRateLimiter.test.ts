@@ -28,3 +28,5 @@ describe('dbRateLimiter', () => {
     expect(res.allowed).toBe(true); // fails open
   });
 });
+
+// Add tests that mock requests (no service role)
