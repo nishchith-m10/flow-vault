@@ -292,3 +292,5 @@ export default function VariablesPage() {
     </div>
   );
 }
+
+// Adjust labels and helper text
