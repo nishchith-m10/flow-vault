@@ -30,3 +30,5 @@ export type { PaginationProps } from './Pagination';
 export { FloatingActionBar } from './FloatingActionBar';
 export type { FloatingActionBarProps, FloatingAction } from './FloatingActionBar';
 
+
+// Sort exports and add one-line doc
