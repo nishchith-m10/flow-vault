@@ -36,3 +36,5 @@ export function createUserClient(userId: string) {
     },
   });
 }
+
+// Narrow typing to `unknown` and add TODO to refine usage
