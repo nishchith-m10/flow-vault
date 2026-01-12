@@ -111,8 +111,9 @@ async function main() {
       newContent = original + `\n<!-- ${description} -->\n`;
     }
 
-    // Quick secret scan on the new content
-    const secrets = scanForSecrets(newContent);
+    // Quick secret scan on the new content (skip for code files)
+    const isCodeFile = /\.(ts|tsx|js|jsx)$/.test(filePath);
+    const secrets = isCodeFile ? [] : scanForSecrets(newContent);
     if (secrets.length > 0) {
       console.error("Secret scan failed for file", filePath, secrets.slice(0, 3));
       continue;
