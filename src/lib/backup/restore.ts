@@ -226,3 +226,5 @@ export function formatWorkflowForExport(workflow: N8nWorkflow): string {
 
   return JSON.stringify(exportData, null, 2);
 }
+
+// Add descriptive message when restore encounters missing workflow data
