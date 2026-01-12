@@ -43,7 +43,9 @@ export default function TagsPage() {
   }, [isConfigured, n8nUrl, apiKey, toast]);
 
   useEffect(() => {
-    fetchTags();
+    queueMicrotask(() => {
+      fetchTags();
+    });
   }, [fetchTags]);
 
   const createTag = async () => {
@@ -119,7 +121,7 @@ export default function TagsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold">Tags</h1>
-            <p className="text-sm text-[var(--text-tertiary)]">Organize your workflows with tags</p>
+            <p className="text-sm text-(--text-tertiary)">Organize your workflows with tags</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -141,7 +143,7 @@ export default function TagsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="block text-sm text-[var(--text-tertiary)] mb-2">Tag Name</label>
+              <label className="block text-sm text-(--text-tertiary) mb-2">Tag Name</label>
               <input
                 type="text"
                 value={newTagName}
@@ -168,8 +170,8 @@ export default function TagsPage() {
       {loading ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[var(--accent-indigo)]" />
-            <p className="mt-2 text-sm text-[var(--text-tertiary)]">Loading tags...</p>
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-(--accent-indigo)" />
+            <p className="mt-2 text-sm text-(--text-tertiary)">Loading tags...</p>
           </CardContent>
         </Card>
       ) : tags.length === 0 ? (
