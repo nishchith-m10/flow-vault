@@ -108,3 +108,5 @@ export function ThemeToggle() {
     </button>
   );
 }
+
+// Guard localStorage writes and add JSDoc
