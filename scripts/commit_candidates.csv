@@ -1,0 +1,102 @@
+file_path,commit_message,description,flags
+src/docs/SETUP_GUIDE.md,docs(setup): add .env.example reference and sample values,Add reference to `.env.example` and sample placeholders for SUPABASE_*, ENCRYPTION_KEY, CRON_SECRET,Good
+.env.example,chore(env): add .env.example with placeholders,Add `.env.example` with placeholders for required env vars,Good
+docs/SETUP_GUIDE.md,docs: fix ambiguous TODO about env setup,Replace TODO with explicit steps and link to `.env.example`,Good
+docs/FILES_CREATED_SUMMARY.md,docs: fix table formatting and minor grammar,Fix markdown table alignment and minor grammar issues,Good
+docs/FEATURES_IDEAS_Version2.md,docs: remove duplicated lines and correct typos,Delete duplicated sentences and fix typos,Good
+docs/DELEGATION.md,docs: clarify environment variable section heading,Improve heading consistency and add an example,Good
+docs/SETUP_GUIDE.md,docs: add note about SQL test CI runner,Add note suggesting adding SQL runner to CI and how to enable it,Good/Needs Review
+docs/SECURITY_TEST_PLAN.md,docs: add explicit security reminder about ENCRYPTION_KEY,Add a clear reminder to never commit encryption keys and show generation example,Good
+package.json,chore: add npm script `check-env` referencing scripts/check_env.js,Add `check-env` script to package.json to validate env var presence,Good
+scripts/check_env.js,chore: add --sample flag to print required env names,Support `--sample` to print a starter `.env` template,Good
+src/lib/crypto.ts,refactor(crypto): add isValidEncryptionKey function and JSDoc,Add `isValidEncryptionKey` helper and document usage,Needs Review
+__tests__/crypto/crypto.test.ts,test(crypto): add encryption key tests,Add tests for key validation and encrypt/decrypt roundtrip,Good
+src/lib/encryption/index.ts,chore: add inline comment about encoding assumptions,Clarify encoding used for ciphertext generation,Needs Review
+src/lib/encryption/crypto_helpers.ts,chore: mirror encrypt notes and add better error message,Add extra context when decryption fails,Needs Review
+src/lib/backup/restore.ts,fix(restore): add message when workflow is missing,Add descriptive message when restore encounters missing workflow data,Good
+src/lib/database/client.ts,fix(types): replace `any` with `unknown` for workflow_data,Narrow typing to `unknown` and add TODO to refine usage,Good
+src/app/backups/page.tsx,ui: add small accessibility label improvements (aria),Add aria-labels to download/export buttons,Good
+src/components/ui/Input.tsx,fix: improve label clarity and JSDoc,Add clearer label text and small JSDoc,Good
+src/components/Card.tsx,chore: add default padding comment,Document the default padding for Card component,Good
+src/components/Toast.tsx,fix: update success text to be more informative,Adjust success toast copy on import operations,Good
+src/components/FloatingActionBar.tsx,fix: ensure keyboard accessibility for actions,Add key handlers and documentation for accessibility,Good
+src/app/settings/page.tsx,chore: add missing optional typing for updatedAt,Make `updatedAt` optional to reflect DB behavior,Good
+src/lib/errors/index.ts,chore: standardize error message formatting,Make error messages consistent and include context,Good
+src/lib/sentry.ts,chore: replace `any` with unknown where feasible,Narrow types and add inline TODOs,Good
+src/app/api/rate-limit/route.ts,chore: add small inline docs for rate limit headers,Document header semantics and usage,Good
+__tests__/rateLimit/rateLimit.test.ts,test: add assertion messages to aid debugging,Add explicit messages to failing expectations,Good
+__tests__/backup/restore.test.ts,test: add restore edge-case tests,Test restore behavior when workflow is empty or has missing fields,Good
+src/lib/trash.ts,chore: add guard and comment about fallback strategy,Document fallback to env var and add test hook,Needs Review
+src/app/workflows/create/page.tsx,fix: guard for new Date() with invalid input,Avoid Date parsing errors when `updatedAt` missing,Good
+src/components/ui/Badge.tsx,fix: small styling edge-case,Ensure Badge renders correctly when long text present,Good
+src/components/Modal.tsx,fix: prevent event propagation on backdrop click,Add event stop propagation and document behavior,Good
+src/components/CommandPalette.tsx,fix: avoid memory leak on keydown listeners,Cleanup event listeners on unmount,Good
+src/components/GlobalErrorBoundary.tsx,fix: improve error logging detail,Include error id and context in logs,Good
+src/app/executions/page.tsx,fix: ensure save button disables with no changes,Disable save when no changes detected,Good
+src/components/ui/EmptyState.tsx,fix: add aria-label to spinner,Accessibility: add `aria-label` and prop docs,Good
+src/lib/rateLimit/dbLimiter.ts,fix: make size calculation more robust,Avoid division by zero and handle large values,Good
+src/lib/backup/scheduler.ts,chore: remove duplicate log entries for backup events,Ensure single log per duplicate event,Good
+src/components/ui/Button.tsx,fix: small type and JSDoc update,Add explicit prop type and small JSDoc,Good
+src/app/tags/page.tsx,ui: small copy improvements,Adjust user-facing copy for clarity,Good
+src/app/workflows/import/page.tsx,fix: toast message improvements on import,Make success toast more informative,Good
+src/app/backups/[id]/page.tsx,fix: bytes formatting utility edge-case,Handle zero and negative bytes gracefully,Good
+src/lib/middleware/auth.ts,fix: avoid throwing in non-prod test envs,Return 401 gracefully in test environments,Good
+__tests__/security/dbRateLimiter.test.ts,test: add isolated claim tests,Add tests that mock requests (no service role),Good/Needs Review
+supabase/migrations/002_key_metadata.sql,docs(migrations): fix typo and clarify comment,Small comment fixes describing key metadata additions,Needs Review
+supabase/migrations/001_rls_flowvault.sql,docs(migrations): document IF NOT EXISTS rationale,Explain why IF NOT EXISTS patterns are used,Needs Review
+scripts/re_encrypt_backups.ts,chore: add dry-run guard and additional confirmation,Require `--confirm` for write operations and add `--dry-run` option,Sensitive/Needs Review
+scripts/re_encrypt_backups.sh,chore: add `--dry-run` option and safer prompts,Add interactive confirmation before changing backups,Sensitive/Needs Review
+__tests__/rls/rls.test.ts,test(rls): document skipped tests and add mocks,Add skip explanation and create mock-friendly tests,Sensitive/Needs Review
+src/lib/crypto.ts,chore: add small JSDoc and guard for empty keys,Add docs and ensure functions validate empty keys,Needs Review
+src/components/ThemeProvider.tsx,chore: persist theme to localStorage only when defined,Guard localStorage writes and add JSDoc,Good
+src/components/Toast.tsx,fix: ensure toast clears on unmount,Prevent stale timers on unmount,Good
+src/lib/encryption/password.ts,chore: add comment about password source,Document where encryption password is expected to come from,Good
+src/lib/backup/index.ts,chore: add small test to ensure dedup excludes timestamps,Add test ensuring deduplicator ignores updated_at fields,Good
+src/app/api/backups/route.ts,fix: add clearer error context on update failures,Include response body in logs when available,Good
+src/app/variables/page.tsx,ui: small label improvements,Adjust labels and helper text,Good
+src/components/ui/index.ts,chore: ensure exports sorted and documented,Sort exports and add one-line doc,Good
+src/lib/migrations/README.md,docs: add checklist for re-encrypt dry-run and confirm,Add small checklist documenting dry-run steps,Needs Review
+src/lib/sentry/index.ts,chore: add return types and tighten types,Make function signatures explicit,Good
+src/app/api/credentials/route.ts,fix: improve toasts and error messages,Make user-facing errors clearer and testable,Good
+src/lib/backup/restore_helpers.ts,fix: add guard for large payloads,Prevent memory blowup on malformed inputs,Good
+__tests__/re_encrypt/re_encrypt.test.ts,test: add dry-run tests and confirming behavior,Test dry-run output without requiring secrets,Sensitive/Needs Review
+src/app/workflows/archived/page.tsx,ui: small accessibility fixes,Add keyboard navigation improvements,Good
+src/components/Toast.tsx,fix: small UI copy and success toast wording,Polish user-facing text for clarity,Good
+src/lib/middleware/validate.ts,chore: add JSDoc for public functions,Document input validation semantics,Good
+src/app/api/settings/route.ts,fix: improve permission error messages,Give more actionable permission error text,Good
+src/components/Modal.tsx,chore: add test for backdrop click behavior,Add unit test ensuring backdrop click closes modal,Good
+src/components/DashboardLayout.tsx,chore: add comment about header handling,Document header slot usage,Good
+src/lib/encryption/README.md,docs: add note about never committing ENCRYPTION_KEY,Add example generation command and security note,Good
+src/lib/crypto.ts,fix(types): replace any with unknown where possible,Narrow types and add TODOs,Needs Review
+src/app/settings/page.tsx,fix: small form label clarification,Improve name/tag prompts for users,Good
+src/components/ui/Input.tsx,fix: add required prop doc and aria,Improve accessibility docs,Good
+src/components/GlobalErrorBoundary.tsx,fix: include Sentry scope details in logs,Add more diagnostic context to Sentry events,Good
+src/lib/rateLimit/redis_client.ts,fix: add small retry logic comment,Document how retries are handled,Good
+src/tests/rls_tests.sql,docs: small formatting and comment fixes,Fix minor SQL formatting and comment typos,Needs Review
+src/lib/storage/index.ts,chore: add small missing type comment,Document ambiguous types,Good
+src/app/api/executions/route.ts,fix: return better 400 messages on bad input,Add structured error JSON for validation issues,Good
+src/components/ui/FloatingActionBar.tsx,fix: ensure button focus states are visible,Improve focus outline for accessibility,Good
+src/app/backups/page.tsx,fix: ensure correct page size selector prop usage,Correct props and add test,Good
+src/lib/encryption/key_rotation.ts,docs: add comment about rotation safety and who to notify,Document process and required reviewers,Sensitive/Needs Review
+src/components/ui/Card.tsx,fix: style edge-case for nested cards,Ensure nested cards spacing is correct,Good
+scripts/commit_plan_config.json,chore: add config scaffolding for automated plan,Add reviewer lists and auto-merge policy placeholders,Good
+README.md,docs: add lint/format check note for PRs,Encourage running `npm run lint` before opening PRs,Good
+src/lib/backup/restore_helpers.ts,fix: add unit test for timestamp deduplication,Ensure dedup logic ignores timestamps,Good
+src/lib/encryption/errors.ts,chore: improve decrypt error messages,Add context when decryption fails (no secrets),Needs Review
+src/components/CommandPalette.tsx,fix: improve keybindings docs,Add JSDoc explaining keybinding overrides,Good
+src/app/variables/page.tsx,fix: small copy and helper text changes,Clarify labeling for variables UI,Good
+src/lib/crypto.ts,fix: add unit tests for key validation and no-op behavior,Add tests ensuring invalid keys are rejected,Needs Review
+src/lib/middleware/headers.ts,chore: add test ensuring rate limit headers set,Test that API responses include correct rate limit headers,Good
+src/app/tags/page.tsx,fix: small SEO meta tag improvement,Add description meta tag for tags page,Good
+src/components/ui/EmptyState.tsx,fix: spacing issue when text wraps,Ensure spacing remains consistent,Good
+src/components/ui/Badge.tsx,fix: small a11y improvement for color contrast,Ensure contrast meets AA guidelines,Good
+src/lib/encryption/README.md,docs: add troubleshooting step for missing env vars,Add example commands and check_env usage,Good
+src/lib/encryption/password.ts,fix: add test for password fallback behavior,Test fallback to env var and explicit passphrase,Good
+src/components/ui/index.ts,fix: add export for new Badge component,Ensure Badge is exported from UI index,Good
+src/app/workflows/import/page.tsx,fix: disable import button while importing,Prevent duplicate submissions,Good
+src/lib/database/migrations.ts,chore: add note about running migrations safely,Document safe migration steps for maintainers,Needs Review
+src/lib/sentry/init.ts,chore: add small guard for missing DSN,Skip Sentry init if DSN absent to avoid throwing,Good
+src/components/DashboardLayout.tsx,fix: small test to ensure layout renders children,Add simple render test,Good
+src/lib/encryption/key_rotation.ts,chore: add TODO for rotation playbook,Add a TODO and link to SEC docs for review,Sensitive/Needs Review
+src/app/backups/page.tsx,fix: add guard for export large backup warning,Warn users before exporting large backups,Good
+src/components/Toast.tsx,fix: support multi-line messages,Allow line breaks in toast messages,Good

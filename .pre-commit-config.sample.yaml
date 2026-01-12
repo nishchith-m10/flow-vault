@@ -1,0 +1,76 @@
+# SAMPLE: Pre-commit Hook Configuration for Secret Detection
+
+# DO NOT COMMIT - This is a sample pre-commit config
+# To enable:
+# 1. Install pre-commit: pip install pre-commit
+# 2. Remove ".sample" from filename (rename to .pre-commit-config.yaml)
+# 3. Run: pre-commit install
+# 4. Test: pre-commit run --all-files
+
+repos:
+  # Detect secrets using detect-secrets
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Detect secrets
+        args:
+          - '--baseline'
+          - '.secrets.baseline'
+          - '--exclude-files'
+          - '.*\.lock$'
+          - '--exclude-files'
+          - 'node_modules/.*'
+          - '--exclude-files'
+          - 'dist/.*'
+          - '--exclude-files'
+          - 'build/.*'
+          - '--exclude-files'
+          - '.*\.sample\.(ts|js|yml|yaml)$'  # Exclude sample files
+        
+        # Exclude these secrets plugins if they cause false positives
+        # args: ['--baseline', '.secrets.baseline', '--disable-plugin', 'KeywordDetector']
+
+  # Additional useful pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Prevent committing to main
+      - id: no-commit-to-branch
+        args: ['--branch', 'main', '--branch', 'master']
+      
+      # Detect private keys
+      - id: detect-private-key
+      
+      # Check for merge conflicts
+      - id: check-merge-conflict
+      
+      # Check YAML syntax
+      - id: check-yaml
+        args: ['--unsafe']  # Allow custom YAML tags
+      
+      # Check JSON syntax
+      - id: check-json
+      
+      # Ensure files end with newline
+      - id: end-of-file-fixer
+      
+      # Remove trailing whitespace
+      - id: trailing-whitespace
+
+  # Optional: Prettier for code formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, json, yaml, markdown]
+        exclude: '^(package-lock\.json|.*\.min\.(js|css))$'
+
+# To create initial baseline (allows existing secrets, blocks new ones):
+# 1. Run: detect-secrets scan > .secrets.baseline
+# 2. Review .secrets.baseline and remove any false positives
+# 3. Commit .secrets.baseline
+# 4. From now on, pre-commit will block new secrets
+
+# To update baseline after reviewing new secrets:
+# detect-secrets scan --baseline .secrets.baseline

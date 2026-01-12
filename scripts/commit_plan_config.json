@@ -1,0 +1,11 @@
+{
+  "githubRepo": "<owner>/<repo>",
+  "branchPrefix": "auto/commit-plan",
+  "autoMergeNonSensitive": true,
+  "concurrency": 1,
+  "sensitiveReviewers": ["team-security"],
+  "defaultReviewers": ["team-eng"],
+  "prLabels": ["auto-commit"],
+  "dryRun": true,
+  "requiredChecks": ["build", "lint", "test"]
+}

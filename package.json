@@ -11,6 +11,7 @@
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "csv-parse": "^6.1.0",
     "framer-motion": "^12.23.26",
     "jszip": "^3.10.1",
     "lucide-react": "^0.562.0",
@@ -27,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
