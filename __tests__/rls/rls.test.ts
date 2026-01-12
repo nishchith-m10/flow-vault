@@ -120,3 +120,5 @@ describe('RLS Tests (without service role)', () => {
     expect(true).toBe(true);
   });
 });
+
+// Add skip explanation and create mock-friendly tests
