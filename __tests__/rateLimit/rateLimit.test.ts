@@ -161,3 +161,5 @@ describe('Rate Limiter', () => {
     });
   });
 });
+
+// Add explicit messages to failing expectations
