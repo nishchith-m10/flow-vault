@@ -45,7 +45,9 @@ export default function VariablesPage() {
   }, [isConfigured, n8nUrl, apiKey, toast]);
 
   useEffect(() => {
-    fetchVariables();
+    queueMicrotask(() => {
+      fetchVariables();
+    });
   }, [fetchVariables]);
 
   const createVariable = async () => {
