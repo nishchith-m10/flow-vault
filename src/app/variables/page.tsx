@@ -294,3 +294,5 @@ export default function VariablesPage() {
 }
 
 // Adjust labels and helper text
+
+// Clarify labeling for variables UI
