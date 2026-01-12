@@ -180,3 +180,5 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 }
 
 // Add event stop propagation and document behavior
+
+// Add unit test ensuring backdrop click closes modal
