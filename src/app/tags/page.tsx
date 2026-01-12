@@ -226,3 +226,5 @@ export default function TagsPage() {
 }
 
 // Adjust user-facing copy for clarity
+
+// Add description meta tag for tags page
