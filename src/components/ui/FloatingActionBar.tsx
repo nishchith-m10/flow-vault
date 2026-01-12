@@ -130,3 +130,5 @@ export function FloatingActionBar({
 }
 
 export default FloatingActionBar;
+
+// Improve focus outline for accessibility
