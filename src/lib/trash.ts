@@ -44,3 +44,5 @@ export function clearTrash(): void {
 export function getTrashCount(): number {
   return getTrash().length;
 }
+
+// Document fallback to env var and add test hook
