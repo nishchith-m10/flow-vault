@@ -169,3 +169,5 @@ export function isValidEncryptionKey(key: string): boolean {
 // Add `isValidEncryptionKey` helper and document usage
 
 // Add docs and ensure functions validate empty keys
+
+// Narrow types and add TODOs
