@@ -167,3 +167,5 @@ export function isValidEncryptionKey(key: string): boolean {
 // console.log('Decrypted:', decrypted);
 
 // Add `isValidEncryptionKey` helper and document usage
+
+// Add docs and ensure functions validate empty keys
