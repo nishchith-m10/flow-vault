@@ -48,3 +48,5 @@ export default class GlobalErrorBoundary extends Component<Props, State> {
 }
 
 // Include error id and context in logs
+
+// Add more diagnostic context to Sentry events
