@@ -334,3 +334,5 @@ export default function ArchivedWorkflowsPage() {
     </div>
   );
 }
+
+// Add keyboard navigation improvements
