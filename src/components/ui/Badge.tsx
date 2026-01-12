@@ -43,3 +43,5 @@ export function Badge({
 export default Badge;
 
 // Ensure Badge renders correctly when long text present
+
+// Ensure contrast meets AA guidelines
