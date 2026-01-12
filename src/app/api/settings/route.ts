@@ -281,3 +281,5 @@ export async function PATCH(request: NextRequest) {
     }, { status: 200 });
   }
 }
+
+// Give more actionable permission error text
