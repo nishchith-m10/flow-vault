@@ -397,3 +397,5 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 }
 
 // Document header slot usage
+
+// Add simple render test
