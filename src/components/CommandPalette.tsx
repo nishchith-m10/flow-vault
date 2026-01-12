@@ -239,3 +239,5 @@ export function CommandPaletteProvider({ children }: CommandPaletteProviderProps
 }
 
 export default CommandPaletteProvider;
+
+// Cleanup event listeners on unmount
