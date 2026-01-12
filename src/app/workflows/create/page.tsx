@@ -222,3 +222,5 @@ export default function CreatePage() {
     </div>
   );
 }
+
+// Avoid Date parsing errors when `updatedAt` missing
