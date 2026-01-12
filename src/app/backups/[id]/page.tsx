@@ -469,3 +469,5 @@ export default function BackupVersionPage() {
     </div>
   );
 }
+
+// Handle zero and negative bytes gracefully
