@@ -45,7 +45,9 @@ export default function ExecutionsPage() {
   }, [isConfigured, n8nUrl, apiKey, toast]);
 
   useEffect(() => {
-    fetchExecutions();
+    queueMicrotask(() => {
+      fetchExecutions();
+    });
   }, [fetchExecutions]);
 
   const deleteExecution = (id: string) => {
@@ -124,8 +126,8 @@ export default function ExecutionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-[var(--accent-muted)] rounded-lg">
-            <Zap className="w-6 h-6 text-[var(--accent)]" />
+          <div className="p-2 bg-(--accent-muted) rounded-lg">
+            <Zap className="w-6 h-6 text-(--accent)" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Executions</h1>
