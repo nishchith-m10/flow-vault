@@ -32,3 +32,5 @@ export type { FloatingActionBarProps, FloatingAction } from './FloatingActionBar
 
 
 // Sort exports and add one-line doc
+
+// Ensure Badge is exported from UI index
