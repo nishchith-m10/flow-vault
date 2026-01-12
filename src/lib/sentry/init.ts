@@ -106,3 +106,5 @@ if (typeof window === 'undefined') {
     await initSentry();
   })();
 }
+
+// Skip Sentry init if DSN absent to avoid throwing
