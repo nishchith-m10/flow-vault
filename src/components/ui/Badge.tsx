@@ -41,3 +41,5 @@ export function Badge({
 }
 
 export default Badge;
+
+// Ensure Badge renders correctly when long text present
