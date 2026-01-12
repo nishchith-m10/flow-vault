@@ -37,3 +37,5 @@ export {
   type DecryptionResult,
   type KeyDerivationOptions,
 } from './types';
+
+// Clarify encoding used for ciphertext generation
