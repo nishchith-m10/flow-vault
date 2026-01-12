@@ -178,3 +178,5 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     </ModalContext.Provider>
   );
 }
+
+// Add event stop propagation and document behavior
