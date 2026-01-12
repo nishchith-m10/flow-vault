@@ -16,7 +16,9 @@ export default function TrashPage() {
   const toast = useToast();
 
   useEffect(() => {
-    setTrash(getTrash());
+    queueMicrotask(() => {
+      setTrash(getTrash());
+    });
   }, []);
 
   const restore = async (workflow: TrashedWorkflow) => {
