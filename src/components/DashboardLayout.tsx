@@ -395,3 +395,5 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </CredentialsContext.Provider>
   );
 }
+
+// Document header slot usage
