@@ -46,3 +46,5 @@ export default class GlobalErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+
+// Include error id and context in logs
