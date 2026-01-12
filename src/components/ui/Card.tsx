@@ -179,3 +179,5 @@ export function StatCard({ label, value, trend, icon, className = '' }: StatCard
 }
 
 export default Card;
+
+// Ensure nested cards spacing is correct
