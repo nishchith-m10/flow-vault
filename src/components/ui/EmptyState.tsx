@@ -84,3 +84,5 @@ export function EmptyState({
 }
 
 export default EmptyState;
+
+// Accessibility: add `aria-label` and prop docs
