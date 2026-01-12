@@ -34,13 +34,15 @@ export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProvider
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('flowvault-theme') as Theme | null;
-      if (stored && ['dark', 'light'].includes(stored)) {
-        setTheme(stored);
+    queueMicrotask(() => {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('flowvault-theme') as Theme | null;
+        if (stored && ['dark', 'light'].includes(stored)) {
+          setTheme(stored);
+        }
       }
-    }
-    setMounted(true);
+      setMounted(true);
+    });
   }, []);
 
   // Set mounted flag on first render
