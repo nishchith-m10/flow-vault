@@ -221,3 +221,5 @@ export default function ExecutionsPage() {
     </div>
   );
 }
+
+// Disable save when no changes detected
