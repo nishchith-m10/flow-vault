@@ -132,3 +132,5 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 // Prevent stale timers on unmount
 
 // Polish user-facing text for clarity
+
+// Allow line breaks in toast messages
