@@ -100,6 +100,13 @@ async function main() {
     const original = fs.readFileSync(absPath, "utf8");
     let newContent = original;
 
+    // Check if change already applied
+    const alreadyApplied = original.includes(description);
+    if (alreadyApplied) {
+      console.log(`Change already applied for ${filePath}. Skipping.`);
+      continue;
+    }
+
     // Strategy for minimal, low-risk changes based on description:
     // Since exact changes aren't specified, add a comment with the description
     if (/\.md$/i.test(filePath)) {
