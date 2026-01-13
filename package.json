@@ -9,15 +9,19 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.15.0",
+    "@clerk/themes": "^2.4.47",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "@supabase/supabase-js": "^2.90.1",
     "csv-parse": "^6.1.0",
     "framer-motion": "^12.23.26",
     "jszip": "^3.10.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "svix": "^1.84.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
