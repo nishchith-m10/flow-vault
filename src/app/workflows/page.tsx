@@ -73,7 +73,9 @@ export default function WorkflowsPage() {
   }, [isConfigured, n8nUrl, apiKey, toast]);
 
   useEffect(() => {
-    fetchWorkflows();
+    queueMicrotask(() => {
+      fetchWorkflows();
+    });
   }, [fetchWorkflows]);
 
   const filteredWorkflows = workflows.filter((w) =>
@@ -372,9 +374,9 @@ export default function WorkflowsPage() {
                   />
                 </div>
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-medium text-[var(--text-primary)] truncate">{workflow.name}</span>
+                  <span className="font-medium text-(--text-primary) truncate">{workflow.name}</span>
                   {workflow.tags && workflow.tags.length > 0 && (
-                    <div className="flex gap-1 flex-shrink-0">
+                    <div className="flex gap-1 shrink-0">
                       {workflow.tags.slice(0, 2).map((t) => (
                         <Badge key={t.id} variant="neutral">
                           {t.name}
@@ -393,7 +395,7 @@ export default function WorkflowsPage() {
                     <Badge variant="neutral" dot>Inactive</Badge>
                   )}
                 </div>
-                <div className="flex items-center text-sm text-[var(--text-tertiary)]">
+                <div className="flex items-center text-sm text-(--text-tertiary)">
                   {new Date(workflow.updatedAt).toLocaleDateString()}
                 </div>
               </div>
@@ -401,7 +403,7 @@ export default function WorkflowsPage() {
 
             {/* Pagination */}
             {(totalPages > 1 || pageSize === -1 || filteredWorkflows.length > 10) && (
-              <div className="border-t border-[var(--border-primary)]">
+              <div className="border-t border-(--border-primary)">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
