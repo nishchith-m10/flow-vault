@@ -13,15 +13,20 @@ export async function checkAndIncrementRateLimit(
   windowSeconds = 60 * 60
 ): Promise<{ allowed: boolean; remaining?: number }> {
   // Call the atomic RPC implemented in SQL (increment_rate_limit)
-  const { data, error } = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<unknown> }).rpc('increment_rate_limit', {
+  interface IncrementRateLimitResponse { data?: boolean; error?: unknown }
+
+  const res = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<IncrementRateLimitResponse> }).rpc('increment_rate_limit', {
     p_clerk_user_id: clerkUserId,
     p_action_type: actionType,
     p_limit: limit,
     p_window_seconds: windowSeconds,
   });
 
+  const data = res?.data;
+  const error = res?.error;
+
   if (error) {
-    console.warn('Rate limiter RPC error:', error.message || error);
+    console.warn('Rate limiter RPC error:', (error as any)?.message || error);
     // Fail-open in case of DB errors — rely on Upstash Redis in prod
     return { allowed: true };
   }
