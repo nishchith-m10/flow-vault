@@ -4,8 +4,16 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { checkRateLimit } from '@/lib/rateLimit';
+
+// Optional Clerk auth helper
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available; auth() will return undefined
+}
 
 export interface RateLimiterOptions {
   action: string;
@@ -18,10 +26,10 @@ export interface RateLimiterOptions {
  *   export const POST = withRateLimit('backup:trigger')(async (req) => { ... });
  */
 export function withRateLimit(action: string, cost: number = 1) {
-  return function <T extends (req: NextRequest, ...args: unknown[]) => Promise<NextResponse | Response>>(
-    handler: T
-  ): T {
-    return (async (req: NextRequest, ...args: unknown[]) => {
+  return function <T extends (...args: any[]) => Promise<NextResponse | Response>>(handler: T): T {
+    return (async (...args: any[]) => {
+      const req = args[0] as NextRequest;
+
       // Get user ID from Clerk
       const { userId } = await auth();
 
@@ -57,8 +65,8 @@ export function withRateLimit(action: string, cost: number = 1) {
         );
       }
 
-      // Call original handler
-      const response = await handler(req, ...args);
+      // Call original handler with original args
+      const response = await handler(...args);
 
       // Add rate limit headers to successful response
       if (response instanceof NextResponse) {
@@ -68,6 +76,6 @@ export function withRateLimit(action: string, cost: number = 1) {
       }
 
       return response;
-    }) as T;
+    }) as unknown as T;
   };
 }
