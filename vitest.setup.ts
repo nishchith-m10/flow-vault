@@ -8,7 +8,7 @@ process.env.CLERK_SECRET_KEY = 'test-clerk-secret';
 vi.mock('next/server', () => ({
   NextRequest: vi.fn(),
   NextResponse: {
-    json: vi.fn((data, init) => ({ data, init, headers: new Map() })),
+    json: vi.fn((data: any, init?: any) => ({ data, init, headers: new Map() })),
     redirect: vi.fn(),
   },
 }));
