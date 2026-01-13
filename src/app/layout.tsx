@@ -13,6 +13,10 @@ import { ToastProvider } from "@/components/Toast";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CommandPaletteProvider } from "@/components/CommandPalette";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
+import { AuthProvider } from "@/components/providers/AuthProvider";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import AuthPages from "@/components/AuthPages";
+import AuthStateManager from "@/components/AuthStateManager";
 
 export const metadata: Metadata = {
   title: "FlowVault - n8n Workflow Manager",
@@ -46,17 +50,25 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased" suppressHydrationWarning>
-        <GlobalErrorBoundary>
-          <ThemeProvider>
-            <ToastProvider>
-              <ModalProvider>
-                <CommandPaletteProvider>
-                  <DashboardLayout>{children}</DashboardLayout>
-                </CommandPaletteProvider>
-              </ModalProvider>
-            </ToastProvider>
-          </ThemeProvider>
-        </GlobalErrorBoundary>
+        <AuthProvider>
+          <GlobalErrorBoundary>
+            <ThemeProvider>
+              <ToastProvider>
+                <ModalProvider>
+                  <CommandPaletteProvider>
+                    <AuthStateManager />
+                    <SignedIn>
+                      <DashboardLayout>{children}</DashboardLayout>
+                    </SignedIn>
+                    <SignedOut>
+                      <AuthPages />
+                    </SignedOut>
+                  </CommandPaletteProvider>
+                </ModalProvider>
+              </ToastProvider>
+            </ThemeProvider>
+          </GlobalErrorBoundary>
+        </AuthProvider>
       </body>
     </html>
   );
