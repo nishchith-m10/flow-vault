@@ -15,6 +15,12 @@ export {
   N8nWorkflowListSchema,
   EncryptionResultSchema,
   DecryptionResultSchema,
+  N8nActionEnum,
+  N8nProxyRequestSchema,
+  N8nUrlSchema,
+  N8nApiKeySchema,
+  N8nLimitSchema,
+  N8nWorkflowImportSchema,
 } from './schemas';
 
 export type {
@@ -29,6 +35,8 @@ export type {
   N8nWorkflowListInput,
   EncryptionResultInput,
   DecryptionResultInput,
+  N8nProxyRequest,
+  N8nAction,
 } from './schemas';
 
 /**

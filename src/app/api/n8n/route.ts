@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { N8nProxyRequestSchema, validateData } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { action, n8nUrl, apiKey, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = body;
+
+    // Validate request body with Zod schema
+    const validationResult = validateData(N8nProxyRequestSchema, body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: 'Invalid request', details: validationResult.error },
+        { status: 400 }
+      );
+    }
+
+    const { action, n8nUrl, apiKey, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as any;
 
     const headers = {
       'X-N8N-API-KEY': apiKey,

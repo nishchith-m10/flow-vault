@@ -156,6 +156,282 @@ export const DecryptionResultSchema = z.object({
 });
 
 /**
+ * n8n Proxy API Validation Schemas
+ * Used to validate requests to the /api/n8n proxy endpoint
+ */
+
+/**
+ * Enum of all valid n8n proxy actions
+ * Whitelist approach prevents invalid actions from being processed
+ */
+export const N8nActionEnum = z.enum([
+  // Workflow actions
+  'import',
+  'listWorkflows',
+  'getWorkflow',
+  'deleteWorkflow',
+  'activateWorkflow',
+  'deactivateWorkflow',
+  'archiveWorkflow',
+  'unarchiveWorkflow',
+  // Tag actions
+  'createTag',
+  'listTags',
+  'deleteTag',
+  'tagWorkflow',
+  'untagWorkflow',
+  // Execution actions
+  'listExecutions',
+  'getExecution',
+  'deleteExecution',
+  'retryExecution',
+  // Variable actions
+  'listVariables',
+  'createVariable',
+  'updateVariable',
+  'deleteVariable',
+]);
+
+/**
+ * Schema for n8n URL validation
+ * Must be HTTPS, valid URL format, reasonable length
+ */
+export const N8nUrlSchema = z
+  .string()
+  .url('Invalid URL format')
+  .max(2048, 'URL too long (max 2048 characters)')
+  .refine(
+    (url) => url.startsWith('https://') || url.startsWith('http://localhost') || url.startsWith('http://127.0.0.1'),
+    { message: 'n8n URL must use HTTPS (or HTTP for localhost)' }
+  );
+
+/**
+ * Schema for n8n API key validation
+ * Reasonable length constraints for security
+ */
+export const N8nApiKeySchema = z
+  .string()
+  .min(10, 'API key too short (min 10 characters)')
+  .max(1024, 'API key too long (max 1024 characters)');
+
+/**
+ * Schema for query limit parameter
+ * Prevents DoS via excessive query limits
+ */
+export const N8nLimitSchema = z
+  .number()
+  .int('Limit must be an integer')
+  .min(1, 'Limit must be at least 1')
+  .max(1000, 'Limit cannot exceed 1000');
+
+/**
+ * Schema for workflow import payload
+ * Validates structure and enforces size limits to prevent DoS
+ */
+export const N8nWorkflowImportSchema = z.object({
+  name: z.string().min(1, 'Workflow name required').max(200, 'Workflow name too long'),
+  nodes: z.array(z.any()).max(500, 'Too many nodes (max 500)'),
+  connections: z.record(z.string(), z.any()),
+  settings: z.record(z.string(), z.any()).optional(),
+  staticData: z.any().optional(),
+});
+
+/**
+ * Schema for workflow import action
+ */
+export const N8nImportRequestSchema = z.object({
+  action: z.literal('import'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflow: N8nWorkflowImportSchema,
+});
+
+/**
+ * Schema for workflow operations requiring workflowId
+ */
+export const N8nGetWorkflowRequestSchema = z.object({
+  action: z.literal('getWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+export const N8nDeleteWorkflowRequestSchema = z.object({
+  action: z.literal('deleteWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+export const N8nActivateWorkflowRequestSchema = z.object({
+  action: z.literal('activateWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+export const N8nDeactivateWorkflowRequestSchema = z.object({
+  action: z.literal('deactivateWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+export const N8nArchiveWorkflowRequestSchema = z.object({
+  action: z.literal('archiveWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+export const N8nUnarchiveWorkflowRequestSchema = z.object({
+  action: z.literal('unarchiveWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+});
+
+/**
+ * Schema for tag operations
+ */
+export const N8nCreateTagRequestSchema = z.object({
+  action: z.literal('createTag'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  tagName: z.string().min(1, 'Tag name required').max(100, 'Tag name too long'),
+});
+
+export const N8nDeleteTagRequestSchema = z.object({
+  action: z.literal('deleteTag'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
+});
+
+export const N8nTagWorkflowRequestSchema = z.object({
+  action: z.literal('tagWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+  tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
+});
+
+export const N8nUntagWorkflowRequestSchema = z.object({
+  action: z.literal('untagWorkflow'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
+  tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
+});
+
+/**
+ * Schema for list tags
+ */
+export const N8nListTagsRequestSchema = z.object({
+  action: z.literal('listTags'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+});
+
+/**
+ * Schema for execution operations
+ */
+export const N8nGetExecutionRequestSchema = z.object({
+  action: z.literal('getExecution'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
+});
+
+export const N8nDeleteExecutionRequestSchema = z.object({
+  action: z.literal('deleteExecution'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
+});
+
+export const N8nRetryExecutionRequestSchema = z.object({
+  action: z.literal('retryExecution'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
+});
+
+export const N8nListExecutionsRequestSchema = z.object({
+  action: z.literal('listExecutions'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  limit: N8nLimitSchema.optional(),
+});
+
+/**
+ * Schema for variable operations
+ */
+export const N8nCreateVariableRequestSchema = z.object({
+  action: z.literal('createVariable'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  variableName: z.string().min(1, 'Variable name required').max(100, 'Variable name too long'),
+  variableValue: z.string().max(10000, 'Variable value too long'),
+});
+
+export const N8nUpdateVariableRequestSchema = z.object({
+  action: z.literal('updateVariable'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  variableId: z.string().min(1, 'Variable ID required').max(100, 'Variable ID too long'),
+  variableName: z.string().min(1, 'Variable name required').max(100, 'Variable name too long'),
+  variableValue: z.string().max(10000, 'Variable value too long'),
+});
+
+export const N8nDeleteVariableRequestSchema = z.object({
+  action: z.literal('deleteVariable'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+  variableId: z.string().min(1, 'Variable ID required').max(100, 'Variable ID too long'),
+});
+
+export const N8nListVariablesRequestSchema = z.object({
+  action: z.literal('listVariables'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+});
+
+export const N8nListWorkflowsRequestSchema = z.object({
+  action: z.literal('listWorkflows'),
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+});
+
+/**
+ * Discriminated union schema for all n8n proxy requests
+ * Validates the request based on the action type
+ */
+export const N8nProxyRequestSchema = z.discriminatedUnion('action', [
+  N8nImportRequestSchema,
+  N8nGetWorkflowRequestSchema,
+  N8nDeleteWorkflowRequestSchema,
+  N8nActivateWorkflowRequestSchema,
+  N8nDeactivateWorkflowRequestSchema,
+  N8nArchiveWorkflowRequestSchema,
+  N8nUnarchiveWorkflowRequestSchema,
+  N8nCreateTagRequestSchema,
+  N8nDeleteTagRequestSchema,
+  N8nTagWorkflowRequestSchema,
+  N8nUntagWorkflowRequestSchema,
+  N8nListTagsRequestSchema,
+  N8nGetExecutionRequestSchema,
+  N8nDeleteExecutionRequestSchema,
+  N8nRetryExecutionRequestSchema,
+  N8nListExecutionsRequestSchema,
+  N8nCreateVariableRequestSchema,
+  N8nUpdateVariableRequestSchema,
+  N8nDeleteVariableRequestSchema,
+  N8nListVariablesRequestSchema,
+  N8nListWorkflowsRequestSchema,
+]);
+
+/**
  * Type exports for TypeScript inference
  */
 export type EncryptedDataInput = z.infer<typeof EncryptedDataSchema>;
@@ -169,6 +445,8 @@ export type SettingsUpdateRequest = z.infer<typeof SettingsUpdateRequestSchema>;
 export type N8nWorkflowListInput = z.infer<typeof N8nWorkflowListSchema>;
 export type EncryptionResultInput = z.infer<typeof EncryptionResultSchema>;
 export type DecryptionResultInput = z.infer<typeof DecryptionResultSchema>;
+export type N8nProxyRequest = z.infer<typeof N8nProxyRequestSchema>;
+export type N8nAction = z.infer<typeof N8nActionEnum>;
 
 /**
  * USAGE EXAMPLES
