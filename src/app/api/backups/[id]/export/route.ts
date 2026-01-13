@@ -6,8 +6,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getBackupById } from '@/lib/database/workflowBackups';
+
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available
+}
 import { decryptBackupData, formatWorkflowForExport } from '@/lib/backup/restore';
 import { type EncryptedData } from '@/lib/encryption';
 import { withRateLimit } from '@/lib/middleware/rateLimiter';
