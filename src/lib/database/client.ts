@@ -32,6 +32,7 @@ try {
   // Provide a lightweight stub when createClient isn't available so builds can proceed in environments
   // without Supabase installed. Runtime features will throw a helpful error if used without installing
   // the dependency.
+  // Type assertion is acceptable here as this stub is only for build-time compatibility
   supabase = {
     from: () => ({ select: () => ({ data: null, error: null }), insert: () => ({ error: null }), update: () => ({ error: null }), delete: () => ({ error: null }) }),
     rpc: () => ({ data: null, error: null }),

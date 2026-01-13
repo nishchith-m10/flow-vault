@@ -24,10 +24,14 @@ export interface RateLimiterOptions {
  * Rate limiter middleware factory
  * Usage:
  *   export const POST = withRateLimit('backup:trigger')(async (req) => { ... });
+ *
+ * Note: Type assertion at the end is necessary because TypeScript cannot infer
+ * that the wrapped function preserves the exact signature of the handler.
+ * The assertion is safe because we forward all args and preserve the return type.
  */
 export function withRateLimit(action: string, cost: number = 1) {
   return function <T extends (...args: any[]) => Promise<NextResponse | Response>>(handler: T): T {
-    return (async (...args: any[]) => {
+    return (async (...args: Parameters<T>) => {
       const req = args[0] as NextRequest;
 
       // Get user ID from Clerk

@@ -21,6 +21,8 @@ export {
   N8nApiKeySchema,
   N8nLimitSchema,
   N8nWorkflowImportSchema,
+  RateLimitCounterSchema,
+  RateLimitRpcResponseSchema,
 } from './schemas';
 
 export type {
@@ -37,6 +39,8 @@ export type {
   DecryptionResultInput,
   N8nProxyRequest,
   N8nAction,
+  RateLimitCounter,
+  RateLimitRpcResponse,
 } from './schemas';
 
 /**

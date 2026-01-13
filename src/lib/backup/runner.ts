@@ -67,8 +67,10 @@ export async function runBackup(
         try {
           // Validate workflow data
           if (!validateWorkflowData(workflow)) {
-            const wf = workflow as { id?: string };
-            errors.push(`Invalid workflow data for ${wf.id || 'unknown'}`);
+            // Workflow failed validation - id might be missing or invalid
+            // Type assertion needed because TypeScript narrows to 'never' after validation failure
+            const workflowData = workflow as unknown as { id?: string };
+            errors.push(`Invalid workflow data for ${workflowData.id || 'unknown'}`);
             workflowsSkipped++;
             return;
           }

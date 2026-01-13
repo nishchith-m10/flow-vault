@@ -58,11 +58,10 @@ describe('Rate Limiter', () => {
 
     it('should return allowed=false when over limit', async () => {
       const { createUserClient } = await import('@/lib/database/client');
-      const mockSingle = vi.fn().mockResolvedValue({
-        data: { current_count: 100 },
+      const mockRpc = vi.fn().mockResolvedValue({
+        data: { current_count: 61 }, // Over limit of 60 for api:general
         error: null,
       });
-      const mockRpc = vi.fn().mockReturnValue({ single: mockSingle });
       vi.mocked(createUserClient).mockReturnValue({ rpc: mockRpc } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
       const result = await checkRateLimit('user-123', 'api:general', 1);
@@ -73,11 +72,10 @@ describe('Rate Limiter', () => {
 
     it('should fail open on database error', async () => {
       const { createUserClient } = await import('@/lib/database/client');
-      const mockSingle = vi.fn().mockResolvedValue({
+      const mockRpc = vi.fn().mockResolvedValue({
         data: null,
         error: { message: 'DB Error' },
       });
-      const mockRpc = vi.fn().mockReturnValue({ single: mockSingle });
       vi.mocked(createUserClient).mockReturnValue({ rpc: mockRpc } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
       const result = await checkRateLimit('user-123', 'api:general', 1);
@@ -87,11 +85,10 @@ describe('Rate Limiter', () => {
 
     it('should support custom cost values', async () => {
       const { createUserClient } = await import('@/lib/database/client');
-      const mockSingle = vi.fn().mockResolvedValue({
+      const mockRpc = vi.fn().mockResolvedValue({
         data: { current_count: 95 },
         error: null,
       });
-      const mockRpc = vi.fn().mockReturnValue({ single: mockSingle });
       vi.mocked(createUserClient).mockReturnValue({ rpc: mockRpc } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
       await checkRateLimit('user-123', 'backup:trigger', 5);
@@ -105,6 +102,7 @@ describe('Rate Limiter', () => {
 
   describe('getRateLimitStatus', () => {
     it('should return current status without incrementing', async () => {
+      const { createUserClient } = await import('@/lib/database/client');
       const mockFrom = vi.fn(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({

@@ -432,6 +432,26 @@ export const N8nProxyRequestSchema = z.discriminatedUnion('action', [
 ]);
 
 /**
+ * Rate Limit Database Response Schemas
+ * Used to validate data from Supabase RPC and queries
+ */
+
+/**
+ * Schema for rate limit counter from flowvault_rate_limit_counters table
+ */
+export const RateLimitCounterSchema = z.object({
+  count: z.number().int().nonnegative('Count must be non-negative'),
+  window_start: z.string().datetime('Invalid window_start datetime format'),
+});
+
+/**
+ * Schema for RPC response from flowvault_increment_rate_limit
+ */
+export const RateLimitRpcResponseSchema = z.object({
+  current_count: z.number().int().nonnegative('Current count must be non-negative'),
+});
+
+/**
  * Type exports for TypeScript inference
  */
 export type EncryptedDataInput = z.infer<typeof EncryptedDataSchema>;
@@ -447,6 +467,8 @@ export type EncryptionResultInput = z.infer<typeof EncryptionResultSchema>;
 export type DecryptionResultInput = z.infer<typeof DecryptionResultSchema>;
 export type N8nProxyRequest = z.infer<typeof N8nProxyRequestSchema>;
 export type N8nAction = z.infer<typeof N8nActionEnum>;
+export type RateLimitCounter = z.infer<typeof RateLimitCounterSchema>;
+export type RateLimitRpcResponse = z.infer<typeof RateLimitRpcResponseSchema>;
 
 /**
  * USAGE EXAMPLES

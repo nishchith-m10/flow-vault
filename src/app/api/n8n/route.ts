@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { N8nProxyRequestSchema, validateData } from '@/lib/validation';
 
+// Helper type for destructuring discriminated union - all fields are optional except common ones
+type N8nProxyRequestFlat = {
+  action: string;
+  n8nUrl: string;
+  apiKey: string;
+  workflow?: any;
+  tagName?: string;
+  workflowId?: string;
+  tagId?: string;
+  limit?: number;
+  variableId?: string;
+  variableName?: string;
+  variableValue?: string;
+  executionId?: string;
+};
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -14,7 +30,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { action, n8nUrl, apiKey, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as any;
+    // Type assertion is safe here because we've validated with Zod schema above
+    // Using flat type to destructure all possible fields from discriminated union
+    const { action, n8nUrl, apiKey, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as N8nProxyRequestFlat;
 
     const headers = {
       'X-N8N-API-KEY': apiKey,

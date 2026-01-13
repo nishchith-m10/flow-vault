@@ -5,6 +5,11 @@
 
 import { createUserClient } from '@/lib/database/client';
 import { getSupabaseServerClient } from '@/lib/supabase/server';
+import {
+  RateLimitRpcResponseSchema,
+  RateLimitCounterSchema,
+  safeValidate,
+} from '@/lib/validation';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -49,54 +54,59 @@ export async function checkRateLimit(
   const supabase = createUserClient(userId);
 
   // Atomic upsert: increment or create counter
-  interface FlowvaultRateLimitResponse {
-    current_count: number;
-  }
+  const res = await supabase.rpc('flowvault_increment_rate_limit', {
+    p_user_id: userId,
+    p_action: action,
+    p_cost: cost,
+    p_window_start: windowStart.toISOString(),
+    p_max_requests: config.maxRequests,
+  });
 
-  const res = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<{ data?: FlowvaultRateLimitResponse; error?: unknown }> })
-    .rpc('flowvault_increment_rate_limit', {
-      p_user_id: userId,
-      p_action: action,
-      p_cost: cost,
-      p_window_start: windowStart.toISOString(),
-      p_max_requests: config.maxRequests,
-    });
-
-  const data = res.data;
   const error = res.error;
 
-  if (error || !data) {
-    console.error('Rate limit check failed or no data returned:', error);
+  // Validate RPC response data with Zod schema
+  if (res.data) {
+    const validationResult = safeValidate(RateLimitRpcResponseSchema, res.data);
+    if (!validationResult.success) {
+      console.error('Rate limit RPC response validation failed:', validationResult.error);
+      // Treat validation failure as database error (will trigger fail strategy below)
+    } else if (validationResult.data) {
+      const data = validationResult.data;
+      const resetAt = new Date(now.getTime() + config.windowMs);
 
-    // Apply fail strategy based on configuration
-    if (config.failStrategy === 'closed') {
-      // Fail closed: Deny request on database error (security-critical operations)
-      console.warn(`Rate limit check failed for ${action}, failing closed (denying request)`);
       return {
-        allowed: false,
-        remaining: 0,
-        resetAt: new Date(now.getTime() + config.windowMs),
+        allowed: data.current_count <= config.maxRequests,
+        remaining: Math.max(0, config.maxRequests - data.current_count),
+        resetAt,
         limit: config.maxRequests,
-        failedClosed: true,
       };
     }
+  }
 
-    // Fail open: Allow request on database error (for availability)
-    console.warn(`Rate limit check failed for ${action}, failing open (allowing request)`);
+  // If we reach here, either there was an error or validation failed
+  if (error) {
+    console.error('Rate limit check failed:', error);
+  }
+
+  // Apply fail strategy based on configuration
+  if (config.failStrategy === 'closed') {
+    // Fail closed: Deny request on database error (security-critical operations)
+    console.warn(`Rate limit check failed for ${action}, failing closed (denying request)`);
     return {
-      allowed: true,
-      remaining: config.maxRequests,
+      allowed: false,
+      remaining: 0,
       resetAt: new Date(now.getTime() + config.windowMs),
       limit: config.maxRequests,
+      failedClosed: true,
     };
   }
 
-  const resetAt = new Date(now.getTime() + config.windowMs);
-
+  // Fail open: Allow request on database error (for availability)
+  console.warn(`Rate limit check failed for ${action}, failing open (allowing request)`);
   return {
-    allowed: data.current_count <= config.maxRequests,
-    remaining: Math.max(0, config.maxRequests - data.current_count),
-    resetAt,
+    allowed: true,
+    remaining: config.maxRequests,
+    resetAt: new Date(now.getTime() + config.windowMs),
     limit: config.maxRequests,
   };
 }
@@ -131,54 +141,59 @@ export async function checkInstanceRateLimit(
   const supabase = createUserClient(userId);
 
   // Atomic upsert: increment or create counter for this instance
-  interface FlowvaultRateLimitResponse {
-    current_count: number;
-  }
+  const res = await supabase.rpc('flowvault_increment_rate_limit', {
+    p_user_id: userId,
+    p_action: instanceAction,
+    p_cost: cost,
+    p_window_start: windowStart.toISOString(),
+    p_max_requests: config.maxRequests,
+  });
 
-  const res = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<{ data?: FlowvaultRateLimitResponse; error?: unknown }> })
-    .rpc('flowvault_increment_rate_limit', {
-      p_user_id: userId,
-      p_action: instanceAction,
-      p_cost: cost,
-      p_window_start: windowStart.toISOString(),
-      p_max_requests: config.maxRequests,
-    });
-
-  const data = res.data;
   const error = res.error;
 
-  if (error || !data) {
-    console.error('Instance rate limit check failed or no data returned:', error);
+  // Validate RPC response data with Zod schema
+  if (res.data) {
+    const validationResult = safeValidate(RateLimitRpcResponseSchema, res.data);
+    if (!validationResult.success) {
+      console.error('Instance rate limit RPC response validation failed:', validationResult.error);
+      // Treat validation failure as database error (will trigger fail strategy below)
+    } else if (validationResult.data) {
+      const data = validationResult.data;
+      const resetAt = new Date(now.getTime() + config.windowMs);
 
-    // Apply fail strategy based on configuration
-    if (config.failStrategy === 'closed') {
-      // Fail closed: Deny request on database error
-      console.warn(`Instance rate limit check failed for ${instanceAction}, failing closed (denying request)`);
       return {
-        allowed: false,
-        remaining: 0,
-        resetAt: new Date(now.getTime() + config.windowMs),
+        allowed: data.current_count <= config.maxRequests,
+        remaining: Math.max(0, config.maxRequests - data.current_count),
+        resetAt,
         limit: config.maxRequests,
-        failedClosed: true,
       };
     }
+  }
 
-    // Fail open: Allow request on database error
-    console.warn(`Instance rate limit check failed for ${instanceAction}, failing open (allowing request)`);
+  // If we reach here, either there was an error or validation failed
+  if (error) {
+    console.error('Instance rate limit check failed:', error);
+  }
+
+  // Apply fail strategy based on configuration
+  if (config.failStrategy === 'closed') {
+    // Fail closed: Deny request on database error
+    console.warn(`Instance rate limit check failed for ${instanceAction}, failing closed (denying request)`);
     return {
-      allowed: true,
-      remaining: config.maxRequests,
+      allowed: false,
+      remaining: 0,
       resetAt: new Date(now.getTime() + config.windowMs),
       limit: config.maxRequests,
+      failedClosed: true,
     };
   }
 
-  const resetAt = new Date(now.getTime() + config.windowMs);
-
+  // Fail open: Allow request on database error
+  console.warn(`Instance rate limit check failed for ${instanceAction}, failing open (allowing request)`);
   return {
-    allowed: data.current_count <= config.maxRequests,
-    remaining: Math.max(0, config.maxRequests - data.current_count),
-    resetAt,
+    allowed: true,
+    remaining: config.maxRequests,
+    resetAt: new Date(now.getTime() + config.windowMs),
     limit: config.maxRequests,
   };
 }
@@ -196,7 +211,7 @@ export async function getRateLimitStatus(
 
   const supabase = createUserClient(userId);
 
-  const { data, error } = await supabase
+  const { data: rawData, error } = await supabase
     .from('flowvault_rate_limit_counters')
     .select('count, window_start')
     .eq('user_id', userId)
@@ -206,7 +221,7 @@ export async function getRateLimitStatus(
     .limit(1)
     .single();
 
-  if (error || !data) {
+  if (error || !rawData) {
     // No counter exists yet
     return {
       allowed: true,
@@ -216,13 +231,27 @@ export async function getRateLimitStatus(
     };
   }
 
+  // Validate database response with Zod schema
+  const validationResult = safeValidate(RateLimitCounterSchema, rawData);
+  if (!validationResult.success || !validationResult.data) {
+    console.error('Rate limit counter validation failed:', validationResult.error);
+    // Treat validation failure as no counter exists
+    return {
+      allowed: true,
+      remaining: config.maxRequests,
+      resetAt: new Date(now.getTime() + config.windowMs),
+      limit: config.maxRequests,
+    };
+  }
+
+  const data = validationResult.data;
   const resetAt = new Date(
-    new Date((data as { window_start: string }).window_start).getTime() + config.windowMs
+    new Date(data.window_start).getTime() + config.windowMs
   );
 
   return {
-    allowed: (data as { count: number }).count < config.maxRequests,
-    remaining: Math.max(0, config.maxRequests - (data as { count: number }).count),
+    allowed: data.count < config.maxRequests,
+    remaining: Math.max(0, config.maxRequests - data.count),
     resetAt,
     limit: config.maxRequests,
   };
