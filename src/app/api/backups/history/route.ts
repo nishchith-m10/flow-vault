@@ -4,8 +4,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getAllUserBackups } from '@/lib/database';
+
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available
+}
 import { handleApiError } from '@/lib/errors';
 
 export async function GET(request: NextRequest) {
