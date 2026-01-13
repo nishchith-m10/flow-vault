@@ -6,8 +6,16 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getRateLimitStatus } from '@/lib/rateLimit';
+
+// Optional Clerk auth helper
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available in this environment
+}
 
 export async function GET(request: NextRequest) {
   try {
