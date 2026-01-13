@@ -271,14 +271,14 @@ export default class SupabaseAdapter implements StorageAdapter {
     }
 
     const backups = data || [];
-    const uniqueWorkflows = new Set(backups.map((b) => b.workflow_id)).size;
+    const uniqueWorkflows = new Set(backups.map((b: any) => b.workflow_id)).size;
     
     // Calculate total size (approximate)
-    const totalSize = backups.reduce((sum, b) => {
+    const totalSize = backups.reduce((sum: number, b: any) => {
       return sum + JSON.stringify(b.workflow_data).length;
     }, 0);
 
-    const timestamps = backups.map((b) => b.created_at).sort();
+    const timestamps = backups.map((b: any) => b.created_at).sort();
 
     return {
       total_backups: backups.length,
