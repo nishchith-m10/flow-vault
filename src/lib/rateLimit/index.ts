@@ -41,19 +41,25 @@ export async function checkRateLimit(
   const supabase = createUserClient(userId);
 
   // Atomic upsert: increment or create counter
-  const { data, error } = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<unknown> })
+  interface FlowvaultRateLimitResponse {
+    current_count: number;
+  }
+
+  const res = await (supabase as unknown as { rpc: (name: string, params: unknown) => Promise<{ data?: FlowvaultRateLimitResponse; error?: unknown }> })
     .rpc('flowvault_increment_rate_limit', {
       p_user_id: userId,
       p_action: action,
       p_cost: cost,
       p_window_start: windowStart.toISOString(),
       p_max_requests: config.maxRequests,
-    })
-    .single();
+    });
 
-  if (error) {
-    console.error('Rate limit check failed:', error);
-    // On error, allow request (fail open)
+  const data = res.data;
+  const error = res.error;
+
+  if (error || !data) {
+    console.error('Rate limit check failed or no data returned:', error);
+    // On error or missing data, allow request (fail open)
     return {
       allowed: true,
       remaining: config.maxRequests,
