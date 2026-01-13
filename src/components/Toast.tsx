@@ -66,12 +66,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   };
 
   const getIcon = (type: Toast['type']) => {
-    const iconClass = 'w-5 h-5 flex-shrink-0';
+    const iconClass = 'w-5 h-5 shrink-0';
     switch (type) {
-      case 'success': return <CheckCircle2 className={`${iconClass} text-[var(--success)]`} />;
-      case 'error': return <XCircle className={`${iconClass} text-[var(--error)]`} />;
-      case 'warning': return <AlertTriangle className={`${iconClass} text-[var(--warning)]`} />;
-      case 'info': return <Info className={`${iconClass} text-[var(--info)]`} />;
+      case 'success': return <CheckCircle2 className={`${iconClass} text-(--success)`} />;
+      case 'error': return <XCircle className={`${iconClass} text-(--error)`} />;
+      case 'warning': return <AlertTriangle className={`${iconClass} text-(--warning)`} />;
+      case 'info': return <Info className={`${iconClass} text-(--info)`} />;
     }
   };
 
@@ -97,9 +97,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           >
             {getIcon(toast.type)}
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-[var(--text-primary)]">{toast.title}</div>
+              <div className="font-medium text-(--text-primary)">{toast.title}</div>
               {toast.message && (
-                <div className="text-sm text-[var(--text-secondary)] mt-0.5">{toast.message}</div>
+                <div className="text-sm text-(--text-secondary) mt-0.5">{toast.message}</div>
               )}
               {toast.action && (
                 <button
@@ -107,7 +107,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                     toast.action?.onClick();
                     dismissToast(toast.id);
                   }}
-                  className="mt-2 px-3 py-1.5 bg-[var(--bg-subtle)] rounded-[var(--radius-sm)] text-sm font-medium hover:bg-[var(--bg-hover)] transition-colors"
+                  className="mt-2 px-3 py-1.5 bg-(--bg-subtle) rounded-(--radius-sm) text-sm font-medium hover:bg-(--bg-hover) transition-colors"
                 >
                   {toast.action.label}
                 </button>
@@ -115,10 +115,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             </div>
             <button
               onClick={() => dismissToast(toast.id)}
-              className="p-1 rounded-[var(--radius-sm)] hover:bg-[var(--bg-subtle)] transition-colors"
+              className="p-1 rounded-(--radius-sm) hover:bg-(--bg-subtle) transition-colors"
               aria-label="Dismiss notification"
             >
-              <X className="w-4 h-4 text-[var(--text-tertiary)]" />
+              <X className="w-4 h-4 text-(--text-tertiary)" />
             </button>
           </div>
         ))}
