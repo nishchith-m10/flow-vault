@@ -18,6 +18,7 @@ try {
 import { decryptBackupData, formatWorkflowForExport } from '@/lib/backup/restore';
 import { type EncryptedData } from '@/lib/encryption';
 import { withRateLimit } from '@/lib/middleware/rateLimiter';
+import { EncryptedDataSchema, validateData } from '@/lib/validation';
 
 async function handleExport(
   request: NextRequest,
@@ -64,7 +65,14 @@ async function handleExport(
     }
 
     // Decrypt backup data
-    const encryptedData = backup.workflow_data as unknown as EncryptedData;
+    const validationResult = validateData(EncryptedDataSchema, backup.workflow_data);
+    if (!validationResult.success || !validationResult.data) {
+      return NextResponse.json(
+        { error: `Invalid encrypted data format: ${validationResult.error}` },
+        { status: 500 }
+      );
+    }
+    const encryptedData = validationResult.data;
     const decryptResult = await decryptBackupData(encryptedData, encryptionPassword);
 
     if (!decryptResult.success || !decryptResult.workflow) {

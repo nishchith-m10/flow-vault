@@ -10,6 +10,7 @@ import {
   type DecryptionResult,
 } from './types';
 import { deriveKey, validateKey } from './keyManagement';
+import { safeJSONParse } from '@/lib/utils/json';
 
 /**
  * Decrypts data encrypted with AES-256-GCM
@@ -124,11 +125,17 @@ export async function decryptJSON<T = Record<string, unknown>>(
       };
     }
 
-    const data = JSON.parse(result.plaintext) as T;
+    const parseResult = safeJSONParse<T>(result.plaintext);
+    if (!parseResult.success || !parseResult.data) {
+      return { 
+        success: false, 
+        error: `JSON parse failed: ${parseResult.error}` 
+      };
+    }
 
     return {
       success: true,
-      data,
+      data: parseResult.data,
       plaintext: result.plaintext,
     };
   } catch (error) {

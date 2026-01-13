@@ -6,6 +6,7 @@
 import { decrypt, type EncryptedData } from '../encryption';
 import { createN8nClient } from './n8nClient';
 import type { N8nWorkflow } from './types';
+import { safeJSONParse } from '@/lib/utils/json';
 
 export interface RestoreOptions {
   backupId: string;
@@ -99,15 +100,14 @@ export async function decryptBackupData(
     }
 
     // Parse JSON
-    let workflow: N8nWorkflow;
-    try {
-      workflow = JSON.parse(decryptionResult.plaintext);
-    } catch (_error) {
+    const parseResult = safeJSONParse<N8nWorkflow>(decryptionResult.plaintext);
+    if (!parseResult.success || !parseResult.data) {
       return {
         success: false,
-        error: 'Invalid workflow data: failed to parse JSON',
+        error: `Invalid workflow data: ${parseResult.error}`,
       };
     }
+    const workflow = parseResult.data;
 
     // Validate structure
     const validation = validateWorkflowStructure(workflow);

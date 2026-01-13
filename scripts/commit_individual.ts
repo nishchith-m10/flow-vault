@@ -16,7 +16,7 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-const { parse: csvParse } = require("csv-parse/sync");
+import { parse as csvParse } from "csv-parse/sync";
 
 const ROOT = path.resolve(__dirname, "..");
 const CSV_PATH = path.join(ROOT, "scripts/commit_candidates.csv");
@@ -85,7 +85,7 @@ async function main() {
     const filePath = row.file_path?.trim();
     const commitMessage = row.commit_message?.trim() || `chore: automated change ${index}`;
     const description = row.description?.trim() || "Automated small change";
-    const flags = (row.flags || "").toLowerCase();
+
 
     console.log(`\n[${index}/${rows.length}] Processing ${filePath} — ${commitMessage}`);
 

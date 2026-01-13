@@ -1,4 +1,6 @@
 
+import { safeJSONParse } from '@/lib/utils/json';
+
 export interface TrashedWorkflow {
   id: string;
   name: string;
@@ -10,12 +12,12 @@ const TRASH_KEY = 'n8n_dashboard_trash';
 
 export function getTrash(): TrashedWorkflow[] {
   if (typeof window === 'undefined') return [];
-  try {
-    const data = localStorage.getItem(TRASH_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
+  
+  const data = localStorage.getItem(TRASH_KEY);
+  if (!data) return [];
+  
+  const result = safeJSONParse<TrashedWorkflow[]>(data, []);
+  return result.data || [];
 }
 
 export function addToTrash(workflow: { id: string; name: string; [key: string]: unknown }): void {

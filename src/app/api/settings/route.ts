@@ -19,6 +19,8 @@ import {
   userSettingsExist,
 } from '@/lib/database';
 import { encrypt, decrypt, type EncryptedData } from '@/lib/encryption';
+import { safeJSONParse } from '@/lib/utils/json';
+import { ApiKeyTestRequestSchema, validateData } from '@/lib/validation';
 
 /**
  * GET /api/settings
@@ -217,8 +219,18 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Parse and validate request body
     const body = await request.json();
-    const { n8n_instance_url: providedUrl, n8n_api_key: providedKey } = body;
+    const validationResult = validateData(ApiKeyTestRequestSchema, body);
+    
+    if (!validationResult.success || !validationResult.data) {
+      return NextResponse.json(
+        { error: `Invalid request: ${validationResult.error}` },
+        { status: 400 }
+      );
+    }
+
+    const { n8n_instance_url: providedUrl, n8n_api_key: providedKey } = validationResult.data;
 
     let instanceUrl: string;
     let apiKey: string;
@@ -241,7 +253,14 @@ export async function PATCH(request: NextRequest) {
         );
       }
 
-      const encryptedData: EncryptedData = JSON.parse(settings.n8n_api_key_encrypted);
+      const parseResult = safeJSONParse<EncryptedData>(settings.n8n_api_key_encrypted);
+      if (!parseResult.success || !parseResult.data) {
+        return NextResponse.json(
+          { error: `Failed to parse encrypted API key: ${parseResult.error}` },
+          { status: 500 }
+        );
+      }
+      const encryptedData = parseResult.data;
       const decryptionResult = await decrypt(encryptedData, encryptionPassword);
 
       if (!decryptionResult.success || !decryptionResult.plaintext) {

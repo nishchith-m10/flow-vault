@@ -19,7 +19,9 @@ try {
 import { decryptBackupData } from '@/lib/backup/restore';
 import { type EncryptedData, decrypt } from '@/lib/encryption';
 import { getUserSettings } from '@/lib/database';
+import { safeJSONParse } from '@/lib/utils/json';
 import { withRateLimit } from '@/lib/middleware/rateLimiter';
+import { EncryptedDataSchema, validateData } from '@/lib/validation';
 
 async function handleRestore(
   request: NextRequest,
@@ -78,7 +80,14 @@ async function handleRestore(
     }
 
     // Decrypt backup data
-    const encryptedData = backup.workflow_data as unknown as EncryptedData;
+    const validationResult = validateData(EncryptedDataSchema, backup.workflow_data);
+    if (!validationResult.success || !validationResult.data) {
+      return NextResponse.json(
+        { error: `Invalid encrypted data format: ${validationResult.error}` },
+        { status: 500 }
+      );
+    }
+    const encryptedData = validationResult.data;
     const decryptResult = await decryptBackupData(encryptedData, encryptionPassword);
 
     if (!decryptResult.success || !decryptResult.workflow) {
@@ -159,7 +168,14 @@ async function restoreWorkflowToN8n(
       };
     }
 
-    const encryptedApiKey = JSON.parse(settings.n8n_api_key_encrypted) as EncryptedData;
+    const parseResult = safeJSONParse<EncryptedData>(settings.n8n_api_key_encrypted);
+    if (!parseResult.success || !parseResult.data) {
+      return {
+        success: false,
+        error: `Failed to parse encrypted API key: ${parseResult.error}`,
+      };
+    }
+    const encryptedApiKey = parseResult.data;
     const decryptionResult = await decrypt(encryptedApiKey, encryptionPassword);
 
     if (!decryptionResult.success || !decryptionResult.plaintext) {

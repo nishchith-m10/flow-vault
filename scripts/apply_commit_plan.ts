@@ -18,7 +18,13 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { Octokit } from "octokit";
+let Octokit: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  Octokit = require('octokit').Octokit;
+} catch (err) {
+  Octokit = undefined;
+}
 import { parse as csvParse } from "csv-parse/sync";
 
 const ROOT = path.resolve(__dirname, "..");

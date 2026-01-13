@@ -192,7 +192,8 @@ describe('Workflow Restore', () => {
       const result = await decryptBackupData(mockEncryptedData, 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('failed to parse JSON');
+      expect(result.error).toContain('Invalid workflow data');
+      expect(result.error).toContain('JSON parse error');
     });
 
     it('should validate workflow structure after decryption', async () => {

@@ -5,6 +5,7 @@
 import { decrypt, type EncryptedData } from '../encryption';
 import { getUserSettings } from '../database';
 import { N8nConnectionError } from '../errors';
+import { safeJSONParse } from '../utils/json';
 import type { N8nWorkflow } from './types';
 
 export interface N8nClient {
@@ -32,7 +33,11 @@ export async function createN8nClient(clerkUserId: string): Promise<N8nClient> {
     throw new N8nConnectionError('Encryption key not configured');
   }
 
-  const encryptedData: EncryptedData = JSON.parse(settings.n8n_api_key_encrypted);
+  const parseResult = safeJSONParse<EncryptedData>(settings.n8n_api_key_encrypted);
+  if (!parseResult.success || !parseResult.data) {
+    throw new N8nConnectionError(`Failed to parse encrypted API key: ${parseResult.error}`);
+  }
+  const encryptedData = parseResult.data;
   const decryptionResult = await decrypt(encryptedData, encryptionPassword);
 
   if (!decryptionResult.success || !decryptionResult.plaintext) {
