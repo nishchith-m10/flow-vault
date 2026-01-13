@@ -1,3 +1,4 @@
+// Supabase client and Clerk auth imports
 import { createClient } from '@supabase/supabase-js';
 import { auth } from '@clerk/nextjs/server';
 
