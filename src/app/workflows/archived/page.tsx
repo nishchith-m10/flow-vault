@@ -280,7 +280,7 @@ export default function ArchivedWorkflowsPage() {
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="font-medium truncate">{workflow.name}</span>
                   {workflow.tags && workflow.tags.length > 0 && (
-                    <div className="flex gap-1 flex-shrink-0">
+                    <div className="flex gap-1 shrink-0">
                       {workflow.tags.slice(0, 2).map((t) => (
                         <Badge key={t.id} variant="neutral">{t.name}</Badge>
                       ))}
