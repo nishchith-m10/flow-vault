@@ -98,33 +98,34 @@ export const ApiKeyTestRequestSchema = z.object({
  * Used in backup creation endpoint
  */
 export const BackupTriggerRequestSchema = z.object({
-  workflowIds: z.array(z.string()).min(1, 'At least one workflow ID required'),
-  encryptionPassword: z.string().min(1, 'Encryption password required'),
-  tags: z.array(z.string()).optional(),
-  description: z.string().optional(),
+  workflowIds: z.array(z.string().max(100, 'Workflow ID too long')).optional(),
+  tags: z.array(z.string().max(50, 'Tag too long')).optional(),
+  description: z.string().max(500, 'Description too long').optional(),
 });
 
 /**
  * Schema for backup restore request
  * Used in restore endpoint
  */
-export const BackupRestoreRequestSchema = z.object({
-  encryptionPassword: z.string().min(1, 'Encryption password required'),
-  overwrite: z.boolean().optional(),
-});
+export const BackupRestoreRequestSchema = z
+  .object({
+    handleConflict: z.enum(['skip', 'overwrite', 'create-new']).optional().default('create-new'),
+  })
+  .strict(); // Reject unknown fields for security
 
 /**
  * Schema for settings update request
  * Used in settings API endpoints
  */
-export const SettingsUpdateRequestSchema = z.object({
-  n8nUrl: z.string().url('Invalid n8n URL format'),
-  n8nApiKey: z.string().min(1, 'API key required'),
-  encryptionPassword: z.string().min(1, 'Encryption password required'),
-  backupEnabled: z.boolean().optional(),
-  backupSchedule: z.string().optional(),
-  retentionDays: z.number().int().positive().optional(),
-});
+export const SettingsUpdateRequestSchema = z
+  .object({
+    n8n_instance_url: z.string().url('Invalid n8n URL format').max(2048, 'URL too long'),
+    n8n_api_key: z.string().min(1, 'API key required').max(1024, 'API key too long'),
+    backup_enabled: z.boolean().optional().default(true),
+    backup_schedule: z.string().optional().default('daily'),
+    retention_days: z.number().int().positive('Retention days must be positive').optional().default(30),
+  })
+  .strict(); // Reject unknown fields for security
 
 /**
  * Schema for workflow list response

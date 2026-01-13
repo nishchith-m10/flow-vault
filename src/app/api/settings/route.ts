@@ -20,7 +20,7 @@ import {
 } from '@/lib/database';
 import { encrypt, decrypt, type EncryptedData } from '@/lib/encryption';
 import { safeJSONParse } from '@/lib/utils/json';
-import { ApiKeyTestRequestSchema, validateData } from '@/lib/validation';
+import { ApiKeyTestRequestSchema, SettingsUpdateRequestSchema, validateData } from '@/lib/validation';
 
 /**
  * GET /api/settings
@@ -80,31 +80,24 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    // Validate request body with schema
+    const validationResult = validateData(SettingsUpdateRequestSchema, body);
+
+    if (!validationResult.success || !validationResult.data) {
+      return NextResponse.json(
+        { error: 'Invalid request', message: validationResult.error },
+        { status: 400 }
+      );
+    }
+
     const {
       n8n_instance_url,
       n8n_api_key,
       backup_enabled,
       backup_schedule,
       retention_days,
-    } = body;
-
-    // Validate required fields
-    if (!n8n_instance_url || !n8n_api_key) {
-      return NextResponse.json(
-        { error: 'Missing required fields', message: 'n8n_instance_url and n8n_api_key are required' },
-        { status: 400 }
-      );
-    }
-
-    // Validate URL format
-    try {
-      new URL(n8n_instance_url);
-    } catch {
-      return NextResponse.json(
-        { error: 'Invalid n8n_instance_url', message: 'Must be a valid URL' },
-        { status: 400 }
-      );
-    }
+    } = validationResult.data;
 
     // Get encryption key from environment
     const encryptionPassword = process.env.FLOWVAULT_ENCRYPTION_KEY;

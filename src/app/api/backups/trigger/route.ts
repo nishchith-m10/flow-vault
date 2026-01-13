@@ -5,8 +5,9 @@
  * Rate-limited to 100 requests/hour using atomic DB counters
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { runBackupWithRetry } from '@/lib/backup';
+import { BackupTriggerRequestSchema, validateData } from '@/lib/validation';
 
 let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
 try {
@@ -18,7 +19,7 @@ try {
 import { handleApiError } from '@/lib/errors';
 import { withRateLimit } from '@/lib/middleware/rateLimiter';
 
-async function handleTriggerBackup() {
+async function handleTriggerBackup(request: NextRequest) {
   try {
     const { userId } = await auth();
 
@@ -29,7 +30,19 @@ async function handleTriggerBackup() {
       );
     }
 
-    // Run backup with retry logic
+    // Parse and validate request body (optional - backward compatible)
+    const body = await request.json().catch(() => ({}));
+    const validationResult = validateData(BackupTriggerRequestSchema, body);
+    
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: `Invalid request: ${validationResult.error}` },
+        { status: 400 }
+      );
+    }
+
+    // Future: Use validationResult.data?.workflowIds for selective backup
+    // For now, backup all workflows (backward compatible)
     const result = await runBackupWithRetry(userId, 'manual');
 
     if (!result.success) {

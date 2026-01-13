@@ -272,70 +272,64 @@ describe('BackupTriggerRequestSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('should reject empty workflow IDs array', () => {
-    const invalid = {
+  it('should accept empty workflow IDs array (all fields optional)', () => {
+    const valid = {
       workflowIds: [],
-      encryptionPassword: 'secure_password',
     };
     
-    const result = validateData(BackupTriggerRequestSchema, invalid);
-    expect(result.success).toBe(false);
-    expect(result.error).toContain('At least one workflow ID required');
+    const result = validateData(BackupTriggerRequestSchema, valid);
+    expect(result.success).toBe(true);
   });
 
-  it('should reject missing encryption password', () => {
-    const invalid = {
-      workflowIds: ['workflow1'],
-    };
+  it('should accept missing fields (all optional)', () => {
+    const valid = {};
     
-    const result = validateData(BackupTriggerRequestSchema, invalid);
-    expect(result.success).toBe(false);
+    const result = validateData(BackupTriggerRequestSchema, valid);
+    expect(result.success).toBe(true);
   });
 
-  it('should reject empty encryption password', () => {
-    const invalid = {
+  it('should accept with all optional fields provided', () => {
+    const valid = {
       workflowIds: ['workflow1'],
-      encryptionPassword: '',
+      tags: ['production'],
+      description: 'Test backup',
     };
     
-    const result = validateData(BackupTriggerRequestSchema, invalid);
-    expect(result.success).toBe(false);
-    expect(result.error).toContain('Encryption password required');
+    const result = validateData(BackupTriggerRequestSchema, valid);
+    expect(result.success).toBe(true);
   });
 });
 
 describe('BackupRestoreRequestSchema', () => {
-  it('should validate correct restore request', () => {
+  it('should validate with handleConflict skip', () => {
     const valid = {
-      encryptionPassword: 'secure_password',
-      overwrite: true,
+      handleConflict: 'skip',
     };
     
     const result = validateData(BackupRestoreRequestSchema, valid);
     expect(result.success).toBe(true);
   });
 
-  it('should validate minimal restore request', () => {
+  it('should validate with handleConflict overwrite', () => {
     const valid = {
-      encryptionPassword: 'secure_password',
+      handleConflict: 'overwrite',
     };
     
     const result = validateData(BackupRestoreRequestSchema, valid);
     expect(result.success).toBe(true);
   });
 
-  it('should reject missing encryption password', () => {
-    const invalid = {
-      overwrite: true,
-    };
+  it('should default to create-new when missing', () => {
+    const valid = {};
     
-    const result = validateData(BackupRestoreRequestSchema, invalid);
-    expect(result.success).toBe(false);
+    const result = validateData(BackupRestoreRequestSchema, valid);
+    expect(result.success).toBe(true);
+    expect(result.data?.handleConflict).toBe('create-new');
   });
 
-  it('should reject empty encryption password', () => {
+  it('should reject invalid enum value', () => {
     const invalid = {
-      encryptionPassword: '',
+      handleConflict: 'invalid',
     };
     
     const result = validateData(BackupRestoreRequestSchema, invalid);
@@ -522,9 +516,8 @@ describe('N8nWorkflowListSchema', () => {
 describe('SettingsUpdateRequestSchema', () => {
   it('should validate correct settings update', () => {
     const valid = {
-      n8nUrl: 'https://n8n.example.com',
-      n8nApiKey: 'api_key_value',
-      encryptionPassword: 'secure_password',
+      n8n_instance_url: 'https://n8n.example.com',
+      n8n_api_key: 'api_key_value',
     };
     
     const result = validateData(SettingsUpdateRequestSchema, valid);
@@ -533,12 +526,11 @@ describe('SettingsUpdateRequestSchema', () => {
 
   it('should validate with optional fields', () => {
     const valid = {
-      n8nUrl: 'https://n8n.example.com',
-      n8nApiKey: 'api_key_value',
-      encryptionPassword: 'secure_password',
-      backupEnabled: true,
-      backupSchedule: '0 0 * * *',
-      retentionDays: 90,
+      n8n_instance_url: 'https://n8n.example.com',
+      n8n_api_key: 'api_key_value',
+      backup_enabled: true,
+      backup_schedule: 'daily',
+      retention_days: 90,
     };
     
     const result = validateData(SettingsUpdateRequestSchema, valid);
@@ -547,14 +539,13 @@ describe('SettingsUpdateRequestSchema', () => {
 
   it('should reject invalid URL', () => {
     const invalid = {
-      n8nUrl: 'not-a-url',
-      n8nApiKey: 'api_key_value',
-      encryptionPassword: 'secure_password',
+      n8n_instance_url: 'not-a-url',
+      n8n_api_key: 'api_key_value',
     };
     
     const result = validateData(SettingsUpdateRequestSchema, invalid);
     expect(result.success).toBe(false);
-    expect(result.error).toContain('Invalid n8n URL format');
+    expect(result.error).toContain('Invalid');
   });
 
   it('should reject missing API key', () => {
@@ -764,10 +755,10 @@ describe('Helper Functions', () => {
 
     it('should handle complex validation errors', () => {
       const invalid = {
-        workflowIds: [],
-        encryptionPassword: '',
+        n8n_instance_url: 'not-a-url',
+        retention_days: -5,
       };
-      const result = validateData(BackupTriggerRequestSchema, invalid);
+      const result = validateData(SettingsUpdateRequestSchema, invalid);
       
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -810,24 +801,23 @@ describe('Helper Functions', () => {
 
     it('should throw with meaningful error', () => {
       expect(() => {
-        validateDataOrThrow(BackupTriggerRequestSchema, {
-          workflowIds: [],
-          encryptionPassword: '',
+        validateDataOrThrow(SettingsUpdateRequestSchema, {
+          n8n_instance_url: 'not-a-url',
+          retention_days: -5,
         });
       }).toThrow();
     });
 
     it('should preserve data types', () => {
       const valid = {
-        n8nUrl: 'https://example.com',
-        n8nApiKey: 'key',
-        encryptionPassword: 'pass',
-        retentionDays: 30,
+        n8n_instance_url: 'https://example.com',
+        n8n_api_key: 'key',
+        retention_days: 30,
       };
       const result = validateDataOrThrow(SettingsUpdateRequestSchema, valid);
       
-      expect(result.retentionDays).toBe(30);
-      expect(typeof result.retentionDays).toBe('number');
+      expect(result.retention_days).toBe(30);
+      expect(typeof result.retention_days).toBe('number');
     });
   });
 
@@ -853,10 +843,10 @@ describe('Helper Functions', () => {
 
     it('should provide error details for debugging', () => {
       const invalid = {
-        workflowIds: [],
-        encryptionPassword: '',
+        n8n_instance_url: 'not-a-url',
+        retention_days: -5,
       };
-      const result = safeValidate(BackupTriggerRequestSchema, invalid);
+      const result = safeValidate(SettingsUpdateRequestSchema, invalid);
       
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -958,9 +948,8 @@ describe('Edge Cases and Integration', () => {
   it('should handle validation across multiple schemas', () => {
     // Settings update
     const settings = {
-      n8nUrl: 'https://n8n.example.com',
-      n8nApiKey: 'api_key',
-      encryptionPassword: 'password',
+      n8n_instance_url: 'https://n8n.example.com',
+      n8n_api_key: 'api_key',
     };
     const settingsResult = validateData(SettingsUpdateRequestSchema, settings);
     expect(settingsResult.success).toBe(true);
@@ -968,7 +957,6 @@ describe('Edge Cases and Integration', () => {
     // Backup trigger
     const backup = {
       workflowIds: ['wf1', 'wf2'],
-      encryptionPassword: 'password',
       tags: ['manual'],
     };
     const backupResult = validateData(BackupTriggerRequestSchema, backup);

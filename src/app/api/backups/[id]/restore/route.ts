@@ -21,7 +21,7 @@ import { type EncryptedData, decrypt } from '@/lib/encryption';
 import { getUserSettings } from '@/lib/database';
 import { safeJSONParse } from '@/lib/utils/json';
 import { withRateLimit } from '@/lib/middleware/rateLimiter';
-import { EncryptedDataSchema, validateData } from '@/lib/validation';
+import { EncryptedDataSchema, BackupRestoreRequestSchema, validateData } from '@/lib/validation';
 
 async function handleRestore(
   request: NextRequest,
@@ -40,17 +40,18 @@ async function handleRestore(
     const resolvedParams = await params;
     const backupId = resolvedParams.id;
 
-    // Get request body for conflict handling strategy
+    // Parse and validate request body
     const body = await request.json().catch(() => ({}));
-    const handleConflict = body.handleConflict || 'create-new'; // 'skip' | 'overwrite' | 'create-new'
+    const validationResult = validateData(BackupRestoreRequestSchema, body);
 
-    // Validate conflict strategy
-    if (!['skip', 'overwrite', 'create-new'].includes(handleConflict)) {
+    if (!validationResult.success || !validationResult.data) {
       return NextResponse.json(
-        { success: false, error: 'Invalid conflict handling strategy' },
+        { success: false, error: `Invalid request: ${validationResult.error}` },
         { status: 400 }
       );
     }
+
+    const { handleConflict } = validationResult.data; // Typed as 'skip' | 'overwrite' | 'create-new'
 
     // Get backup from database
     const backup = await getBackupById(backupId);
@@ -80,14 +81,14 @@ async function handleRestore(
     }
 
     // Decrypt backup data
-    const validationResult = validateData(EncryptedDataSchema, backup.workflow_data);
-    if (!validationResult.success || !validationResult.data) {
+    const encryptedDataValidation = validateData(EncryptedDataSchema, backup.workflow_data);
+    if (!encryptedDataValidation.success || !encryptedDataValidation.data) {
       return NextResponse.json(
-        { error: `Invalid encrypted data format: ${validationResult.error}` },
+        { error: `Invalid encrypted data format: ${encryptedDataValidation.error}` },
         { status: 500 }
       );
     }
-    const encryptedData = validationResult.data;
+    const encryptedData = encryptedDataValidation.data;
     const decryptResult = await decryptBackupData(encryptedData, encryptionPassword);
 
     if (!decryptResult.success || !decryptResult.workflow) {
