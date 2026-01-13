@@ -112,6 +112,8 @@
   --z-modal: 300;
   --z-command: 400;
   --z-toast: 500;
+  --z-clerk-modal: 9999;
+  --z-clerk-backdrop: 9998;
 
   /* Color scheme indicator */
   color-scheme: dark;
@@ -1132,8 +1134,15 @@ select.input {
 }
 
 .sidebar-footer {
-  padding: var(--space-3);
+  padding: var(--space-2) var(--space-3);
   border-top: 1px solid var(--border-default);
+}
+
+.sidebar-footer > div:first-child {
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* ============================================
@@ -1376,4 +1385,615 @@ select.input {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ============================================
+   Clerk Modal Overrides
+   ============================================ */
+
+/* Ensure Clerk modals and backdrops are above everything including water */
+.cl-modalBackdrop {
+  z-index: var(--z-clerk-backdrop) !important;
+  /* use softer dark overlay by default */
+  background: rgba(10, 10, 11, 0.6) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Light theme: softer, light overlay so modal content remains visible */
+[data-theme="light"] .cl-modalBackdrop {
+  z-index: var(--z-clerk-backdrop) !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.cl-modal,
+.cl-userButtonPopoverCard {
+  z-index: var(--z-clerk-modal) !important;
+}
+
+/* Modal/card backgrounds: use theme-aware variables so layout is consistent across themes */
+.cl-card,
+.cl-rootBox,
+.cl-cardBox,
+.cl-scrollBox {
+  background: var(--bg-elevated) !important;
+  background-image: none !important;
+  border-color: var(--border-default) !important;
+  color: var(--text-primary) !important;
+}
+
+.cl-navbar {
+  background: var(--bg-elevated) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+.cl-navbarButton {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.cl-navbarButton:hover {
+  background: #27272A !important;
+  color: white !important;
+}
+
+.cl-navbarButton[data-active="true"] {
+  background: #27272A !important;
+  color: white !important;
+  border-bottom: 2px solid #F97316 !important;
+}
+
+.cl-profileSection,
+.cl-profileSectionPrimaryButton__root {
+  background: #18181B !important;
+  border-bottom-color: #3F3F46 !important;
+}
+
+.cl-profileSectionContent {
+  background: #18181B !important;
+}
+
+/* Input fields slightly darker for contrast */
+.cl-formFieldInput,
+.cl-input,
+.cl-formFieldInput__identifier {
+  background: #0F0F10 !important;
+  border-color: #3F3F46 !important;
+  color: #FFFFFF !important;
+}
+
+.cl-formFieldInput::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* All text should be bright white for maximum contrast */
+.cl-formFieldLabel,
+.cl-formFieldLabelRow,
+.cl-formFieldLabel__identifier,
+.cl-headerTitle,
+.cl-headerSubtitle {
+  color: #FFFFFF !important;
+  font-weight: 500 !important;
+}
+
+.cl-identityPreview,
+.cl-identityPreviewText {
+  color: #FFFFFF !important;
+}
+
+.cl-identityPreviewEditButton {
+  color: #F97316 !important;
+}
+
+.cl-identityPreviewEditButton:hover {
+  color: #FB923C !important;
+}
+
+.cl-formButtonPrimary {
+  background: #F97316 !important;
+  color: white !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: #FB923C !important;
+}
+
+.cl-formButtonSecondary {
+  background: #3F3F46 !important;
+  color: white !important;
+}
+
+.cl-formButtonSecondary:hover {
+  background: #52525B !important;
+}
+
+/* Hide ONLY Clerk branding/watermark elements, but keep functional popover footer visible */
+.cl-footerAction,
+.cl-footerActionText,
+.cl-footerActionLink,
+.cl-footerPages,
+.cl-internal-b3fm6y,
+[class*="cl-branded"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure the user-button popover footer (manage account / sign out) remains visible */
+.cl-userButtonPopoverFooter {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  padding: 0.25rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+/* Hide watermark and branding text in popover */
+.cl-userButtonPopoverCard::after,
+.cl-userButtonPopoverCard::before,
+.cl-userButtonPopoverMain::after,
+.cl-userButtonPopoverMain::before {
+  display: none !important;
+}
+
+/* Hide Clerk watermark and branding - targeted approach */
+.cl-userButtonPopoverFooter,
+.cl-footer,
+.cl-footerPages,
+.cl-footerAction,
+.cl-footerActionText,
+.cl-footerActionLink {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Remove background images and pseudo-elements that show watermark */
+.cl-card,
+.cl-card *,
+.cl-rootBox,
+.cl-rootBox *,
+.cl-cardBox,
+.cl-cardBox * {
+  background-image: none !important;
+}
+
+.cl-card::before,
+.cl-card::after,
+.cl-rootBox::before,
+.cl-rootBox::after,
+.cl-cardBox::before,
+.cl-cardBox::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Hide any footer elements specifically */
+.cl-footer,
+.cl-footer * {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-image: none !important;
+}
+
+/* Compact popover sizing */
+.cl-userButtonPopoverCard {
+  min-width: 200px !important;
+  max-width: 200px !important;
+}
+
+.cl-userButtonPopoverMain {
+  padding: 0.25rem !important;
+}
+
+/* Dark mode popover action buttons */
+.cl-userButtonPopoverActionButton {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: var(--text-primary) !important;
+  transition: background-color 200ms !important;
+}
+
+.cl-userButtonPopoverActionButton:hover {
+  background: var(--bg-hover) !important;
+}
+
+.cl-userButtonPopoverActionButtonText {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.cl-userButtonPopoverActionButtonIcon {
+  width: 1rem !important;
+  height: 1rem !important;
+  color: var(--text-tertiary) !important;
+}
+
+/* Light mode specific overrides */
+[data-theme="light"] .cl-userButtonPopoverActionButton {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButton:hover {
+  background: var(--bg-hover) !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButtonText {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButtonIcon {
+  color: var(--text-tertiary) !important;
+}
+
+/* Hide user info in popover (name/email) */
+.cl-userPreview,
+.cl-userPreviewMainIdentifier,
+.cl-userPreviewSecondaryIdentifier,
+.cl-userPreviewAvatarContainer {
+  display: none !important;
+}
+
+/* Ensure avatar is perfectly circular with no square background */
+.cl-userButtonAvatarBox,
+.cl-avatar,
+.cl-avatar *,
+.cl-userButtonAvatarBox img,
+.cl-userPreviewAvatarContainer img {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Remove any square placeholders or borders behind avatars */
+.cl-userButtonAvatarBox,
+.cl-avatar-placeholder,
+.cl-userPreviewAvatarContainer {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* =========================
+   Light mode Clerk styles
+   ========================= */
+[data-theme="light"] .cl-card,
+[data-theme="light"] .cl-rootBox,
+[data-theme="light"] .cl-cardBox,
+[data-theme="light"] .cl-scrollBox {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+  background-image: none !important;
+}
+
+[data-theme="light"] .cl-navbar {
+  background: var(--bg-elevated) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+[data-theme="light"] .cl-formFieldInput,
+[data-theme="light"] .cl-input,
+[data-theme="light"] .cl-formFieldInput__identifier {
+  background: var(--bg-subtle) !important;
+  border-color: var(--border-default) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .cl-formFieldInput::placeholder {
+  color: rgba(0,0,0,0.45) !important;
+}
+
+/* Ensure avatar has no square border in light mode and is visible against light background */
+[data-theme="light"] .cl-userButtonAvatarBox,
+[data-theme="light"] .cl-userButtonAvatarBox img,
+[data-theme="light"] .cl-userPreviewAvatarContainer img {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 1px solid transparent !important; /* keep no visible square */
+  box-shadow: none !important;
+}
+
+/* If avatar needs subtle separation on light bg, use a soft ring */
+[data-theme="light"] .cl-userButtonAvatarBox {
+  box-shadow: 0 0 0 1px rgba(16,16,16,0.04) inset !important;
+}
+
+/* Light mode texts/buttons */
+[data-theme="light"] .cl-formFieldLabel,
+[data-theme="light"] .cl-formFieldLabelRow,
+[data-theme="light"] .cl-formFieldLabel__identifier,
+[data-theme="light"] .cl-headerTitle,
+[data-theme="light"] .cl-headerSubtitle {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+/* Cap modal/profile avatar size (modal header) */
+.cl-identityPreviewAvatarContainer,
+.cl-identityPreviewAvatar,
+.cl-identityPreview__avatar,
+.cl-identityPreview img,
+[data-theme="light"] .cl-identityPreviewAvatarContainer,
+[data-theme="light"] .cl-identityPreviewAvatar {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Ensure sidebar small avatar remains 32px */
+.cl-userButtonAvatarBox,
+[data-theme="light"] .cl-userButtonAvatarBox {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+/* Remove diagonal stripe/backgrounds applied inline */
+.cl-rootBox [style*="linear-gradient"],
+.cl-card [style*="linear-gradient"],
+[data-theme="light"] .cl-rootBox [style*="linear-gradient"],
+[data-theme="light"] .cl-card [style*="linear-gradient"] {
+  background-image: none !important;
+  background: transparent !important;
+}
+
+/* Tone down inner panel to match light theme (avoid dark inset panels) */
+[data-theme="light"] .cl-card .cl-section,
+[data-theme="light"] .cl-card .cl-row,
+[data-theme="light"] .cl-card .cl-list,
+[data-theme="light"] .cl-card .cl-inner,
+[data-theme="light"] .cl-card .cl-panel,
+[data-theme="light"] .cl-card .cl-content,
+[data-theme="light"] .cl-card .cl-scrollBox,
+[data-theme="light"] .cl-cardBox,
+[data-theme="light"] .cl-cardBox * {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+  box-shadow: none !important;
+}
+
+/* Make all text inside card readable on light mode */
+[data-theme="light"] .cl-card,
+[data-theme="light"] .cl-card * {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+}
+
+/* Ensure footer/watermark hidden in light mode except sidebar footer we need to keep */
+[data-theme="light"] .cl-footer,
+[data-theme="light"] .cl-footer *,
+[data-theme="light"] [class*="branding"],
+[data-theme="light"] [class*="brand"],
+[data-theme="light"] .cl-card footer,
+[data-theme="light"] .cl-card > div:last-child,
+[data-theme="light"] .cl-rootBox > div:last-child,
+[data-theme="light"] img[src*="clerk"],
+[data-theme="light"] svg[class*="clerk"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Explicitly restore sidebar footer in light mode */
+[data-theme="light"] .sidebar-footer {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  padding: var(--space-3) !important;
+  margin: 0 !important;
+}
+
+/* Make sure avatar images are visible in light mode */
+[data-theme="light"] .cl-userButtonAvatarBox img,
+[data-theme="light"] .cl-avatarBox img,
+[data-theme="light"] .cl-userPreviewAvatarContainer img {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  width: 100% !important;
+}
+
+/* Ensure the connection button and avatar in footer are visible and styled for light */
+[data-theme="light"] .sidebar-footer .btn,
+[data-theme="light"] .sidebar-footer .flex {
+  color: var(--text-primary) !important;
+}
+
+/* Force text colors in user profile section for light mode */
+[data-theme="light"] .sidebar-footer .flex .text-sm,
+[data-theme="light"] .sidebar-footer .flex .text-xs,
+[data-theme="light"] .sidebar-footer div > div {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .sidebar-footer .flex .text-xs {
+  color: var(--text-tertiary) !important;
+}
+
+[data-theme="light"] .sidebar-footer .w-2.h-2.rounded-full {
+  display: inline-block !important;
+}
+
+/* Remove any remaining linear gradients or background patterns within root/card */
+[data-theme="light"] .cl-rootBox [style*="linear-gradient"],
+[data-theme="light"] .cl-card [style*="linear-gradient"] {
+  background-image: none !important;
+  background: transparent !important;
+}
+[data-theme="light"] .cl-formButtonPrimary {
+  background: var(--accent) !important;
+  color: white !important;
+}
+
+[data-theme="light"] .cl-formButtonSecondary {
+  background: var(--bg-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Light-mode popover overrides: make popovers match light theme and use accent on hover */
+[data-theme="light"] .cl-userButtonPopoverCard,
+[data-theme="light"] .cl-userButtonPopoverMain,
+[data-theme="light"] [class*="userButtonPopover"] {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  box-shadow: 0 6px 18px rgba(16,16,16,0.06) !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButton,
+[data-theme="light"] [class*="userButtonPopoverActionButton"] {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButton:hover,
+[data-theme="light"] [class*="userButtonPopoverActionButton"]:hover {
+  background: var(--bg-subtle) !important;
+  color: var(--accent) !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButtonText,
+[data-theme="light"] [class*="userButtonPopoverActionButtonText"] {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverActionButtonIcon,
+[data-theme="light"] [class*="userButtonPopoverActionButtonIcon"] {
+  color: var(--text-tertiary) !important;
+}
+
+/* Ensure footer/branding not visible in light popover */
+[data-theme="light"] .cl-userButtonPopoverFooter,
+[data-theme="light"] .cl-userButtonPopoverCard footer,
+[data-theme="light"] .cl-userButtonPopoverCard > div:last-child {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Force ALL popover text to be dark in light mode - nuclear option */
+[data-theme="light"] .cl-userButtonPopoverCard,
+[data-theme="light"] .cl-userButtonPopoverCard *,
+[data-theme="light"] .cl-userButtonPopoverCard button,
+[data-theme="light"] .cl-userButtonPopoverCard button *,
+[data-theme="light"] .cl-userButtonPopoverCard span,
+[data-theme="light"] .cl-userButtonPopoverCard div,
+[data-theme="light"] .cl-userButtonPopoverCard p,
+[data-theme="light"] .cl-userButtonPopoverCard a,
+[data-theme="light"] .cl-userButtonPopoverActionButton,
+[data-theme="light"] .cl-userButtonPopoverActionButtonText,
+[data-theme="light"] [class*="userButtonPopover"] *,
+[data-theme="light"] [class*="userButtonPopover"] button *,
+[data-theme="light"] [class*="userButtonPopover"] span {
+  color: #18181B !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverCard,
+[data-theme="light"] .cl-userButtonPopoverCard .cl-row,
+[data-theme="light"] .cl-userButtonPopoverCard .cl-section,
+[data-theme="light"] .cl-userButtonPopoverCard button {
+  background: #FFFFFF !important;
+  border-color: #D4D4D8 !important;
+}
+
+[data-theme="light"] .cl-userButtonPopoverCard button:hover,
+[data-theme="light"] .cl-userButtonPopoverCard button:hover * {
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================
+   FINAL CLERK OVERRIDES - Clean & Consistent
+   ============================================ */
+
+/* Force consistent popover styling across all themes */
+.cl-userButtonPopoverCard,
+[data-theme="light"] .cl-userButtonPopoverCard,
+[data-theme="dark"] .cl-userButtonPopoverCard {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-default) !important;
+  color: var(--text-primary) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  padding: 6px !important;
+}
+
+/* Force consistent action button styling */
+.cl-userButtonPopoverActionButton,
+[data-theme="light"] .cl-userButtonPopoverActionButton,
+[data-theme="dark"] .cl-userButtonPopoverActionButton {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  transition: background-color 150ms ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.cl-userButtonPopoverActionButton:hover,
+[data-theme="light"] .cl-userButtonPopoverActionButton:hover,
+[data-theme="dark"] .cl-userButtonPopoverActionButton:hover {
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Force consistent action button text */
+.cl-userButtonPopoverActionButtonText,
+[data-theme="light"] .cl-userButtonPopoverActionButtonText,
+[data-theme="dark"] .cl-userButtonPopoverActionButtonText {
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Force consistent action button icons */
+.cl-userButtonPopoverActionButtonIcon,
+[data-theme="light"] .cl-userButtonPopoverActionButtonIcon,
+[data-theme="dark"] .cl-userButtonPopoverActionButtonIcon {
+  color: var(--text-tertiary) !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Force consistent popover main container */
+.cl-userButtonPopoverMain,
+[data-theme="light"] .cl-userButtonPopoverMain,
+[data-theme="dark"] .cl-userButtonPopoverMain {
+  background: var(--bg-elevated) !important;
+  padding: 0 !important;
 }
