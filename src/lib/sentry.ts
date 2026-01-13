@@ -3,11 +3,7 @@
  * Reads SENTRY_DSN from env and initializes Sentry only when present.
  * Exports `captureException` and `withScope` helpers that are safe no-ops when Sentry not configured.
  */
-let Sentry: {
-  init: (config: { dsn: string; environment: string }) => void;
-  captureException: (error: unknown) => void;
-  withScope: (callback: (scope: { setExtra: (key: string, value: unknown) => void }) => void) => void;
-} | null = null;
+let Sentry: any | null = null;
 let initialized = false;
 
 export async function initSentry() {
@@ -18,11 +14,15 @@ export async function initSentry() {
   }
 
   try {
-    // Dynamically import to avoid adding hard dep in browser bundles
-    // Install @sentry/node in production to enable reporting
-    Sentry = await import('@sentry/node');
-    Sentry.init({ dsn, environment: process.env.NODE_ENV || 'development' });
-    initialized = true;
+    // Use require to avoid TypeScript errors when @sentry/node isn't installed
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      Sentry = require('@sentry/node');
+      Sentry.init({ dsn, environment: process.env.NODE_ENV || 'development' });
+      initialized = true;
+    } catch (err) {
+      console.warn('Sentry module not found; continuing without Sentry');
+    }
   } catch (err) {
     // Fail quietly and leave capture as no-op
     console.warn('Sentry init failed:', err instanceof Error ? err.message : err);
@@ -33,7 +33,7 @@ export function captureException(err: unknown, context?: Record<string, unknown>
   if (!initialized || !Sentry) return;
   try {
     if (context) {
-      Sentry.withScope((scope) => {
+      Sentry.withScope((scope: any) => {
         Object.entries(context).forEach(([k, v]) => scope.setExtra(k, v));
         Sentry.captureException(err);
       });
