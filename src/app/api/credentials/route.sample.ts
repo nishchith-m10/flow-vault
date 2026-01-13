@@ -15,7 +15,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+// Optional Clerk auth helper for samples
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available
+}
 import { encrypt, decrypt } from '@/lib/crypto';
 import { createStorageAdapter } from '@/lib/storage/adapter';
 
