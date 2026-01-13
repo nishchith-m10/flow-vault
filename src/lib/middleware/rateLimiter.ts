@@ -52,16 +52,23 @@ export function withRateLimit(action: string, cost: number = 1) {
 
       if (!rateLimit.allowed) {
         headers.set('Retry-After', Math.ceil((rateLimit.resetAt.getTime() - Date.now()) / 1000).toString());
-        
+
+        // Differentiate between normal rate limit and fail-closed database error
+        const errorMessage = rateLimit.failedClosed
+          ? 'Service temporarily unavailable due to rate limit system error'
+          : 'Rate limit exceeded';
+
+        const statusCode = rateLimit.failedClosed ? 503 : 429;
+
         return NextResponse.json(
           {
             success: false,
-            error: 'Rate limit exceeded',
+            error: errorMessage,
             limit: rateLimit.limit,
             remaining: 0,
             resetAt: rateLimit.resetAt.toISOString(),
           },
-          { status: 429, headers }
+          { status: statusCode, headers }
         );
       }
 
