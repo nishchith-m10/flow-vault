@@ -27,6 +27,7 @@ import {
 import Button from './ui/Button';
 import { ThemeToggle } from './ThemeProvider';
 import { useCommandPalette } from './CommandPalette';
+import { UserProfile } from './UserProfile';
 
 interface CredentialsContextType {
   n8nUrl: string;
@@ -193,8 +194,16 @@ function Sidebar({
           ))}
         </nav>
 
-        {/* Connection Status */}
+        {/* Sidebar Footer */}
         <div className="sidebar-footer">
+          <div className="flex items-center gap-3">
+            <UserProfile />
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--border-default)] my-2" />
+
+          {/* Connection Status */}
           <button
             onClick={onToggleSettings}
             suppressHydrationWarning
@@ -322,9 +331,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   // Load from localStorage on mount
   useEffect(() => {
-    setN8nUrl(localStorage.getItem('n8n_url') || '');
-    setApiKey(localStorage.getItem('n8n_api_key') || '');
-    setIsMounted(true);
+    queueMicrotask(() => {
+      setN8nUrl(localStorage.getItem('n8n_url') || '');
+      setApiKey(localStorage.getItem('n8n_api_key') || '');
+      setIsMounted(true);
+    });
   }, []);
 
   // Save to localStorage when changed
