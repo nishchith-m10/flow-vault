@@ -3,7 +3,19 @@
  * Only initializes if SENTRY_DSN is present
  */
 
-import * as Sentry from '@sentry/nextjs';
+let Sentry: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  Sentry = require('@sentry/nextjs');
+} catch (err) {
+  // Fallback stub for environments without @sentry/nextjs installed
+  Sentry = {
+    init: () => {},
+    withScope: (cb: (scope: any) => void) => cb({ setContext: () => {} }),
+    captureException: () => {},
+    captureMessage: () => {},
+  };
+}
 
 let sentryInitialized = false;
 
@@ -36,7 +48,7 @@ export function initSentry(): void {
         'Non-Error promise rejection captured',
       ],
       
-      beforeSend(event, hint) {
+      beforeSend(event: any, hint: any) {
         // Don't send errors containing sensitive data
         const error = hint.originalException;
         if (error instanceof Error) {
@@ -72,7 +84,7 @@ export function captureException(error: Error | unknown, context?: Record<string
 
   try {
     if (context) {
-      Sentry.withScope((scope) => {
+      Sentry.withScope((scope: any) => {
         Object.entries(context).forEach(([key, value]) => {
           scope.setContext(key, value as Record<string, unknown>);
         });
