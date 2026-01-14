@@ -9,7 +9,7 @@ import { Button, Card, CardContent, EmptyState } from '@/components/ui';
 import { Trash2, RotateCcw, Download, RefreshCw, Unplug, Loader2, AlertTriangle } from 'lucide-react';
 
 export default function TrashPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [trash, setTrash] = useState<TrashedWorkflow[]>([]);
   const [restoring, setRestoring] = useState<string | null>(null);
   const { openModal, closeModal } = useModal();
@@ -28,7 +28,7 @@ export default function TrashPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'import', n8nUrl, apiKey, workflow: workflow.workflow }),
+        body: JSON.stringify({ action: 'import', workflow: workflow.workflow }),
       });
       const result = await response.json();
       if (result.id) {

@@ -14,7 +14,7 @@ interface Variable {
 }
 
 export default function VariablesPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [variables, setVariables] = useState<Variable[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export default function VariablesPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'listVariables', n8nUrl, apiKey }),
+        body: JSON.stringify({ action: 'listVariables' }),
       });
       const data = await response.json();
       setVariables(data.data || []);
@@ -42,7 +42,7 @@ export default function VariablesPage() {
       toast.error('Failed to fetch variables');
     }
     setLoading(false);
-  }, [isConfigured, n8nUrl, apiKey, toast]);
+  }, [isConfigured, toast]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -60,7 +60,7 @@ export default function VariablesPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'createVariable', n8nUrl, apiKey, key: newKey, value: newValue }),
+        body: JSON.stringify({ action: 'createVariable', key: newKey, value: newValue }),
       });
       const result = await response.json();
       if (result.id) {
@@ -85,7 +85,7 @@ export default function VariablesPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'updateVariable', n8nUrl, apiKey, variableId: id, value: editValue }),
+        body: JSON.stringify({ action: 'updateVariable', variableId: id, value: editValue }),
       });
       const result = await response.json();
       if (result.id) {
@@ -115,7 +115,7 @@ export default function VariablesPage() {
           await fetch('/api/n8n', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'deleteVariable', n8nUrl, apiKey, variableId: variable.id }),
+            body: JSON.stringify({ action: 'deleteVariable', variableId: variable.id }),
           });
           toast.success(`Variable "${variable.key}" deleted`);
           fetchVariables();

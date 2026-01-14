@@ -18,34 +18,26 @@ import {
   X,
   CheckCircle2,
   XCircle,
-  ChevronDown,
   ChevronRight,
-  Key,
-  Link as LinkIcon,
   Command,
 } from 'lucide-react';
-import Button from './ui/Button';
 import { ThemeToggle } from './ThemeProvider';
 import { useCommandPalette } from './CommandPalette';
 import { UserProfile } from './UserProfile';
 
-interface CredentialsContextType {
-  n8nUrl: string;
-  apiKey: string;
-  setN8nUrl: (url: string) => void;
-  setApiKey: (key: string) => void;
+// Configuration status context - credentials never exposed to client
+interface ConfigurationContextType {
   isConfigured: boolean;
+  refreshConfiguration: () => Promise<void>;
 }
 
-const CredentialsContext = createContext<CredentialsContextType>({
-  n8nUrl: '',
-  apiKey: '',
-  setN8nUrl: () => {},
-  setApiKey: () => {},
+const ConfigurationContext = createContext<ConfigurationContextType>({
   isConfigured: false,
+  refreshConfiguration: async () => {},
 });
 
-export const useCredentials = () => useContext(CredentialsContext);
+// Export with backward-compatible name for gradual migration
+export const useCredentials = () => useContext(ConfigurationContext);
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -122,8 +114,6 @@ function MobileHeader({ onMenuClick, isConfigured }: MobileHeaderProps) {
 interface SidebarProps {
   pathname: string;
   isConfigured: boolean;
-  showSettings: boolean;
-  onToggleSettings: () => void;
   isMobileOpen: boolean;
   onMobileClose: () => void;
 }
@@ -131,8 +121,6 @@ interface SidebarProps {
 function Sidebar({
   pathname,
   isConfigured,
-  showSettings,
-  onToggleSettings,
   isMobileOpen,
   onMobileClose,
 }: SidebarProps) {
@@ -204,8 +192,8 @@ function Sidebar({
           <div className="h-px bg-[var(--border-default)] my-2" />
 
           {/* Connection Status */}
-          <button
-            onClick={onToggleSettings}
+          <Link
+            href="/settings"
             suppressHydrationWarning
             className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] transition-all ${
               isConfigured
@@ -223,128 +211,39 @@ function Sidebar({
                 {isConfigured ? 'Connected' : 'Not Connected'}
               </span>
             </div>
-            {showSettings ? (
-              <ChevronDown size={16} />
-            ) : (
-              <ChevronRight size={16} />
-            )}
-          </button>
+            <ChevronRight size={16} />
+          </Link>
         </div>
       </aside>
     </>
   );
 }
 
-interface SettingsPanelProps {
-  n8nUrl: string;
-  apiKey: string;
-  onUrlChange: (url: string) => void;
-  onApiKeyChange: (key: string) => void;
-  onClose: () => void;
-}
-
-function SettingsPanel({
-  n8nUrl,
-  apiKey,
-  onUrlChange,
-  onApiKeyChange,
-  onClose,
-}: SettingsPanelProps) {
-  return (
-    <motion.div
-      className="bg-[var(--bg-elevated)] border-b border-[var(--border-default)] p-6"
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: 'auto' }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.2 }}
-    >
-      <div className="max-w-2xl mx-auto space-y-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--accent-muted)] flex items-center justify-center">
-              <Key size={20} className="text-[var(--accent)]" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-                n8n Connection
-              </h2>
-              <p className="text-sm text-[var(--text-tertiary)]">
-                Configure your n8n instance
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="btn btn-ghost btn-icon btn-sm"
-            aria-label="Close settings"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-              <LinkIcon size={14} />
-              Instance URL
-            </label>
-            <input
-              type="text"
-              value={n8nUrl}
-              onChange={(e) => onUrlChange(e.target.value)}
-              placeholder="https://your-n8n.ondigitalocean.app"
-              className="input w-full"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-              <Key size={14} />
-              API Key
-            </label>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => onApiKeyChange(e.target.value)}
-              placeholder="Your n8n API key"
-              className="input w-full"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <Button variant="primary" onClick={onClose}>
-            Save & Close
-          </Button>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const [n8nUrl, setN8nUrl] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [showSettings, setShowSettings] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isConfigured, setIsConfigured] = useState(false);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    queueMicrotask(() => {
-      setN8nUrl(localStorage.getItem('n8n_url') || '');
-      setApiKey(localStorage.getItem('n8n_api_key') || '');
-      setIsMounted(true);
-    });
-  }, []);
-
-  // Save to localStorage when changed
-  useEffect(() => {
-    if (isMounted) {
-      if (n8nUrl) localStorage.setItem('n8n_url', n8nUrl);
-      if (apiKey) localStorage.setItem('n8n_api_key', apiKey);
+  // Fetch configuration status from server (credentials never exposed to client)
+  const refreshConfiguration = async () => {
+    try {
+      const response = await fetch('/api/settings');
+      if (response.ok) {
+        const result = await response.json();
+        setIsConfigured(result.success && result.data);
+      } else {
+        setIsConfigured(false);
+      }
+    } catch (error) {
+      console.error('Failed to check configuration status:', error);
+      setIsConfigured(false);
     }
-  }, [n8nUrl, apiKey, isMounted]);
+  };
+
+  // Load configuration status on mount
+  useEffect(() => {
+    refreshConfiguration();
+  }, []);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -354,11 +253,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     }
   }, [pathname, mobileMenuOpen]);
 
-  const isConfigured = Boolean(n8nUrl && apiKey);
-
   return (
-    <CredentialsContext.Provider
-      value={{ n8nUrl, apiKey, setN8nUrl, setApiKey, isConfigured }}
+    <ConfigurationContext.Provider
+      value={{ isConfigured, refreshConfiguration }}
     >
       <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
         {/* Mobile Header */}
@@ -371,31 +268,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <Sidebar
           pathname={pathname}
           isConfigured={isConfigured}
-          showSettings={showSettings}
-          onToggleSettings={() => setShowSettings(!showSettings)}
           isMobileOpen={mobileMenuOpen}
           onMobileClose={() => setMobileMenuOpen(false)}
         />
 
         {/* Main Content */}
         <main className="main-content">
-          {/* Settings Panel */}
-          <AnimatePresence>
-            {showSettings && (
-              <SettingsPanel
-                n8nUrl={n8nUrl}
-                apiKey={apiKey}
-                onUrlChange={setN8nUrl}
-                onApiKeyChange={setApiKey}
-                onClose={() => setShowSettings(false)}
-              />
-            )}
-          </AnimatePresence>
+          {/* Settings panel removed - use /settings page for credential management */}
 
           {/* Page Content */}
           <div className="page-container">{children}</div>
         </main>
       </div>
-    </CredentialsContext.Provider>
+    </ConfigurationContext.Provider>
   );
 }

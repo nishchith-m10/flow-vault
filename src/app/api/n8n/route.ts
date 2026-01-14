@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { N8nProxyRequestSchema, validateData } from '@/lib/validation';
+import { getUserSettings } from '@/lib/database';
+import { decrypt, type EncryptedData } from '@/lib/encryption';
+import { safeJSONParse } from '@/lib/utils/json';
+
+// Clerk auth import
+let auth: () => Promise<{ userId?: string }> = async () => ({ userId: undefined });
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  auth = require('@clerk/nextjs/server').auth;
+} catch (err) {
+  // Clerk not available
+}
 
 // Helper type for destructuring discriminated union - all fields are optional except common ones
 type N8nProxyRequestFlat = {
   action: string;
-  n8nUrl: string;
-  apiKey: string;
   workflow?: any;
   tagName?: string;
   workflowId?: string;
@@ -19,6 +29,15 @@ type N8nProxyRequestFlat = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
 
     // Validate request body with Zod schema
@@ -30,9 +49,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Fetch user settings server-side (credentials never sent to client)
+    let settings;
+    try {
+      settings = await getUserSettings(userId);
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Settings not configured', message: 'Please configure your n8n credentials in settings first' },
+        { status: 404 }
+      );
+    }
+
+    // Decrypt API key server-side
+    const encryptionPassword = process.env.FLOWVAULT_ENCRYPTION_KEY;
+    if (!encryptionPassword) {
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    const encryptedDataResult = safeJSONParse<EncryptedData>(
+      settings.n8n_api_key_encrypted
+    );
+
+    if (!encryptedDataResult.success || !encryptedDataResult.data) {
+      console.error('Failed to parse encrypted API key:', encryptedDataResult.error);
+      return NextResponse.json(
+        { error: 'Failed to decrypt credentials' },
+        { status: 500 }
+      );
+    }
+
+    const decryptResult = await decrypt(encryptedDataResult.data, encryptionPassword);
+    if (!decryptResult.success || !decryptResult.plaintext) {
+      console.error('Failed to decrypt API key:', decryptResult.error);
+      return NextResponse.json(
+        { error: 'Failed to decrypt credentials' },
+        { status: 500 }
+      );
+    }
+
+    const apiKey = decryptResult.plaintext;
+    const n8nUrl = settings.n8n_instance_url;
+
     // Type assertion is safe here because we've validated with Zod schema above
     // Using flat type to destructure all possible fields from discriminated union
-    const { action, n8nUrl, apiKey, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as N8nProxyRequestFlat;
+    const { action, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as N8nProxyRequestFlat;
 
     const headers = {
       'X-N8N-API-KEY': apiKey,

@@ -20,15 +20,15 @@ Harden FlowVault's security posture by addressing identified vulnerabilities, im
 
 ### Active
 
-- [ ] Wrap all JSON.parse calls in try-catch with typed error handling
-- [ ] Add Zod validation schemas for all API route inputs
-- [ ] Fix rate limiter fail-open behavior for security-critical operations
-- [ ] Add input validation to n8n proxy (limit, action, payload size)
-- [ ] Replace unsafe type assertions with runtime validation
-- [ ] Implement API key uniqueness constraint per user
-- [ ] Implement n8n URL uniqueness constraint per user
-- [ ] Add instance-level rate limits (per n8n instance)
-- [ ] Minimize client-side credential exposure
+- [x] Wrap all JSON.parse calls in try-catch with typed error handling — Phase 1-2
+- [x] Add Zod validation schemas for all API route inputs — Phase 3-4
+- [x] Fix rate limiter fail-open behavior for security-critical operations — Phase 6
+- [x] Add input validation to n8n proxy (limit, action, payload size) — Phase 5
+- [x] Replace unsafe type assertions with runtime validation — Phase 7
+- [x] Implement API key uniqueness constraint per user — Phase 8
+- [x] Implement n8n URL uniqueness constraint per user — Phase 8
+- [x] Add instance-level rate limits (per n8n instance) — Phase 6
+- [x] Minimize client-side credential exposure — Phase 9
 
 ### Out of Scope
 
@@ -72,4 +72,4 @@ Harden FlowVault's security posture by addressing identified vulnerabilities, im
 
 ---
 
-*Last updated: 2026-01-12 after initialization*
+*Last updated: 2026-01-13 after Phase 9 completion*

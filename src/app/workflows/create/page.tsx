@@ -13,7 +13,7 @@ interface LogEntry {
 }
 
 export default function CreatePage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [workflowNames, setWorkflowNames] = useState('');
   const [tagName, setTagName] = useState('');
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -55,7 +55,7 @@ export default function CreatePage() {
         const response = await fetch('/api/n8n', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'import', n8nUrl, apiKey, workflow: emptyWorkflow }),
+          body: JSON.stringify({ action: 'import', workflow: emptyWorkflow }),
         });
         const result = await response.json();
         if (result.id) {
@@ -80,7 +80,7 @@ export default function CreatePage() {
         const tagResponse = await fetch('/api/n8n', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'createTag', n8nUrl, apiKey, tagName }),
+          body: JSON.stringify({ action: 'createTag', tagName }),
         });
         const tagResult = await tagResponse.json();
         if (tagResult.id) {
@@ -88,7 +88,7 @@ export default function CreatePage() {
             await fetch('/api/n8n', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'tagWorkflow', n8nUrl, apiKey, workflowId: wfId, tagId: tagResult.id }),
+              body: JSON.stringify({ action: 'tagWorkflow', workflowId: wfId, tagId: tagResult.id }),
             });
           }
           log(`Tagged ${createdIds.length} workflow(s)`, 'success');

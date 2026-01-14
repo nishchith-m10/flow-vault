@@ -19,21 +19,21 @@ export function isWorkflowArchived(workflow: Workflow): boolean {
 /**
  * Archive a workflow by setting isArchived to true in n8n
  */
-export async function archiveWorkflow(n8nUrl: string, apiKey: string, workflowId: string): Promise<void> {
+export async function archiveWorkflow(workflowId: string): Promise<void> {
   await fetch('/api/n8n', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'archiveWorkflow', n8nUrl, apiKey, workflowId }),
+    body: JSON.stringify({ action: 'archiveWorkflow', workflowId }),
   });
 }
 
 /**
  * Unarchive a workflow by setting isArchived to false in n8n
  */
-export async function unarchiveWorkflow(n8nUrl: string, apiKey: string, workflowId: string): Promise<void> {
+export async function unarchiveWorkflow(workflowId: string): Promise<void> {
   await fetch('/api/n8n', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'unarchiveWorkflow', n8nUrl, apiKey, workflowId }),
+    body: JSON.stringify({ action: 'unarchiveWorkflow', workflowId }),
   });
 }

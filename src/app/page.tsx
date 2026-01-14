@@ -10,7 +10,6 @@ import {
   Upload,
   Sparkles,
   Settings,
-  Link,
   CheckCircle2,
   Unplug,
 } from 'lucide-react';
@@ -72,7 +71,7 @@ function QuickAction({ href, icon: Icon, label }: QuickActionProps) {
 }
 
 export default function DashboardPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -86,7 +85,7 @@ export default function DashboardPage() {
         const wfResponse = await fetch('/api/n8n', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'listWorkflows', n8nUrl, apiKey }),
+          body: JSON.stringify({ action: 'listWorkflows' }),
         });
         const wfData = await wfResponse.json();
 
@@ -94,7 +93,7 @@ export default function DashboardPage() {
         const exResponse = await fetch('/api/n8n', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'listExecutions', n8nUrl, apiKey, limit: 100 }),
+          body: JSON.stringify({ action: 'listExecutions', limit: 100 }),
         });
         const exData = await exResponse.json();
 
@@ -115,7 +114,7 @@ export default function DashboardPage() {
     };
 
     fetchStats();
-  }, [isConfigured, n8nUrl, apiKey]);
+  }, [isConfigured]);
 
   if (!isConfigured) {
     return (
@@ -186,15 +185,6 @@ export default function DashboardPage() {
             <CardTitle>Connection Info</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b border-[var(--border-primary)]">
-              <div className="flex items-center gap-3 text-[var(--text-muted)]">
-                <Link className="w-4 h-4" />
-                <span className="shrink-0">Instance</span>
-              </div>
-              <span className="font-mono text-xs text-[var(--text-primary)] truncate ml-2" style={{ maxWidth: '60%' }} title={n8nUrl}>
-                {n8nUrl}
-              </span>
-            </div>
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-3 text-[var(--text-muted)]">
                 <Settings className="w-4 h-4" />

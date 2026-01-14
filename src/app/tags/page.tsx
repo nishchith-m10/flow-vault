@@ -15,7 +15,7 @@ interface TagItem {
 }
 
 export default function TagsPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [tags, setTags] = useState<TagItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [newTagName, setNewTagName] = useState('');
@@ -31,7 +31,7 @@ export default function TagsPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'listTags', n8nUrl, apiKey }),
+        body: JSON.stringify({ action: 'listTags' }),
       });
       const data = await response.json();
       setTags(data.data || []);
@@ -40,7 +40,7 @@ export default function TagsPage() {
       toast.error('Failed to fetch tags');
     }
     setLoading(false);
-  }, [isConfigured, n8nUrl, apiKey, toast]);
+  }, [isConfigured, toast]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -58,7 +58,7 @@ export default function TagsPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'createTag', n8nUrl, apiKey, tagName: newTagName }),
+        body: JSON.stringify({ action: 'createTag', tagName: newTagName }),
       });
       const result = await response.json();
       if (result.id) {
@@ -89,7 +89,7 @@ export default function TagsPage() {
           await fetch('/api/n8n', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'deleteTag', n8nUrl, apiKey, tagId: tag.id }),
+            body: JSON.stringify({ action: 'deleteTag', tagId: tag.id }),
           });
           toast.success(`Tag "${tag.name}" deleted`);
           fetchTags();

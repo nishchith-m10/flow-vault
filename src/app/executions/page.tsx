@@ -19,7 +19,7 @@ interface Execution {
 }
 
 export default function ExecutionsPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [executions, setExecutions] = useState<Execution[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'success' | 'error' | 'running'>('all');
@@ -33,7 +33,7 @@ export default function ExecutionsPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'listExecutions', n8nUrl, apiKey }),
+        body: JSON.stringify({ action: 'listExecutions' }),
       });
       const data = await response.json();
       setExecutions(data.data || []);
@@ -42,7 +42,7 @@ export default function ExecutionsPage() {
       toast.error('Failed to fetch executions');
     }
     setLoading(false);
-  }, [isConfigured, n8nUrl, apiKey, toast]);
+  }, [isConfigured, toast]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -63,7 +63,7 @@ export default function ExecutionsPage() {
           await fetch('/api/n8n', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'deleteExecution', n8nUrl, apiKey, executionId: id }),
+            body: JSON.stringify({ action: 'deleteExecution', executionId: id }),
           });
           setExecutions((prev) => prev.filter((e) => e.id !== id));
           toast.success('Execution deleted');

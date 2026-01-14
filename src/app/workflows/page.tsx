@@ -41,7 +41,7 @@ interface Workflow {
 }
 
 export default function WorkflowsPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const { showModal } = useModal();
   const toast = useToast();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
@@ -59,7 +59,7 @@ export default function WorkflowsPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'listWorkflows', n8nUrl, apiKey }),
+        body: JSON.stringify({ action: 'listWorkflows' }),
       });
       const data = await response.json();
       
@@ -70,7 +70,7 @@ export default function WorkflowsPage() {
       toast.error('Failed to fetch workflows', 'Please check your connection');
     }
     setLoading(false);
-  }, [isConfigured, n8nUrl, apiKey, toast]);
+  }, [isConfigured, toast]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -115,7 +115,7 @@ export default function WorkflowsPage() {
       let successCount = 0;
       for (const id of selectedIds) {
         try {
-          await archiveWorkflow(n8nUrl, apiKey, id);
+          await archiveWorkflow(id);
           successCount++;
         } catch (error) {
           console.error(`Failed to archive workflow ${id}:`, error);
@@ -149,7 +149,7 @@ export default function WorkflowsPage() {
               await fetch('/api/n8n', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'deleteWorkflow', n8nUrl, apiKey, workflowId: id }),
+                body: JSON.stringify({ action: 'deleteWorkflow', workflowId: id }),
               });
               successCount++;
             } catch (error) {
@@ -175,8 +175,6 @@ export default function WorkflowsPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: action === 'activate' ? 'activateWorkflow' : 'deactivateWorkflow',
-            n8nUrl,
-            apiKey,
             workflowId: id,
           }),
         });

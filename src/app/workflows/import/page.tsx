@@ -25,7 +25,7 @@ function generateId() {
 }
 
 export default function ImportPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [files, setFiles] = useState<WorkflowFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
@@ -139,7 +139,7 @@ export default function ImportPage() {
     let errors = 0;
     const tagCache: Record<string, string> = {}; // tagName -> tagId
 
-    log(`Starting import to ${n8nUrl}...`, 'info');
+    log(`Starting import...`, 'info');
 
     for (const file of files) {
       try {
@@ -147,7 +147,7 @@ export default function ImportPage() {
         const response = await fetch('/api/n8n', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'import', n8nUrl, apiKey, workflow: file.content }),
+          body: JSON.stringify({ action: 'import', workflow: file.content }),
         });
         const result = await response.json();
         
@@ -164,7 +164,7 @@ export default function ImportPage() {
                   const tagResponse = await fetch('/api/n8n', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'createTag', n8nUrl, apiKey, tagName }),
+                    body: JSON.stringify({ action: 'createTag', tagName }),
                   });
                   const tagResult = await tagResponse.json();
                   if (tagResult.id) {
@@ -177,7 +177,7 @@ export default function ImportPage() {
                   await fetch('/api/n8n', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'tagWorkflow', n8nUrl, apiKey, workflowId: result.id, tagId: tagCache[tagName] }),
+                    body: JSON.stringify({ action: 'tagWorkflow', workflowId: result.id, tagId: tagCache[tagName] }),
                   });
                 }
               } catch {

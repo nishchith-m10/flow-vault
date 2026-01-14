@@ -20,7 +20,7 @@ interface Workflow {
 }
 
 export default function ArchivedWorkflowsPage() {
-  const { n8nUrl, apiKey, isConfigured } = useCredentials();
+  const { isConfigured } = useCredentials();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -38,7 +38,7 @@ export default function ArchivedWorkflowsPage() {
       const response = await fetch('/api/n8n', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'listWorkflows', n8nUrl, apiKey }),
+        body: JSON.stringify({ action: 'listWorkflows' }),
       });
       const data = await response.json();
       
@@ -49,7 +49,7 @@ export default function ArchivedWorkflowsPage() {
       toast.error('Failed to fetch workflows');
     }
     setLoading(false);
-  }, [isConfigured, n8nUrl, apiKey, toast]);
+  }, [isConfigured, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,7 +80,7 @@ export default function ArchivedWorkflowsPage() {
     let restored = 0;
     for (const id of selectedIds) {
       try {
-        await unarchiveWorkflow(n8nUrl, apiKey, id);
+        await unarchiveWorkflow(id);
         restored++;
       } catch (error) {
         console.error(`Failed to restore workflow ${id}:`, error);
@@ -117,7 +117,7 @@ export default function ArchivedWorkflowsPage() {
             await fetch('/api/n8n', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'deleteWorkflow', n8nUrl, apiKey, workflowId: id }),
+              body: JSON.stringify({ action: 'deleteWorkflow', workflowId: id }),
             });
             deleted++;
           } catch (error) {
