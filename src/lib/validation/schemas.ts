@@ -185,11 +185,6 @@ export const N8nActionEnum = z.enum([
   'getExecution',
   'deleteExecution',
   'retryExecution',
-  // Variable actions
-  'listVariables',
-  'createVariable',
-  'updateVariable',
-  'deleteVariable',
 ]);
 
 /**
@@ -331,30 +326,6 @@ export const N8nListExecutionsRequestSchema = z.object({
   limit: N8nLimitSchema.optional(),
 });
 
-/**
- * Schema for variable operations
- */
-export const N8nCreateVariableRequestSchema = z.object({
-  action: z.literal('createVariable'),
-  variableName: z.string().min(1, 'Variable name required').max(100, 'Variable name too long'),
-  variableValue: z.string().max(10000, 'Variable value too long'),
-});
-
-export const N8nUpdateVariableRequestSchema = z.object({
-  action: z.literal('updateVariable'),
-  variableId: z.string().min(1, 'Variable ID required').max(100, 'Variable ID too long'),
-  variableName: z.string().min(1, 'Variable name required').max(100, 'Variable name too long'),
-  variableValue: z.string().max(10000, 'Variable value too long'),
-});
-
-export const N8nDeleteVariableRequestSchema = z.object({
-  action: z.literal('deleteVariable'),
-  variableId: z.string().min(1, 'Variable ID required').max(100, 'Variable ID too long'),
-});
-
-export const N8nListVariablesRequestSchema = z.object({
-  action: z.literal('listVariables'),});
-
 export const N8nListWorkflowsRequestSchema = z.object({
   action: z.literal('listWorkflows'),});
 
@@ -379,10 +350,6 @@ export const N8nProxyRequestSchema = z.discriminatedUnion('action', [
   N8nDeleteExecutionRequestSchema,
   N8nRetryExecutionRequestSchema,
   N8nListExecutionsRequestSchema,
-  N8nCreateVariableRequestSchema,
-  N8nUpdateVariableRequestSchema,
-  N8nDeleteVariableRequestSchema,
-  N8nListVariablesRequestSchema,
   N8nListWorkflowsRequestSchema,
 ]);
 

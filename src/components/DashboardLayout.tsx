@@ -46,7 +46,6 @@ const navItems = [
   { href: '/workflows/create', label: 'Create', icon: Sparkles, indent: true },
   { href: '/workflows/archived', label: 'Archived', icon: Archive, indent: true },
   { href: '/executions', label: 'Executions', icon: Zap },
-  { href: '/variables', label: 'Variables', icon: Settings },
   { href: '/tags', label: 'Tags', icon: Tag },
   { href: '/trash', label: 'Trash', icon: Trash2 },
 ];

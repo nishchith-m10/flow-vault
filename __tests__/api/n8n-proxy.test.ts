@@ -142,7 +142,6 @@ describe('/api/n8n Proxy - Schema Validation', () => {
         'activateWorkflow', 'deactivateWorkflow', 'archiveWorkflow', 'unarchiveWorkflow',
         'createTag', 'listTags', 'deleteTag', 'tagWorkflow', 'untagWorkflow',
         'listExecutions', 'getExecution', 'deleteExecution', 'retryExecution',
-        'listVariables', 'createVariable', 'updateVariable', 'deleteVariable',
       ];
 
       for (const action of validActions) {
@@ -459,89 +458,6 @@ describe('/api/n8n Proxy - Schema Validation', () => {
     });
   });
 
-  describe('Variable Operations Validation', () => {
-    it('should reject createVariable without variableName', () => {
-      const invalid = {
-        action: 'createVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableValue: 'test-value',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, invalid);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('variableName');
-    });
-
-    it('should reject createVariable with variableValue exceeding 10000 characters', () => {
-      const longValue = 'a'.repeat(10001);
-      const invalid = {
-        action: 'createVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableName: 'test-var',
-        variableValue: longValue,
-      };
-
-      const result = validateData(N8nProxyRequestSchema, invalid);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Variable value too long');
-    });
-
-    it('should reject updateVariable without variableId', () => {
-      const invalid = {
-        action: 'updateVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableName: 'test-var',
-        variableValue: 'test-value',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, invalid);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('variableId');
-    });
-
-    it('should accept valid createVariable', () => {
-      const valid = {
-        action: 'createVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableName: 'test-var',
-        variableValue: 'test-value',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, valid);
-      expect(result.success).toBe(true);
-    });
-
-    it('should accept valid updateVariable', () => {
-      const valid = {
-        action: 'updateVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableId: 'test-id',
-        variableName: 'test-var',
-        variableValue: 'test-value',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, valid);
-      expect(result.success).toBe(true);
-    });
-
-    it('should accept valid deleteVariable', () => {
-      const valid = {
-        action: 'deleteVariable',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-        variableId: 'test-id',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, valid);
-      expect(result.success).toBe(true);
-    });
-  });
-
   describe('List Operations Validation', () => {
     it('should accept listWorkflows', () => {
       const valid = {
@@ -557,17 +473,6 @@ describe('/api/n8n Proxy - Schema Validation', () => {
     it('should accept listTags', () => {
       const valid = {
         action: 'listTags',
-        n8nUrl: 'https://n8n.example.com',
-        apiKey: 'test-api-key-1234567890',
-      };
-
-      const result = validateData(N8nProxyRequestSchema, valid);
-      expect(result.success).toBe(true);
-    });
-
-    it('should accept listVariables', () => {
-      const valid = {
-        action: 'listVariables',
         n8nUrl: 'https://n8n.example.com',
         apiKey: 'test-api-key-1234567890',
       };

@@ -214,7 +214,7 @@ export async function getRateLimitStatus(
   const { data: rawData, error } = await supabase
     .from('flowvault_rate_limit_counters')
     .select('count, window_start')
-    .eq('user_id', userId)
+    .eq('clerk_user_id', userId)
     .eq('action', action)
     .gte('window_start', windowStart.toISOString())
     .order('window_start', { ascending: false })
@@ -269,7 +269,7 @@ export async function resetRateLimit(
   const query = supabase
     .from('flowvault_rate_limit_counters')
     .delete()
-    .eq('user_id', userId);
+    .eq('clerk_user_id', userId);
 
   if (action) {
     query.eq('action', action);

@@ -74,7 +74,6 @@ export function CommandPaletteProvider({ children }: CommandPaletteProviderProps
     { id: 'create', label: 'Create Workflow', icon: <Sparkles size={18} />, shortcut: 'G C', action: () => { router.push('/workflows/create'); close(); }, group: 'Navigation' },
     { id: 'archived', label: 'Archived', icon: <Archive size={18} />, shortcut: 'G A', action: () => { router.push('/workflows/archived'); close(); }, group: 'Navigation' },
     { id: 'executions', label: 'Executions', icon: <Zap size={18} />, shortcut: 'G E', action: () => { router.push('/executions'); close(); }, group: 'Navigation' },
-    { id: 'variables', label: 'Variables', icon: <Settings size={18} />, shortcut: 'G V', action: () => { router.push('/variables'); close(); }, group: 'Navigation' },
     { id: 'tags', label: 'Tags', icon: <Tag size={18} />, shortcut: 'G T', action: () => { router.push('/tags'); close(); }, group: 'Navigation' },
     { id: 'trash', label: 'Trash', icon: <Trash2 size={18} />, action: () => { router.push('/trash'); close(); }, group: 'Navigation' },
   ];

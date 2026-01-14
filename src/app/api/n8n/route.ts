@@ -21,9 +21,6 @@ type N8nProxyRequestFlat = {
   workflowId?: string;
   tagId?: string;
   limit?: number;
-  variableId?: string;
-  variableName?: string;
-  variableValue?: string;
   executionId?: string;
 };
 
@@ -95,7 +92,7 @@ export async function POST(request: NextRequest) {
 
     // Type assertion is safe here because we've validated with Zod schema above
     // Using flat type to destructure all possible fields from discriminated union
-    const { action, workflow, tagName, workflowId, tagId, limit, variableId, variableName, variableValue, executionId } = validationResult.data as N8nProxyRequestFlat;
+    const { action, workflow, tagName, workflowId, tagId, limit, executionId } = validationResult.data as N8nProxyRequestFlat;
 
     const headers = {
       'X-N8N-API-KEY': apiKey,
@@ -271,40 +268,6 @@ export async function POST(request: NextRequest) {
           headers: { 'X-N8N-API-KEY': apiKey },
         });
         return NextResponse.json(await response.json());
-      }
-
-      // ============ VARIABLES ============
-      case 'listVariables': {
-        const response = await fetch(`${baseUrl}/api/v1/variables`, {
-          headers: { 'X-N8N-API-KEY': apiKey },
-        });
-        return NextResponse.json(await response.json());
-      }
-
-      case 'createVariable': {
-        const response = await fetch(`${baseUrl}/api/v1/variables`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({ key: variableName, value: variableValue }),
-        });
-        return NextResponse.json(await response.json());
-      }
-
-      case 'updateVariable': {
-        const response = await fetch(`${baseUrl}/api/v1/variables/${variableId}`, {
-          method: 'PUT',
-          headers,
-          body: JSON.stringify({ key: variableName, value: variableValue }),
-        });
-        return NextResponse.json(await response.json());
-      }
-
-      case 'deleteVariable': {
-        const response = await fetch(`${baseUrl}/api/v1/variables/${variableId}`, {
-          method: 'DELETE',
-          headers: { 'X-N8N-API-KEY': apiKey },
-        });
-        return NextResponse.json({ success: response.ok });
       }
 
       default:
