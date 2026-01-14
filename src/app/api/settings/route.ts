@@ -20,6 +20,7 @@ import {
 } from '@/lib/database';
 import { encrypt, decrypt, type EncryptedData } from '@/lib/encryption';
 import { safeJSONParse } from '@/lib/utils/json';
+import { generateApiKeyHash } from '@/lib/utils/hash';
 import { ApiKeyTestRequestSchema, SettingsUpdateRequestSchema, validateData } from '@/lib/validation';
 
 /**
@@ -108,6 +109,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Generate API key hash for uniqueness checking
+    const apiKeyHash = await generateApiKeyHash(n8n_api_key);
+
     // Encrypt the n8n API key
     const encryptionResult = await encrypt(n8n_api_key, encryptionPassword);
 
@@ -124,27 +128,60 @@ export async function POST(request: NextRequest) {
     const exists = await userSettingsExist(userId);
 
     let result;
-    if (exists) {
-      // Update existing settings
-      result = await updateUserSettings(userId, {
-        n8n_instance_url,
-        n8n_api_key_encrypted: JSON.stringify(encryptedData),
-        encryption_iv: encryptedData.iv,
-        backup_enabled: backup_enabled ?? true,
-        backup_schedule: backup_schedule ?? 'daily',
-        retention_days: retention_days ?? 30,
-      });
-    } else {
-      // Create new settings
-      result = await createUserSettings({
-        clerk_user_id: userId,
-        n8n_instance_url,
-        n8n_api_key_encrypted: JSON.stringify(encryptedData),
-        encryption_iv: encryptedData.iv,
-        backup_enabled: backup_enabled ?? true,
-        backup_schedule: backup_schedule ?? 'daily',
-        retention_days: retention_days ?? 30,
-      });
+    try {
+      if (exists) {
+        // Update existing settings
+        result = await updateUserSettings(userId, {
+          n8n_instance_url,
+          n8n_api_key_encrypted: JSON.stringify(encryptedData),
+          n8n_api_key_hash: apiKeyHash,
+          encryption_iv: encryptedData.iv,
+          backup_enabled: backup_enabled ?? true,
+          backup_schedule: backup_schedule ?? 'daily',
+          retention_days: retention_days ?? 30,
+        });
+      } else {
+        // Create new settings
+        result = await createUserSettings({
+          clerk_user_id: userId,
+          n8n_instance_url,
+          n8n_api_key_encrypted: JSON.stringify(encryptedData),
+          n8n_api_key_hash: apiKeyHash,
+          encryption_iv: encryptedData.iv,
+          backup_enabled: backup_enabled ?? true,
+          backup_schedule: backup_schedule ?? 'daily',
+          retention_days: retention_days ?? 30,
+        });
+      }
+    } catch (error) {
+      // Handle uniqueness constraint violations
+      if (error instanceof Error) {
+        if (error.message.includes('duplicate key') || error.message.includes('unique constraint')) {
+          // Determine which constraint was violated
+          if (error.message.includes('n8n_instance_url') || error.message.includes('url')) {
+            return NextResponse.json(
+              {
+                error: 'Duplicate n8n instance URL',
+                message: 'This n8n instance URL is already registered by another user. Each instance can only be managed by one FlowVault account.',
+                field: 'n8n_instance_url'
+              },
+              { status: 409 } // Conflict
+            );
+          }
+          if (error.message.includes('n8n_api_key_hash') || error.message.includes('hash')) {
+            return NextResponse.json(
+              {
+                error: 'Duplicate API key',
+                message: 'This API key is already in use by another user. Each API key can only be associated with one FlowVault account.',
+                field: 'n8n_api_key'
+              },
+              { status: 409 } // Conflict
+            );
+          }
+        }
+      }
+      // Re-throw if not a constraint violation
+      throw error;
     }
 
     // Don't expose encrypted key in response

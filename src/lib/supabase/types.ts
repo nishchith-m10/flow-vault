@@ -13,6 +13,7 @@ export interface Database {
           clerk_user_id: string;
           n8n_instance_url: string;
           n8n_api_key_encrypted: string;
+          n8n_api_key_hash: string;
           encryption_iv: string;
           backup_enabled: boolean;
           backup_schedule: string;
@@ -26,6 +27,7 @@ export interface Database {
           clerk_user_id: string;
           n8n_instance_url: string;
           n8n_api_key_encrypted: string;
+          n8n_api_key_hash: string;
           encryption_iv: string;
           backup_enabled?: boolean;
           backup_schedule?: string;
@@ -39,6 +41,7 @@ export interface Database {
           clerk_user_id?: string;
           n8n_instance_url?: string;
           n8n_api_key_encrypted?: string;
+          n8n_api_key_hash?: string;
           encryption_iv?: string;
           backup_enabled?: boolean;
           backup_schedule?: string;
