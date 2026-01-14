@@ -1997,3 +1997,194 @@ select.input {
   background: var(--bg-elevated) !important;
   padding: 0 !important;
 }
+
+/* ============================================
+   Clerk Sign-In/Sign-Up Form Styling
+   ============================================ */
+
+/* Main card container */
+.cl-signIn,
+.cl-signUp,
+.cl-card {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Header text */
+.cl-headerTitle,
+.cl-headerSubtitle {
+  color: var(--text-primary) !important;
+}
+
+.cl-headerSubtitle {
+  color: var(--text-secondary) !important;
+}
+
+/* Form field labels */
+.cl-formFieldLabel,
+.cl-label {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+/* Form inputs */
+.cl-formFieldInput,
+.cl-input,
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  background: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 0.375rem !important;
+  transition: all var(--transition-base) !important;
+}
+
+.cl-formFieldInput:focus,
+.cl-input:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-muted) !important;
+  outline: none !important;
+}
+
+.cl-formFieldInput::placeholder,
+.cl-input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Primary button (Sign In, Sign Up) */
+.cl-formButtonPrimary,
+.cl-button,
+button.cl-button {
+  background: var(--accent) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.375rem !important;
+  font-weight: 500 !important;
+  transition: all var(--transition-base) !important;
+}
+
+.cl-formButtonPrimary:hover,
+.cl-button:hover,
+button.cl-button:hover {
+  background: var(--accent-hover) !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+}
+
+.cl-formButtonPrimary:active,
+.cl-button:active {
+  transform: scale(0.98);
+}
+
+/* Social login buttons */
+.cl-socialButtonsBlockButton,
+.cl-socialButton {
+  background: var(--bg-hover) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 0.375rem !important;
+  transition: all var(--transition-base) !important;
+}
+
+.cl-socialButtonsBlockButton:hover,
+.cl-socialButton:hover {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--accent) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+/* Divider */
+.cl-dividerLine,
+[role="separator"] {
+  background: var(--border-default) !important;
+}
+
+.cl-dividerText {
+  color: var(--text-tertiary) !important;
+  font-size: 0.75rem !important;
+}
+
+/* Footer links (Sign up / Sign in toggle) */
+.cl-footerActionLink,
+.cl-formFieldAction,
+[role="link"],
+a {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: color var(--transition-base) !important;
+}
+
+.cl-footerActionLink:hover,
+.cl-formFieldAction:hover,
+a:hover {
+  color: var(--accent-hover) !important;
+}
+
+/* Checkbox */
+.cl-checkbox,
+input[type="checkbox"] {
+  border: 1px solid var(--border-default) !important;
+  background: var(--bg-base) !important;
+}
+
+.cl-checkbox:checked,
+input[type="checkbox"]:checked {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Password visibility toggle */
+.cl-formPasswordHidden,
+.cl-formPasswordVisible {
+  color: var(--text-secondary) !important;
+}
+
+/* Error messages */
+.cl-formFieldErrorMessage,
+[role="alert"] {
+  color: var(--error) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Success messages */
+.cl-alert {
+  background: var(--success-muted) !important;
+  color: var(--success) !important;
+  border: 1px solid var(--success) !important;
+}
+
+/* Sign-in/Sign-up modal backdrop */
+.cl-modalBackdrop {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Manage Account modal */
+.cl-modal {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+/* Tab styling for sign-in/sign-up tabs */
+.cl-tabs {
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+.cl-tab {
+  color: var(--text-secondary) !important;
+  border-bottom: 2px solid transparent !important;
+}
+
+.cl-tab[aria-selected="true"] {
+  color: var(--accent) !important;
+  border-bottom-color: var(--accent) !important;
+}
