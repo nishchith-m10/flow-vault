@@ -7,6 +7,50 @@
 export interface Database {
   public: {
     Tables: {
+      user_settings: {
+        Row: {
+          id: string;
+          clerk_user_id: string;
+          n8n_instance_url: string;
+          n8n_api_key_encrypted: string;
+          n8n_api_key_hash: string;
+          encryption_iv: string;
+          backup_enabled: boolean;
+          backup_schedule: string;
+          last_backup_at: string | null;
+          retention_days: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          clerk_user_id: string;
+          n8n_instance_url: string;
+          n8n_api_key_encrypted: string;
+          n8n_api_key_hash: string;
+          encryption_iv: string;
+          backup_enabled?: boolean;
+          backup_schedule?: string;
+          last_backup_at?: string | null;
+          retention_days?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          clerk_user_id?: string;
+          n8n_instance_url?: string;
+          n8n_api_key_encrypted?: string;
+          n8n_api_key_hash?: string;
+          encryption_iv?: string;
+          backup_enabled?: boolean;
+          backup_schedule?: string;
+          last_backup_at?: string | null;
+          retention_days?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       flowvault_user_settings: {
         Row: {
           id: string;
