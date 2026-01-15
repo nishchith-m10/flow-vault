@@ -165,6 +165,13 @@
 @theme inline {
   --color-background: var(--bg-base);
   --color-foreground: var(--text-primary);
+  --color-card: var(--bg-elevated);
+  --color-card-foreground: var(--text-primary);
+  --color-border: var(--border-default);
+  --color-secondary: var(--bg-hover);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--bg-subtle);
+  --color-muted-foreground: var(--text-tertiary);
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
@@ -1666,296 +1673,33 @@ select.input {
   border: none !important;
 }
 
-/* =========================
-   Light mode Clerk styles
-   ========================= */
-[data-theme="light"] .cl-card,
-[data-theme="light"] .cl-rootBox,
-[data-theme="light"] .cl-cardBox,
-[data-theme="light"] .cl-scrollBox {
-  background: var(--bg-elevated) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-default) !important;
-  background-image: none !important;
-}
-
-[data-theme="light"] .cl-navbar {
-  background: var(--bg-elevated) !important;
-  border-bottom-color: var(--border-default) !important;
-}
-
-[data-theme="light"] .cl-formFieldInput,
-[data-theme="light"] .cl-input,
-[data-theme="light"] .cl-formFieldInput__identifier {
-  background: var(--bg-subtle) !important;
-  border-color: var(--border-default) !important;
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .cl-formFieldInput::placeholder {
-  color: rgba(0,0,0,0.45) !important;
-}
-
-/* Ensure avatar has no square border in light mode and is visible against light background */
-[data-theme="light"] .cl-userButtonAvatarBox,
-[data-theme="light"] .cl-userButtonAvatarBox img,
-[data-theme="light"] .cl-userPreviewAvatarContainer img {
-  border-radius: 9999px !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 1px solid transparent !important; /* keep no visible square */
-  box-shadow: none !important;
-}
-
-/* If avatar needs subtle separation on light bg, use a soft ring */
-[data-theme="light"] .cl-userButtonAvatarBox {
-  box-shadow: 0 0 0 1px rgba(16,16,16,0.04) inset !important;
-}
-
-/* Light mode texts/buttons */
-[data-theme="light"] .cl-formFieldLabel,
-[data-theme="light"] .cl-formFieldLabelRow,
-[data-theme="light"] .cl-formFieldLabel__identifier,
-[data-theme="light"] .cl-headerTitle,
-[data-theme="light"] .cl-headerSubtitle {
-  color: var(--text-primary) !important;
-  font-weight: 500 !important;
-}
-
-/* Cap modal/profile avatar size (modal header) */
-.cl-identityPreviewAvatarContainer,
-.cl-identityPreviewAvatar,
-.cl-identityPreview__avatar,
-.cl-identityPreview img,
-[data-theme="light"] .cl-identityPreviewAvatarContainer,
-[data-theme="light"] .cl-identityPreviewAvatar {
-  width: 48px !important;
-  height: 48px !important;
-  min-width: 48px !important;
-  min-height: 48px !important;
-  border-radius: 9999px !important;
-  overflow: hidden !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-/* Ensure sidebar small avatar remains 32px */
-.cl-userButtonAvatarBox,
-[data-theme="light"] .cl-userButtonAvatarBox {
-  width: 32px !important;
-  height: 32px !important;
-}
-
-/* Remove diagonal stripe/backgrounds applied inline */
-.cl-rootBox [style*="linear-gradient"],
-.cl-card [style*="linear-gradient"],
-[data-theme="light"] .cl-rootBox [style*="linear-gradient"],
-[data-theme="light"] .cl-card [style*="linear-gradient"] {
-  background-image: none !important;
-  background: transparent !important;
-}
-
-/* Tone down inner panel to match light theme (avoid dark inset panels) */
-[data-theme="light"] .cl-card .cl-section,
-[data-theme="light"] .cl-card .cl-row,
-[data-theme="light"] .cl-card .cl-list,
-[data-theme="light"] .cl-card .cl-inner,
-[data-theme="light"] .cl-card .cl-panel,
-[data-theme="light"] .cl-card .cl-content,
-[data-theme="light"] .cl-card .cl-scrollBox,
-[data-theme="light"] .cl-cardBox,
-[data-theme="light"] .cl-cardBox * {
-  background: var(--bg-elevated) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-default) !important;
-  box-shadow: none !important;
-}
-
-/* Make all text inside card readable on light mode */
-[data-theme="light"] .cl-card,
-[data-theme="light"] .cl-card * {
-  color: var(--text-primary) !important;
-  background: transparent !important;
-}
-
-/* Ensure footer/watermark hidden in light mode except sidebar footer we need to keep */
-[data-theme="light"] .cl-footer,
-[data-theme="light"] .cl-footer *,
-[data-theme="light"] [class*="branding"],
-[data-theme="light"] [class*="brand"],
-[data-theme="light"] .cl-card footer,
-[data-theme="light"] .cl-card > div:last-child,
-[data-theme="light"] .cl-rootBox > div:last-child,
-[data-theme="light"] img[src*="clerk"],
-[data-theme="light"] svg[class*="clerk"] {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Explicitly restore sidebar footer in light mode */
-[data-theme="light"] .sidebar-footer {
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
-  padding: var(--space-3) !important;
-  margin: 0 !important;
-}
-
-/* Make sure avatar images are visible in light mode */
-[data-theme="light"] .cl-userButtonAvatarBox img,
-[data-theme="light"] .cl-avatarBox img,
-[data-theme="light"] .cl-userPreviewAvatarContainer img {
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
-  width: 100% !important;
-}
-
-/* Ensure the connection button and avatar in footer are visible and styled for light */
-[data-theme="light"] .sidebar-footer .btn,
-[data-theme="light"] .sidebar-footer .flex {
-  color: var(--text-primary) !important;
-}
-
-/* Force text colors in user profile section for light mode */
-[data-theme="light"] .sidebar-footer .flex .text-sm,
-[data-theme="light"] .sidebar-footer .flex .text-xs,
-[data-theme="light"] .sidebar-footer div > div {
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .sidebar-footer .flex .text-xs {
-  color: var(--text-tertiary) !important;
-}
-
-[data-theme="light"] .sidebar-footer .w-2.h-2.rounded-full {
-  display: inline-block !important;
-}
-
-/* Remove any remaining linear gradients or background patterns within root/card */
-[data-theme="light"] .cl-rootBox [style*="linear-gradient"],
-[data-theme="light"] .cl-card [style*="linear-gradient"] {
-  background-image: none !important;
-  background: transparent !important;
-}
-[data-theme="light"] .cl-formButtonPrimary {
-  background: var(--accent) !important;
-  color: white !important;
-}
-
-[data-theme="light"] .cl-formButtonSecondary {
-  background: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
-}
-
-/* Light-mode popover overrides: make popovers match light theme and use accent on hover */
-[data-theme="light"] .cl-userButtonPopoverCard,
-[data-theme="light"] .cl-userButtonPopoverMain,
-[data-theme="light"] [class*="userButtonPopover"] {
-  background: var(--bg-elevated) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-default) !important;
-  box-shadow: 0 6px 18px rgba(16,16,16,0.06) !important;
-  border-radius: 8px !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButton,
-[data-theme="light"] [class*="userButtonPopoverActionButton"] {
-  background: transparent !important;
-  color: var(--text-primary) !important;
-  border: none !important;
-  padding: 0.5rem 0.75rem !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButton:hover,
-[data-theme="light"] [class*="userButtonPopoverActionButton"]:hover {
-  background: var(--bg-subtle) !important;
-  color: var(--accent) !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButtonText,
-[data-theme="light"] [class*="userButtonPopoverActionButtonText"] {
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButtonIcon,
-[data-theme="light"] [class*="userButtonPopoverActionButtonIcon"] {
-  color: var(--text-tertiary) !important;
-}
-
-/* Ensure footer/branding not visible in light popover */
-[data-theme="light"] .cl-userButtonPopoverFooter,
-[data-theme="light"] .cl-userButtonPopoverCard footer,
-[data-theme="light"] .cl-userButtonPopoverCard > div:last-child {
-  display: none !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  visibility: hidden !important;
-}
-
-/* Force ALL popover text to be dark in light mode - nuclear option */
-[data-theme="light"] .cl-userButtonPopoverCard,
-[data-theme="light"] .cl-userButtonPopoverCard *,
-[data-theme="light"] .cl-userButtonPopoverCard button,
-[data-theme="light"] .cl-userButtonPopoverCard button *,
-[data-theme="light"] .cl-userButtonPopoverCard span,
-[data-theme="light"] .cl-userButtonPopoverCard div,
-[data-theme="light"] .cl-userButtonPopoverCard p,
-[data-theme="light"] .cl-userButtonPopoverCard a,
-[data-theme="light"] .cl-userButtonPopoverActionButton,
-[data-theme="light"] .cl-userButtonPopoverActionButtonText,
-[data-theme="light"] [class*="userButtonPopover"] *,
-[data-theme="light"] [class*="userButtonPopover"] button *,
-[data-theme="light"] [class*="userButtonPopover"] span {
-  color: #18181B !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverCard,
-[data-theme="light"] .cl-userButtonPopoverCard .cl-row,
-[data-theme="light"] .cl-userButtonPopoverCard .cl-section,
-[data-theme="light"] .cl-userButtonPopoverCard button {
-  background: #FFFFFF !important;
-  border-color: #D4D4D8 !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverCard button:hover,
-[data-theme="light"] .cl-userButtonPopoverCard button:hover * {
-  background: var(--bg-hover) !important;
-  color: var(--text-primary) !important;
-}
-
 /* ============================================
-   FINAL CLERK OVERRIDES - Clean & Consistent
+   CLERK COMPONENT STYLING - Unified & Theme-Aware
    ============================================ */
 
-/* Force consistent popover styling across all themes */
-.cl-userButtonPopoverCard,
-[data-theme="light"] .cl-userButtonPopoverCard,
-[data-theme="dark"] .cl-userButtonPopoverCard {
+/* --- Popover (Profile Dropdown) Styling --- */
+.cl-userButtonPopoverCard {
   background: var(--bg-elevated) !important;
   border: 1px solid var(--border-default) !important;
   color: var(--text-primary) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
   min-width: 200px !important;
   max-width: 200px !important;
   padding: 6px !important;
 }
 
-/* Force consistent action button styling */
-.cl-userButtonPopoverActionButton,
-[data-theme="light"] .cl-userButtonPopoverActionButton,
-[data-theme="dark"] .cl-userButtonPopoverActionButton {
+.cl-userButtonPopoverMain {
+  background: var(--bg-elevated) !important;
+  padding: 0 !important;
+}
+
+.cl-userButtonPopoverActionButton {
   background: transparent !important;
   color: var(--text-primary) !important;
   padding: 8px 12px !important;
-  border-radius: 6px !important;
-  transition: background-color 150ms ease !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color var(--transition-fast) !important;
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -1965,44 +1709,59 @@ select.input {
   font-weight: 500 !important;
 }
 
-.cl-userButtonPopoverActionButton:hover,
-[data-theme="light"] .cl-userButtonPopoverActionButton:hover,
-[data-theme="dark"] .cl-userButtonPopoverActionButton:hover {
-  background: var(--bg-hover) !important;
+.cl-userButtonPopoverActionButton:hover {
+  background: var(--bg-subtle) !important;
   color: var(--text-primary) !important;
 }
 
-/* Force consistent action button text */
-.cl-userButtonPopoverActionButtonText,
-[data-theme="light"] .cl-userButtonPopoverActionButtonText,
-[data-theme="dark"] .cl-userButtonPopoverActionButtonText {
+.cl-userButtonPopoverActionButtonText {
   color: var(--text-primary) !important;
   font-size: 14px !important;
   font-weight: 500 !important;
 }
 
-/* Force consistent action button icons */
-.cl-userButtonPopoverActionButtonIcon,
-[data-theme="light"] .cl-userButtonPopoverActionButtonIcon,
-[data-theme="dark"] .cl-userButtonPopoverActionButtonIcon {
+.cl-userButtonPopoverActionButtonIcon {
   color: var(--text-tertiary) !important;
   width: 16px !important;
   height: 16px !important;
 }
 
-/* Force consistent popover main container */
-.cl-userButtonPopoverMain,
-[data-theme="light"] .cl-userButtonPopoverMain,
-[data-theme="dark"] .cl-userButtonPopoverMain {
-  background: var(--bg-elevated) !important;
+/* Profile icon hover effect should be circular */
+.cl-userButtonTrigger {
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
   padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  transition: all var(--transition-fast) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* ============================================
-   Clerk Sign-In/Sign-Up Form Styling
-   ============================================ */
+.cl-userButtonTrigger:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 0 3px var(--accent-muted) !important;
+}
 
-/* Main card container */
+.cl-userButtonTrigger:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-muted) !important;
+  outline: none !important;
+}
+
+.cl-userButtonPopoverFooter,
+.cl-userButtonPopoverCard footer,
+.cl-userButtonPopoverCard > div:last-child {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  visibility: hidden !important;
+}
+
+/* --- Sign-In/Sign-Up Form Styling --- */
 .cl-signIn,
 .cl-signUp,
 .cl-card {
@@ -2012,9 +1771,22 @@ select.input {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Header text */
-.cl-headerTitle,
-.cl-headerSubtitle {
+.cl-card .cl-section,
+.cl-card .cl-row,
+.cl-card .cl-list,
+.cl-card .cl-inner,
+.cl-card .cl-panel,
+.cl-card .cl-content,
+.cl-card .cl-scrollBox,
+.cl-cardBox,
+.cl-cardBox * {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+  box-shadow: none !important;
+}
+
+.cl-headerTitle {
   color: var(--text-primary) !important;
 }
 
@@ -2022,14 +1794,12 @@ select.input {
   color: var(--text-secondary) !important;
 }
 
-/* Form field labels */
 .cl-formFieldLabel,
 .cl-label {
   color: var(--text-primary) !important;
   font-weight: 500 !important;
 }
 
-/* Form inputs */
 .cl-formFieldInput,
 .cl-input,
 input[type="email"],
@@ -2057,7 +1827,6 @@ input[type="text"]:focus {
   color: var(--text-tertiary) !important;
 }
 
-/* Primary button (Sign In, Sign Up) */
 .cl-formButtonPrimary,
 .cl-button,
 button.cl-button {
@@ -2081,10 +1850,14 @@ button.cl-button:hover {
   transform: scale(0.98);
 }
 
-/* Social login buttons */
+.cl-formButtonSecondary {
+  background: var(--bg-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
 .cl-socialButtonsBlockButton,
 .cl-socialButton {
-  background: var(--bg-hover) !important;
+  background: transparent !important;
   color: var(--text-primary) !important;
   border: 1px solid var(--border-default) !important;
   border-radius: 0.375rem !important;
@@ -2093,7 +1866,7 @@ button.cl-button:hover {
 
 .cl-socialButtonsBlockButton:hover,
 .cl-socialButton:hover {
-  background: var(--bg-tertiary) !important;
+  background: var(--bg-hover) !important;
   border-color: var(--accent) !important;
 }
 
@@ -2102,7 +1875,13 @@ button.cl-button:hover {
   font-weight: 500 !important;
 }
 
-/* Divider */
+/* Remove any white background from button containers */
+.cl-socialButtonsBlockButton__root,
+.cl-socialButtonsBlock,
+.cl-socialButtonsIconButton__root {
+  background: transparent !important;
+}
+
 .cl-dividerLine,
 [role="separator"] {
   background: var(--border-default) !important;
@@ -2113,11 +1892,8 @@ button.cl-button:hover {
   font-size: 0.75rem !important;
 }
 
-/* Footer links (Sign up / Sign in toggle) */
 .cl-footerActionLink,
-.cl-formFieldAction,
-[role="link"],
-a {
+.cl-formFieldAction {
   color: var(--accent) !important;
   text-decoration: none !important;
   font-weight: 500 !important;
@@ -2125,12 +1901,10 @@ a {
 }
 
 .cl-footerActionLink:hover,
-.cl-formFieldAction:hover,
-a:hover {
+.cl-formFieldAction:hover {
   color: var(--accent-hover) !important;
 }
 
-/* Checkbox */
 .cl-checkbox,
 input[type="checkbox"] {
   border: 1px solid var(--border-default) !important;
@@ -2143,38 +1917,32 @@ input[type="checkbox"]:checked {
   border-color: var(--accent) !important;
 }
 
-/* Password visibility toggle */
 .cl-formPasswordHidden,
 .cl-formPasswordVisible {
   color: var(--text-secondary) !important;
 }
 
-/* Error messages */
 .cl-formFieldErrorMessage,
 [role="alert"] {
   color: var(--error) !important;
   font-size: 0.875rem !important;
 }
 
-/* Success messages */
 .cl-alert {
   background: var(--success-muted) !important;
   color: var(--success) !important;
   border: 1px solid var(--success) !important;
 }
 
-/* Sign-in/Sign-up modal backdrop */
 .cl-modalBackdrop {
   background: rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Manage Account modal */
 .cl-modal {
   background: var(--bg-elevated) !important;
   border: 1px solid var(--border-default) !important;
 }
 
-/* Tab styling for sign-in/sign-up tabs */
 .cl-tabs {
   border-bottom: 1px solid var(--border-default) !important;
 }
@@ -2187,4 +1955,65 @@ input[type="checkbox"]:checked {
 .cl-tab[aria-selected="true"] {
   color: var(--accent) !important;
   border-bottom-color: var(--accent) !important;
+}
+
+.cl-navbar {
+  background: var(--bg-elevated) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* --- Avatar Styling --- */
+.cl-userButtonAvatarBox,
+.cl-userButtonAvatarBox img,
+.cl-userPreviewAvatarContainer img {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.cl-userButtonAvatarBox {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.cl-identityPreviewAvatarContainer,
+.cl-identityPreviewAvatar,
+.cl-identityPreview__avatar,
+.cl-identityPreview img {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Remove linear gradients and background patterns */
+.cl-rootBox [style*="linear-gradient"],
+.cl-card [style*="linear-gradient"] {
+  background-image: none !important;
+  background: transparent !important;
+}
+
+/* Ensure sidebar footer remains visible */
+.sidebar-footer {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  padding: var(--space-3) !important;
+  margin: 0 !important;
+}
+
+.sidebar-footer .flex .text-sm,
+.sidebar-footer .flex .text-xs,
+.sidebar-footer div > div {
+  color: var(--text-primary) !important;
+}
+
+.sidebar-footer .flex .text-xs {
+  color: var(--text-tertiary) !important;
 }
