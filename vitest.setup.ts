@@ -43,23 +43,43 @@ vi.mock('@clerk/nextjs', () => ({
   })),
 }));
 
-vi.mock('@supabase/supabase-js', () => ({
-  createClient: vi.fn(() => ({
-    from: vi.fn(() => ({
+vi.mock('@supabase/supabase-js', () => {
+  // Simple in-memory store for mocked tables
+  const db: Record<string, any[]> = {};
+
+  const createClient = vi.fn(() => ({
+    from: vi.fn((table: string) => ({
       select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(),
-        })),
+        eq: vi.fn((field: string, val: any) => {
+          const rows = (db[table] || []).filter((r) => r[field] === val);
+          return Promise.resolve({ data: rows, error: null });
+        }),
       })),
-      insert: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
+      delete: vi.fn(() => ({
+        eq: vi.fn((field: string, val: any) => {
+          db[table] = (db[table] || []).filter((r) => r[field] !== val);
+          return Promise.resolve({ data: null, error: null });
+        }),
+      })),
+      insert: vi.fn((rows: any) => {
+        db[table] = db[table] || [];
+        const toInsert = Array.isArray(rows) ? rows : [rows];
+        for (const r of toInsert) {
+          const row = { id: db[table].length + 1, ...r };
+          db[table].push(row);
+        }
+        const last = db[table][db[table].length - 1];
+        const promise: any = Promise.resolve({ data: null, error: null });
+        promise.select = vi.fn(() => ({ single: vi.fn(() => Promise.resolve({ data: last, error: null })) }));
+        return promise as any;
+      }),
+      update: vi.fn(() => Promise.resolve({ data: null, error: null })),
     })),
-    rpc: vi.fn(() => ({
-      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    })),
-  })),
-}));
+    rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
+  }));
+
+  return { createClient };
+});
 
 global.console = {
   ...console,
