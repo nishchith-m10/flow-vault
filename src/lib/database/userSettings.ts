@@ -5,16 +5,16 @@
 import type { Database } from '../supabase/types';
 import { supabase } from './client';
 
-type UserSettings = Database['public']['Tables']['flowvault_user_settings']['Row'];
-type UserSettingsInsert = Database['public']['Tables']['flowvault_user_settings']['Insert'];
-type UserSettingsUpdate = Database['public']['Tables']['flowvault_user_settings']['Update'];
+type UserSettings = Database['public']['Tables']['user_settings']['Row'];
+type UserSettingsInsert = Database['public']['Tables']['user_settings']['Insert'];
+type UserSettingsUpdate = Database['public']['Tables']['user_settings']['Update'];
 
 /**
  * Gets user settings by Clerk user ID
  */
 export async function getUserSettings(clerkUserId: string) {
   const { data, error } = await supabase
-    .from('flowvault_user_settings')
+    .from('user_settings')
     .select('*')
     .eq('clerk_user_id', clerkUserId)
     .single();
@@ -31,7 +31,7 @@ export async function getUserSettings(clerkUserId: string) {
  */
 export async function createUserSettings(settings: UserSettingsInsert) {
   const { data, error } = await supabase
-    .from('flowvault_user_settings')
+    .from('user_settings')
     .insert(settings as never)
     .select()
     .single();
@@ -51,7 +51,7 @@ export async function updateUserSettings(
   updates: UserSettingsUpdate
 ) {
   const { data, error } = await supabase
-    .from('flowvault_user_settings')
+    .from('user_settings')
     .update(updates as never)
     .eq('clerk_user_id', clerkUserId)
     .select()
@@ -69,7 +69,7 @@ export async function updateUserSettings(
  */
 export async function deleteUserSettings(clerkUserId: string) {
   const { error } = await supabase
-    .from('flowvault_user_settings')
+    .from('user_settings')
     .delete()
     .eq('clerk_user_id', clerkUserId);
 
@@ -83,7 +83,7 @@ export async function deleteUserSettings(clerkUserId: string) {
  */
 export async function userSettingsExist(clerkUserId: string): Promise<boolean> {
   const { data, error } = await supabase
-    .from('flowvault_user_settings')
+    .from('user_settings')
     .select('id')
     .eq('clerk_user_id', clerkUserId)
     .maybeSingle();
