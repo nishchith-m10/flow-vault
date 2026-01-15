@@ -26,27 +26,27 @@ export default function AuthPages() {
               appearance={{
                 elements: {
                   rootBox: 'w-full',
-                  card: 'bg-card/50 backdrop-blur-sm shadow-2xl border border-border/50',
-                  headerTitle: 'text-foreground',
-                  headerSubtitle: 'text-muted-foreground',
+                  card: 'bg-[var(--bg-elevated)]/50 backdrop-blur-sm shadow-2xl border border-[var(--border-default)]/50',
+                  headerTitle: 'text-[var(--text-primary)]',
+                  headerSubtitle: 'text-[var(--text-tertiary)]',
                   
                   // Hide Clerk branding
                   footer: 'hidden',
                   footerPages: 'hidden',
                   
-                  socialButtonsBlockButton: 'bg-secondary/50 hover:bg-secondary/70 text-foreground border border-border/50 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#F97316]/50',
-                  socialButtonsBlockButtonText: 'text-foreground font-medium',
-                  dividerLine: 'bg-border',
-                  dividerText: 'text-muted-foreground',
-                  formFieldLabel: 'text-foreground font-medium',
-                  formFieldInput: 'bg-background/50 border-border/50 text-foreground focus:border-[#F97316] focus:ring-[#F97316]/20 transition-all duration-200',
+                  socialButtonsBlockButton: 'bg-[var(--bg-hover)]/50 hover:bg-[var(--bg-hover)]/70 text-[var(--text-primary)] border border-[var(--border-default)]/50 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#F97316]/50',
+                  socialButtonsBlockButtonText: 'text-[var(--text-primary)] font-medium',
+                  dividerLine: 'bg-[var(--border-default)]',
+                  dividerText: 'text-[var(--text-tertiary)]',
+                  formFieldLabel: 'text-[var(--text-primary)] font-medium',
+                  formFieldInput: 'bg-[var(--bg-base)]/50 border-[var(--border-default)]/50 text-[var(--text-primary)] focus:border-[#F97316] focus:ring-[#F97316]/20 transition-all duration-200',
                   formButtonPrimary: 'bg-[#F97316] hover:bg-[#FB923C] text-white font-medium transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#F97316]/30',
                   footerActionLink: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200 font-medium',
-                  identityPreviewText: 'text-foreground',
+                  identityPreviewText: 'text-[var(--text-primary)]',
                   identityPreviewEditButton: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
                   formFieldAction: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
                   formResendCodeLink: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
-                  otpCodeFieldInput: 'bg-background/50 border-border/50 text-foreground focus:border-[#F97316]',
+                  otpCodeFieldInput: 'bg-[var(--bg-base)]/50 border-[var(--border-default)]/50 text-[var(--text-primary)] focus:border-[#F97316]',
                 }
               }}
             />
@@ -55,27 +55,27 @@ export default function AuthPages() {
               appearance={{
                 elements: {
                   rootBox: 'w-full',
-                  card: 'bg-card/50 backdrop-blur-sm shadow-2xl border border-border/50',
-                  headerTitle: 'text-foreground',
-                  headerSubtitle: 'text-muted-foreground',
+                  card: 'bg-[var(--bg-elevated)]/50 backdrop-blur-sm shadow-2xl border border-[var(--border-default)]/50',
+                  headerTitle: 'text-[var(--text-primary)]',
+                  headerSubtitle: 'text-[var(--text-tertiary)]',
                   
                   // Hide Clerk branding
                   footer: 'hidden',
                   footerPages: 'hidden',
                   
-                  socialButtonsBlockButton: 'bg-secondary/50 hover:bg-secondary/70 text-foreground border border-border/50 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#F97316]/50',
-                  socialButtonsBlockButtonText: 'text-foreground font-medium',
-                  dividerLine: 'bg-border',
-                  dividerText: 'text-muted-foreground',
-                  formFieldLabel: 'text-foreground font-medium',
-                  formFieldInput: 'bg-background/50 border-border/50 text-foreground focus:border-[#F97316] focus:ring-[#F97316]/20 transition-all duration-200',
+                  socialButtonsBlockButton: 'bg-[var(--bg-hover)]/50 hover:bg-[var(--bg-hover)]/70 text-[var(--text-primary)] border border-[var(--border-default)]/50 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#F97316]/50',
+                  socialButtonsBlockButtonText: 'text-[var(--text-primary)] font-medium',
+                  dividerLine: 'bg-[var(--border-default)]',
+                  dividerText: 'text-[var(--text-tertiary)]',
+                  formFieldLabel: 'text-[var(--text-primary)] font-medium',
+                  formFieldInput: 'bg-[var(--bg-base)]/50 border-[var(--border-default)]/50 text-[var(--text-primary)] focus:border-[#F97316] focus:ring-[#F97316]/20 transition-all duration-200',
                   formButtonPrimary: 'bg-[#F97316] hover:bg-[#FB923C] text-white font-medium transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#F97316]/30',
                   footerActionLink: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200 font-medium',
-                  identityPreviewText: 'text-foreground',
+                  identityPreviewText: 'text-[var(--text-primary)]',
                   identityPreviewEditButton: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
                   formFieldAction: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
                   formResendCodeLink: 'text-[#F97316] hover:text-[#FB923C] transition-colors duration-200',
-                  otpCodeFieldInput: 'bg-background/50 border-border/50 text-foreground focus:border-[#F97316]',
+                  otpCodeFieldInput: 'bg-[var(--bg-base)]/50 border-[var(--border-default)]/50 text-[var(--text-primary)] focus:border-[#F97316]',
                 }
               }}
             />
