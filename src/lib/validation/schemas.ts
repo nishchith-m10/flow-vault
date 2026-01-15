@@ -210,6 +210,14 @@ export const N8nApiKeySchema = z
   .max(1024, 'API key too long (max 1024 characters)');
 
 /**
+ * Common fields present on every n8n proxy request
+ */
+export const N8nCommonFields = z.object({
+  n8nUrl: N8nUrlSchema,
+  apiKey: N8nApiKeySchema,
+});
+
+/**
  * Schema for query limit parameter
  * Prevents DoS via excessive query limits
  */
@@ -237,7 +245,7 @@ export const N8nWorkflowImportSchema = z.object({
 export const N8nImportRequestSchema = z.object({
   action: z.literal('import'),
   workflow: N8nWorkflowImportSchema,
-});
+}).merge(N8nCommonFields);
 
 /**
  * Schema for workflow operations requiring workflowId
@@ -245,32 +253,32 @@ export const N8nImportRequestSchema = z.object({
 export const N8nGetWorkflowRequestSchema = z.object({
   action: z.literal('getWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nDeleteWorkflowRequestSchema = z.object({
   action: z.literal('deleteWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nActivateWorkflowRequestSchema = z.object({
   action: z.literal('activateWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nDeactivateWorkflowRequestSchema = z.object({
   action: z.literal('deactivateWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nArchiveWorkflowRequestSchema = z.object({
   action: z.literal('archiveWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nUnarchiveWorkflowRequestSchema = z.object({
   action: z.literal('unarchiveWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
-});
+}).merge(N8nCommonFields);
 
 /**
  * Schema for tag operations
@@ -278,30 +286,30 @@ export const N8nUnarchiveWorkflowRequestSchema = z.object({
 export const N8nCreateTagRequestSchema = z.object({
   action: z.literal('createTag'),
   tagName: z.string().min(1, 'Tag name required').max(100, 'Tag name too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nDeleteTagRequestSchema = z.object({
   action: z.literal('deleteTag'),
   tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nTagWorkflowRequestSchema = z.object({
   action: z.literal('tagWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
   tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nUntagWorkflowRequestSchema = z.object({
   action: z.literal('untagWorkflow'),
   workflowId: z.string().min(1, 'Workflow ID required').max(100, 'Workflow ID too long'),
   tagId: z.string().min(1, 'Tag ID required').max(100, 'Tag ID too long'),
-});
+}).merge(N8nCommonFields);
 
 /**
  * Schema for list tags
  */
 export const N8nListTagsRequestSchema = z.object({
-  action: z.literal('listTags'),});
+  action: z.literal('listTags'),}).merge(N8nCommonFields);
 
 /**
  * Schema for execution operations
@@ -309,25 +317,25 @@ export const N8nListTagsRequestSchema = z.object({
 export const N8nGetExecutionRequestSchema = z.object({
   action: z.literal('getExecution'),
   executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nDeleteExecutionRequestSchema = z.object({
   action: z.literal('deleteExecution'),
   executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nRetryExecutionRequestSchema = z.object({
   action: z.literal('retryExecution'),
   executionId: z.string().min(1, 'Execution ID required').max(100, 'Execution ID too long'),
-});
+}).merge(N8nCommonFields);
 
 export const N8nListExecutionsRequestSchema = z.object({
   action: z.literal('listExecutions'),
   limit: N8nLimitSchema.optional(),
-});
+}).merge(N8nCommonFields);
 
 export const N8nListWorkflowsRequestSchema = z.object({
-  action: z.literal('listWorkflows'),});
+  action: z.literal('listWorkflows'),}).merge(N8nCommonFields);
 
 /**
  * Discriminated union schema for all n8n proxy requests
