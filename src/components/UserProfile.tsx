@@ -43,16 +43,23 @@ export function UserProfile() {
             userButtonBox: 'flex items-center',
             userButtonTrigger: {
               borderRadius: '50%',
+              width: '32px',
+              height: '32px',
               padding: 0,
               border: 'none',
               outline: 'none',
+              background: 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               transition: 'all 200ms ease',
               '&:hover': {
-                transform: 'scale(1.1)',
-                boxShadow: '0 0 0 2px var(--accent-muted)'
+                transform: 'scale(1.05)',
+                boxShadow: '0 0 0 3px var(--accent-muted)'
               },
-              '&:focus': {
-                boxShadow: '0 0 0 2px var(--accent)'
+              '&:focus-visible': {
+                boxShadow: '0 0 0 3px var(--accent-muted)',
+                outline: 'none'
               }
             },
             userButtonAvatarBox: {
@@ -66,8 +73,8 @@ export function UserProfile() {
             userButtonPopoverCard: {
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)',
-              borderRadius: '10px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--border-default)',
+              borderRadius: 'var(--radius-md)',
+              boxShadow: 'var(--shadow-lg)',
               minWidth: '200px',
               maxWidth: '200px',
               padding: '6px'
@@ -76,17 +83,17 @@ export function UserProfile() {
               backgroundColor: 'var(--bg-elevated)',
               padding: '0'
             },
-            
+
             // Action buttons
             userButtonPopoverActionButton: {
               backgroundColor: 'transparent',
               color: 'var(--text-primary)',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: 'var(--radius-sm)',
               padding: '8px 12px',
               fontSize: '14px',
               fontWeight: '500',
-              transition: 'background-color 150ms ease',
+              transition: 'background-color var(--transition-fast)',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
@@ -94,7 +101,7 @@ export function UserProfile() {
               textAlign: 'left',
               cursor: 'pointer',
               '&:hover': {
-                backgroundColor: 'var(--bg-hover)'
+                backgroundColor: 'var(--bg-subtle)'
               }
             },
             userButtonPopoverActionButtonText: {
