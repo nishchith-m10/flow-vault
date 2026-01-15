@@ -1,7 +1,7 @@
 'use client';
 
 import { ClerkProvider } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
+import { dark, light } from '@clerk/themes';
 import { useEffect, useState } from 'react';
 
 interface AuthProviderProps {
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       colorDanger: '#EF4444',
     },
   } : {
-    // Light mode without baseTheme - uses Clerk's default light styling
+    baseTheme: light,
     variables: {
       colorPrimary: '#F97316',
       colorBackground: '#FAFAFA',
