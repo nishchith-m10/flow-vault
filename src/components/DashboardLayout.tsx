@@ -183,6 +183,14 @@ function Sidebar({
 
         {/* Sidebar Footer */}
         <div className="sidebar-footer">
+          {/* User Profile */}
+          <div className="flex items-center gap-3">
+            <UserProfile />
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--border-default)] my-2" />
+
           {/* Connection Status */}
           <Link
             href="/settings"
@@ -205,13 +213,6 @@ function Sidebar({
             </div>
             <ChevronRight size={16} />
           </Link>
-
-          {/* Divider */}
-          <div className="h-px bg-[var(--border-default)] my-2" />
-
-          <div className="flex items-center gap-3">
-            <UserProfile />
-          </div>
         </div>
       </aside>
     </>
