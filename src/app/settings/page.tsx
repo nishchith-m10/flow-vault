@@ -43,7 +43,7 @@ export default function SettingsPage() {
     }, [onClose]);
 
     return (
-      <div className={`fixed bottom-4 right-4 p-4 rounded-md shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+      <div className={`fixed bottom-4 right-4 p-4 rounded-md shadow-lg ${type === 'success' ? 'bg-[var(--success)]' : 'bg-[var(--error)]'} text-white`}>
         {message}
       </div>
     );
@@ -171,7 +171,7 @@ export default function SettingsPage() {
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">Settings</h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-8">
+      <p className="text-[var(--text-tertiary)] mb-8">
         Configure your n8n instance connection and backup preferences
       </p>
 
@@ -193,7 +193,7 @@ export default function SettingsPage() {
                 placeholder="https://your-n8n-instance.com"
                 className="w-full"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[var(--text-tertiary)] mt-1">
                 The URL of your n8n instance
               </p>
             </div>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
                 placeholder={settings ? '••••••••••••' : 'Enter your n8n API key'}
                 className="w-full"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[var(--text-tertiary)] mt-1">
                 Your n8n API key (stored encrypted)
               </p>
             </div>
@@ -256,7 +256,7 @@ export default function SettingsPage() {
                 value={backupSchedule}
                 onChange={(e) => setBackupSchedule(e.target.value)}
                 disabled={!backupEnabled}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+                className="input w-full"
               >
                 <option value="hourly">Hourly</option>
                 <option value="daily">Daily</option>
@@ -278,14 +278,14 @@ export default function SettingsPage() {
                 max="365"
                 className="w-full"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[var(--text-tertiary)] mt-1">
                 How long to keep backup versions
               </p>
             </div>
 
             {settings?.last_backup_at && (
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="pt-4 border-t border-[var(--border-default)]">
+                <p className="text-sm text-[var(--text-tertiary)]">
                   Last backup: {new Date(settings.last_backup_at).toLocaleString()}
                 </p>
               </div>
