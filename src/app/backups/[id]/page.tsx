@@ -190,7 +190,7 @@ export default function BackupVersionPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Card className="p-8 text-center">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
             Backup Not Found
           </h2>
           <Button onClick={() => router.push('/backups')}>
@@ -208,14 +208,14 @@ export default function BackupVersionPage() {
         <div
           className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
             toast.type === 'success'
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
+              ? 'bg-[var(--success)] text-white'
+              : 'bg-[var(--error)] text-white'
           }`}
         >
           {toast.message}
           <button
             onClick={() => setToast(null)}
-            className="ml-4 text-white hover:text-gray-200"
+            className="ml-4 text-white hover:opacity-80 transition-opacity"
           >
             ×
           </button>
@@ -233,10 +233,10 @@ export default function BackupVersionPage() {
         
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)]">
               {backup.workflow_name}
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
+            <p className="text-[var(--text-tertiary)] mt-2">
               Version {backup.version} • {formatDate(backup.created_at)}
             </p>
           </div>
@@ -261,49 +261,49 @@ export default function BackupVersionPage() {
 
       {/* Backup Details */}
       <Card className="mb-6 p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
           Backup Details
         </h2>
         
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Backup ID</p>
-            <p className="font-mono text-sm text-gray-900 dark:text-white">{backup.id}</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Backup ID</p>
+            <p className="font-mono text-sm text-[var(--text-primary)]">{backup.id}</p>
           </div>
           
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Workflow ID</p>
-            <p className="font-mono text-sm text-gray-900 dark:text-white">{backup.workflow_id}</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Workflow ID</p>
+            <p className="font-mono text-sm text-[var(--text-primary)]">{backup.workflow_id}</p>
           </div>
           
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Backup Type</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Backup Type</p>
             <Badge variant={backup.backup_type === 'scheduled' ? 'neutral' : 'info'}>
               {backup.backup_type}
             </Badge>
           </div>
           
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Status</p>
             <Badge variant={backup.is_active ? 'success' : 'neutral'}>
               {backup.is_active ? 'Active' : 'Archived'}
             </Badge>
           </div>
           
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Size</p>
-            <p className="text-sm text-gray-900 dark:text-white">{formatBytes(backup.size_bytes)}</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Size</p>
+            <p className="text-sm text-[var(--text-primary)]">{formatBytes(backup.size_bytes)}</p>
           </div>
           
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Checksum</p>
-            <p className="font-mono text-xs text-gray-900 dark:text-white">{backup.checksum.substring(0, 16)}...</p>
+            <p className="text-sm text-[var(--text-tertiary)]">Checksum</p>
+            <p className="font-mono text-xs text-[var(--text-primary)]">{backup.checksum.substring(0, 16)}...</p>
           </div>
         </div>
 
         {backup.tags && backup.tags.length > 0 && (
           <div className="mt-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Tags</p>
+            <p className="text-sm text-[var(--text-tertiary)] mb-2">Tags</p>
             <div className="flex flex-wrap gap-2">
               {backup.tags.map((tag, idx) => (
                 <Badge key={idx} variant="neutral">
@@ -317,7 +317,7 @@ export default function BackupVersionPage() {
 
       {/* Version History */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
           Version History ({allVersions.length} versions)
         </h2>
 
@@ -328,13 +328,13 @@ export default function BackupVersionPage() {
               className={`p-4 rounded-lg border ${
                 version.id === backupId
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 dark:border-gray-700'
+                  : 'border-[var(--border-default)]'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">
+                    <p className="font-semibold text-[var(--text-primary)]">
                       Version {version.version}
                       {version.id === backupId && (
                         <span className="ml-2 text-sm text-blue-600 dark:text-blue-400">
@@ -342,7 +342,7 @@ export default function BackupVersionPage() {
                         </span>
                       )}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-[var(--text-tertiary)]">
                       {formatDate(version.created_at)}
                     </p>
                   </div>
@@ -357,7 +357,7 @@ export default function BackupVersionPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-[var(--text-tertiary)]">
                     {formatBytes(version.size_bytes)}
                   </span>
                   
@@ -381,21 +381,21 @@ export default function BackupVersionPage() {
       {showRestoreModal && (
         <DialogModal isOpen={showRestoreModal} onClose={() => setShowRestoreModal(false)} title="Restore Workflow">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
               Restore Workflow
             </h2>
 
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-[var(--text-tertiary)] mb-6">
               Restore &ldquo;{backup.workflow_name}&rdquo; version {backup.version} to your n8n instance.
             </p>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
                 If workflow already exists:
               </label>
               
               <div className="space-y-2">
-                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-[var(--bg-hover)]">
                   <input
                     type="radio"
                     name="conflict"
@@ -405,14 +405,14 @@ export default function BackupVersionPage() {
                     className="mr-3"
                   />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Create new workflow</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-[var(--text-primary)]">Create new workflow</p>
+                    <p className="text-sm text-[var(--text-tertiary)]">
                       Create as a new workflow with a new ID
                     </p>
                   </div>
                 </label>
 
-                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-[var(--bg-hover)]">
                   <input
                     type="radio"
                     name="conflict"
@@ -422,14 +422,14 @@ export default function BackupVersionPage() {
                     className="mr-3"
                   />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Overwrite existing</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-[var(--text-primary)]">Overwrite existing</p>
+                    <p className="text-sm text-[var(--text-tertiary)]">
                       Replace the existing workflow with this version
                     </p>
                   </div>
                 </label>
 
-                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+                <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-[var(--bg-hover)]">
                   <input
                     type="radio"
                     name="conflict"
@@ -439,8 +439,8 @@ export default function BackupVersionPage() {
                     className="mr-3"
                   />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Skip if exists</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="font-medium text-[var(--text-primary)]">Skip if exists</p>
+                    <p className="text-sm text-[var(--text-tertiary)]">
                       Don&apos;t restore if workflow already exists
                     </p>
                   </div>
