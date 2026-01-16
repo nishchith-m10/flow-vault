@@ -6,6 +6,7 @@ import { Button, Badge, Card, CardContent, EmptyState } from '@/components/ui';
 import { Zap, CheckCircle2, XCircle, Clock, RefreshCw, Unplug, Loader2, Trash2, Filter } from 'lucide-react';
 import { useModal } from '@/components/Modal';
 import { useToast } from '@/components/Toast';
+import { SkeletonCard } from '@/components/ui/Skeleton';
 
 interface Execution {
   id: string;
@@ -126,8 +127,8 @@ export default function ExecutionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-(--accent-muted) rounded-lg">
-            <Zap className="w-6 h-6 text-(--accent)" />
+          <div className="p-2 bg-[var(--accent-muted)] rounded-lg">
+            <Zap className="w-6 h-6 text-[var(--accent)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Executions</h1>
@@ -161,12 +162,11 @@ export default function ExecutionsPage() {
 
       {/* Executions List */}
       {loading ? (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-[var(--accent-indigo)]" />
-            <p className="mt-2 text-sm text-[var(--text-tertiary)]">Loading executions...</p>
-          </CardContent>
-        </Card>
+        <div className="grid gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       ) : filteredExecutions.length === 0 ? (
         <Card>
           <CardContent className="p-12">
