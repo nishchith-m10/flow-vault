@@ -103,8 +103,8 @@ export default function TrashPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-red-500/10 rounded-lg">
-            <Trash2 className="w-6 h-6 text-red-500" />
+          <div className="p-2 bg-[var(--error-muted)] rounded-lg">
+            <Trash2 className="w-6 h-6 text-[var(--error)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Trash</h1>
