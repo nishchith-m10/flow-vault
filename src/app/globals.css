@@ -1395,22 +1395,12 @@ select.input {
 }
 
 /* ============================================
-   Clerk Modal Overrides
+   Clerk Essentials - Minimal Overrides
    ============================================ */
 
-/* Ensure Clerk modals and backdrops are above everything including water */
+/* Z-index for modals and popovers */
 .cl-modalBackdrop {
   z-index: var(--z-clerk-backdrop) !important;
-  /* use softer dark overlay by default */
-  background: rgba(10, 10, 11, 0.6) !important;
-  backdrop-filter: blur(8px) !important;
-}
-
-/* Light theme: softer, light overlay so modal content remains visible */
-[data-theme="light"] .cl-modalBackdrop {
-  z-index: var(--z-clerk-backdrop) !important;
-  background: rgba(255, 255, 255, 0.72) !important;
-  backdrop-filter: blur(8px) !important;
 }
 
 .cl-modal,
@@ -1418,229 +1408,39 @@ select.input {
   z-index: var(--z-clerk-modal) !important;
 }
 
-/* Modal/card backgrounds: use theme-aware variables so layout is consistent across themes */
-.cl-card,
-.cl-rootBox,
-.cl-cardBox,
-.cl-scrollBox {
-  background: var(--bg-elevated) !important;
-  background-image: none !important;
-  border-color: var(--border-default) !important;
-  color: var(--text-primary) !important;
-}
-
-.cl-navbar {
-  background: var(--bg-elevated) !important;
-  border-bottom-color: var(--border-default) !important;
-}
-
-.cl-navbarButton {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-.cl-navbarButton:hover {
-  background: #27272A !important;
-  color: white !important;
-}
-
-.cl-navbarButton[data-active="true"] {
-  background: #27272A !important;
-  color: white !important;
-  border-bottom: 2px solid #F97316 !important;
-}
-
-.cl-profileSection,
-.cl-profileSectionPrimaryButton__root {
-  background: #18181B !important;
-  border-bottom-color: #3F3F46 !important;
-}
-
-.cl-profileSectionContent {
-  background: #18181B !important;
-}
-
-/* Input fields slightly darker for contrast */
-.cl-formFieldInput,
-.cl-input,
-.cl-formFieldInput__identifier {
-  background: #0F0F10 !important;
-  border-color: #3F3F46 !important;
-  color: #FFFFFF !important;
-}
-
-.cl-formFieldInput::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
-}
-
-/* All text should be bright white for maximum contrast */
-.cl-formFieldLabel,
-.cl-formFieldLabelRow,
-.cl-formFieldLabel__identifier,
-.cl-headerTitle,
-.cl-headerSubtitle {
-  color: #FFFFFF !important;
-  font-weight: 500 !important;
-}
-
-.cl-identityPreview,
-.cl-identityPreviewText {
-  color: #FFFFFF !important;
-}
-
-.cl-identityPreviewEditButton {
-  color: #F97316 !important;
-}
-
-.cl-identityPreviewEditButton:hover {
-  color: #FB923C !important;
-}
-
-.cl-formButtonPrimary {
-  background: #F97316 !important;
-  color: white !important;
-}
-
-.cl-formButtonPrimary:hover {
-  background: #FB923C !important;
-}
-
-.cl-formButtonSecondary {
-  background: #3F3F46 !important;
-  color: white !important;
-}
-
-.cl-formButtonSecondary:hover {
-  background: #52525B !important;
-}
-
-/* Hide ONLY Clerk branding/watermark elements, but keep functional popover footer visible */
+/* Hide Clerk branding/watermark */
 .cl-footerAction,
 .cl-footerActionText,
 .cl-footerActionLink,
 .cl-footerPages,
 .cl-internal-b3fm6y,
-[class*="cl-branded"] {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Ensure the user-button popover footer (manage account / sign out) remains visible */
-.cl-userButtonPopoverFooter {
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
-  padding: 0.25rem !important;
-  margin: 0 !important;
-  overflow: visible !important;
-}
-
-/* Hide watermark and branding text in popover */
-.cl-userButtonPopoverCard::after,
-.cl-userButtonPopoverCard::before,
-.cl-userButtonPopoverMain::after,
-.cl-userButtonPopoverMain::before {
-  display: none !important;
-}
-
-/* Hide Clerk watermark and branding - targeted approach */
-.cl-userButtonPopoverFooter,
+[class*="cl-branded"],
 .cl-footer,
-.cl-footerPages,
-.cl-footerAction,
-.cl-footerActionText,
-.cl-footerActionLink {
+.cl-userButtonPopoverFooter {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
-  margin: 0 !important;
   padding: 0 !important;
+  margin: 0 !important;
   overflow: hidden !important;
 }
 
-/* Remove background images and pseudo-elements that show watermark */
-.cl-card,
-.cl-card *,
-.cl-rootBox,
-.cl-rootBox *,
-.cl-cardBox,
-.cl-cardBox * {
-  background-image: none !important;
-}
-
+/* Remove pseudo-elements that show watermark */
 .cl-card::before,
 .cl-card::after,
 .cl-rootBox::before,
 .cl-rootBox::after,
 .cl-cardBox::before,
-.cl-cardBox::after {
+.cl-cardBox::after,
+.cl-userButtonPopoverCard::after,
+.cl-userButtonPopoverCard::before,
+.cl-userButtonPopoverMain::after,
+.cl-userButtonPopoverMain::before {
   display: none !important;
   content: none !important;
 }
 
-/* Hide any footer elements specifically */
-.cl-footer,
-.cl-footer * {
-  display: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background-image: none !important;
-}
-
-/* Compact popover sizing */
-.cl-userButtonPopoverCard {
-  min-width: 200px !important;
-  max-width: 200px !important;
-}
-
-.cl-userButtonPopoverMain {
-  padding: 0.25rem !important;
-}
-
-/* Dark mode popover action buttons */
-.cl-userButtonPopoverActionButton {
-  padding: 0.5rem 0.75rem !important;
-  font-size: 0.875rem !important;
-  color: var(--text-primary) !important;
-  transition: background-color 200ms !important;
-}
-
-.cl-userButtonPopoverActionButton:hover {
-  background: var(--bg-hover) !important;
-}
-
-.cl-userButtonPopoverActionButtonText {
-  color: var(--text-primary) !important;
-  font-weight: 500 !important;
-}
-
-.cl-userButtonPopoverActionButtonIcon {
-  width: 1rem !important;
-  height: 1rem !important;
-  color: var(--text-tertiary) !important;
-}
-
-/* Light mode specific overrides */
-[data-theme="light"] .cl-userButtonPopoverActionButton {
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButton:hover {
-  background: var(--bg-hover) !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButtonText {
-  color: var(--text-primary) !important;
-}
-
-[data-theme="light"] .cl-userButtonPopoverActionButtonIcon {
-  color: var(--text-tertiary) !important;
-}
-
-/* Hide user info in popover (name/email) */
+/* Hide user preview in popover for cleaner look */
 .cl-userPreview,
 .cl-userPreviewMainIdentifier,
 .cl-userPreviewSecondaryIdentifier,
@@ -1648,372 +1448,242 @@ select.input {
   display: none !important;
 }
 
-/* Ensure avatar is perfectly circular with no square background */
-.cl-userButtonAvatarBox,
-.cl-avatar,
-.cl-avatar *,
-.cl-userButtonAvatarBox img,
-.cl-userPreviewAvatarContainer img {
-  border-radius: 9999px !important;
-  overflow: hidden !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  background: transparent !important;
-  border: none !important;
+/* Fix social button icons (Google logo) size */
+.cl-socialButtonsBlockButton svg,
+.cl-socialButtonsBlockButton img,
+.cl-socialButtonsIconButton svg,
+.cl-socialButtonsIconButton img {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
 }
 
-/* Remove any square placeholders or borders behind avatars */
-.cl-userButtonAvatarBox,
-.cl-avatar-placeholder,
-.cl-userPreviewAvatarContainer {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* ============================================
-   CLERK COMPONENT STYLING - Unified & Theme-Aware
-   ============================================ */
-
-/* --- Popover (Profile Dropdown) Styling --- */
-.cl-userButtonPopoverCard {
-  background: var(--bg-elevated) !important;
-  border: 1px solid var(--border-default) !important;
-  color: var(--text-primary) !important;
-  border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-lg) !important;
-  min-width: 200px !important;
-  max-width: 200px !important;
-  padding: 6px !important;
-}
-
-.cl-userButtonPopoverMain {
-  background: var(--bg-elevated) !important;
-  padding: 0 !important;
-}
-
-.cl-userButtonPopoverActionButton {
-  background: transparent !important;
-  color: var(--text-primary) !important;
-  padding: 8px 12px !important;
-  border-radius: var(--radius-sm) !important;
-  transition: background-color var(--transition-fast) !important;
+/* Ensure proper spacing for social button content */
+.cl-socialButtonsBlockButton {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  width: 100% !important;
-  border: none !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
 }
 
-.cl-userButtonPopoverActionButton:hover {
-  background: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
-}
-
-.cl-userButtonPopoverActionButtonText {
-  color: var(--text-primary) !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-}
-
-.cl-userButtonPopoverActionButtonIcon {
-  color: var(--text-tertiary) !important;
-  width: 16px !important;
-  height: 16px !important;
-}
-
-/* Profile icon hover effect should be circular */
-.cl-userButtonTrigger {
-  border-radius: 50% !important;
-  width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  transition: all var(--transition-fast) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.cl-userButtonTrigger:hover {
-  transform: scale(1.05) !important;
-  box-shadow: 0 0 0 3px var(--accent-muted) !important;
-}
-
-.cl-userButtonTrigger:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-muted) !important;
-  outline: none !important;
-}
-
-.cl-userButtonPopoverFooter,
-.cl-userButtonPopoverCard footer,
-.cl-userButtonPopoverCard > div:last-child {
-  display: none !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  visibility: hidden !important;
-}
-
-/* --- Sign-In/Sign-Up Form Styling --- */
-.cl-signIn,
-.cl-signUp,
-.cl-card {
-  background: var(--bg-elevated) !important;
-  border: 1px solid var(--border-default) !important;
-  border-radius: 0.5rem !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-}
-
-.cl-card .cl-section,
-.cl-card .cl-row,
-.cl-card .cl-list,
-.cl-card .cl-inner,
-.cl-card .cl-panel,
-.cl-card .cl-content,
-.cl-card .cl-scrollBox,
-.cl-cardBox,
-.cl-cardBox * {
-  background: var(--bg-elevated) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-default) !important;
-  box-shadow: none !important;
-}
-
-.cl-headerTitle {
-  color: var(--text-primary) !important;
-}
-
-.cl-headerSubtitle {
-  color: var(--text-secondary) !important;
-}
-
-.cl-formFieldLabel,
-.cl-label {
-  color: var(--text-primary) !important;
-  font-weight: 500 !important;
-}
-
-.cl-formFieldInput,
-.cl-input,
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  background: var(--bg-base) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-default) !important;
-  border-radius: 0.375rem !important;
-  transition: all var(--transition-base) !important;
-}
-
-.cl-formFieldInput:focus,
-.cl-input:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px var(--accent-muted) !important;
-  outline: none !important;
-}
-
-.cl-formFieldInput::placeholder,
-.cl-input::placeholder {
-  color: var(--text-tertiary) !important;
-}
-
-.cl-formButtonPrimary,
-.cl-button,
-button.cl-button {
+/* Fix Continue button to be orange by default */
+.cl-formButtonPrimary {
   background: var(--accent) !important;
   color: white !important;
-  border: none !important;
-  border-radius: 0.375rem !important;
-  font-weight: 500 !important;
-  transition: all var(--transition-base) !important;
+  border: 1px solid var(--accent) !important;
 }
 
-.cl-formButtonPrimary:hover,
-.cl-button:hover,
-button.cl-button:hover {
+.cl-formButtonPrimary:hover {
   background: var(--accent-hover) !important;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+  border-color: var(--accent-hover) !important;
+  box-shadow: 0 0 0 4px var(--accent-muted) !important;
 }
 
-.cl-formButtonPrimary:active,
-.cl-button:active {
-  transform: scale(0.98);
+/* Profile modal specific fixes */
+.cl-userProfile .cl-profileSection {
+  background: var(--bg-elevated) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  padding: 16px !important;
 }
 
-.cl-formButtonSecondary {
-  background: var(--bg-subtle) !important;
-  color: var(--text-primary) !important;
+.cl-userProfile .cl-profileSectionContent {
+  background: var(--bg-elevated) !important;
+  padding: 0 !important;
 }
 
-.cl-socialButtonsBlockButton,
-.cl-socialButton {
-  background: transparent !important;
-  color: var(--text-primary) !important;
+.cl-userProfile .cl-profileSectionItem {
+  background: var(--bg-elevated) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  padding: 12px 0 !important;
+  margin: 0 !important;
+}
+
+.cl-userProfile .cl-profileSectionItem:last-child {
+  border-bottom: none !important;
+}
+
+.cl-userProfile .cl-identityPreview {
+  background: var(--bg-elevated) !important;
   border: 1px solid var(--border-default) !important;
-  border-radius: 0.375rem !important;
-  transition: all var(--transition-base) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 16px !important;
+  margin: 0 0 16px 0 !important;
 }
 
-.cl-socialButtonsBlockButton:hover,
-.cl-socialButton:hover {
-  background: var(--bg-hover) !important;
-  border-color: var(--accent) !important;
-}
-
-.cl-socialButtonsBlockButtonText {
+.cl-userProfile .cl-identityPreviewText {
   color: var(--text-primary) !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
+  margin: 0 !important;
 }
 
-/* Remove any white background from button containers */
-.cl-socialButtonsBlockButton__root,
-.cl-socialButtonsBlock,
-.cl-socialButtonsIconButton__root {
-  background: transparent !important;
-}
-
-.cl-dividerLine,
-[role="separator"] {
-  background: var(--border-default) !important;
-}
-
-.cl-dividerText {
-  color: var(--text-tertiary) !important;
-  font-size: 0.75rem !important;
-}
-
-.cl-footerActionLink,
-.cl-formFieldAction {
+.cl-userProfile .cl-identityPreviewEditButton {
   color: var(--accent) !important;
-  text-decoration: none !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
-  transition: color var(--transition-base) !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin-left: 8px !important;
 }
 
-.cl-footerActionLink:hover,
-.cl-formFieldAction:hover {
+.cl-userProfile .cl-identityPreviewEditButton:hover {
   color: var(--accent-hover) !important;
 }
 
-.cl-checkbox,
-input[type="checkbox"] {
-  border: 1px solid var(--border-default) !important;
-  background: var(--bg-base) !important;
+/* Fix form field layout in profile */
+.cl-userProfile .cl-formFieldRow {
+  margin-bottom: 16px !important;
 }
 
-.cl-checkbox:checked,
-input[type="checkbox"]:checked {
-  background: var(--accent) !important;
+.cl-userProfile .cl-formFieldLabelRow {
+  margin-bottom: 6px !important;
+}
+
+.cl-userProfile .cl-formFieldLabel {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+}
+
+.cl-userProfile .cl-formFieldInput {
+  background: transparent !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  width: 100% !important;
+}
+
+.cl-userProfile .cl-formFieldInput:focus {
   border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-muted) !important;
+  outline: none !important;
 }
 
-.cl-formPasswordHidden,
-.cl-formPasswordVisible {
-  color: var(--text-secondary) !important;
+/* Fix button layout in profile */
+.cl-userProfile .cl-formButtonRow {
+  display: flex !important;
+  gap: 8px !important;
+  margin-top: 16px !important;
+  justify-content: flex-end !important;
 }
 
-.cl-formFieldErrorMessage,
-[role="alert"] {
-  color: var(--error) !important;
-  font-size: 0.875rem !important;
-}
-
-.cl-alert {
-  background: var(--success-muted) !important;
-  color: var(--success) !important;
-  border: 1px solid var(--success) !important;
-}
-
-.cl-modalBackdrop {
-  background: rgba(0, 0, 0, 0.5) !important;
-}
-
-.cl-modal {
-  background: var(--bg-elevated) !important;
+.cl-userProfile .cl-profileSectionPrimaryButton,
+.cl-userProfile .cl-profileSectionItem__button {
+  background: transparent !important;
+  color: var(--text-primary) !important;
   border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  height: 36px !important;
+  padding: 0 12px !important;
+  transition: all var(--transition-fast) !important;
+  min-width: auto !important;
 }
 
-.cl-tabs {
-  border-bottom: 1px solid var(--border-default) !important;
+.cl-userProfile .cl-profileSectionPrimaryButton:hover,
+.cl-userProfile .cl-profileSectionItem__button:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
 }
 
-.cl-tab {
+/* Dashed button style for "Add" buttons */
+.cl-userProfile .cl-profileSectionItem__button {
+  border-style: dashed !important;
   color: var(--text-secondary) !important;
-  border-bottom: 2px solid transparent !important;
 }
 
-.cl-tab[aria-selected="true"] {
+.cl-userProfile .cl-profileSectionItem__button:hover {
+  background: var(--bg-subtle) !important;
+  border-style: solid !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* Fix tab styling */
+.cl-userProfile .cl-navbar {
+  background: var(--bg-elevated) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  padding: 0 !important;
+}
+
+.cl-userProfile .cl-navbarButton {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 12px 16px !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.cl-userProfile .cl-navbarButton:hover {
+  background: var(--bg-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
+.cl-userProfile .cl-navbarButton[data-active="true"] {
   color: var(--accent) !important;
   border-bottom-color: var(--accent) !important;
 }
 
-.cl-navbar {
+/* Fix main content area */
+.cl-userProfile .cl-main {
   background: var(--bg-elevated) !important;
-  border-bottom-color: var(--border-default) !important;
+  padding: 24px !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
 }
 
-/* --- Avatar Styling --- */
-.cl-userButtonAvatarBox,
-.cl-userButtonAvatarBox img,
-.cl-userPreviewAvatarContainer img {
-  border-radius: 9999px !important;
-  overflow: hidden !important;
+.cl-userProfile .cl-scrollBox {
+  background: var(--bg-elevated) !important;
+  padding: 0 !important;
+}
+
+/* Fix close button */
+.cl-userProfile .cl-modalCloseButton {
+  color: var(--text-tertiary) !important;
   background: transparent !important;
   border: none !important;
-  box-shadow: none !important;
-}
-
-.cl-userButtonAvatarBox {
+  border-radius: 50% !important;
   width: 32px !important;
   height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all var(--transition-fast) !important;
 }
 
-.cl-identityPreviewAvatarContainer,
-.cl-identityPreviewAvatar,
-.cl-identityPreview__avatar,
-.cl-identityPreview img {
-  width: 48px !important;
-  height: 48px !important;
-  min-width: 48px !important;
-  min-height: 48px !important;
-  border-radius: 9999px !important;
-  overflow: hidden !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-/* Remove linear gradients and background patterns */
-.cl-rootBox [style*="linear-gradient"],
-.cl-card [style*="linear-gradient"] {
-  background-image: none !important;
-  background: transparent !important;
-}
-
-/* Ensure sidebar footer remains visible */
-.sidebar-footer {
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
-  padding: var(--space-3) !important;
-  margin: 0 !important;
-}
-
-.sidebar-footer .flex .text-sm,
-.sidebar-footer .flex .text-xs,
-.sidebar-footer div > div {
+.cl-userProfile .cl-modalCloseButton:hover {
   color: var(--text-primary) !important;
+  background: var(--bg-hover) !important;
 }
 
-.sidebar-footer .flex .text-xs {
-  color: var(--text-tertiary) !important;
+/* Animations for smooth interactions */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
