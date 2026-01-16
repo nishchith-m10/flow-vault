@@ -182,37 +182,33 @@ function Sidebar({
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="sidebar-footer">
-          {/* User Profile */}
-          <div className="flex items-center gap-3">
-            <UserProfile />
-          </div>
-
-          {/* Divider */}
-          <div className="h-px bg-[var(--border-default)] my-2" />
-
-          {/* Connection Status */}
+        <div className="sidebar-footer space-y-3">
+          {/* Connection Status - More Subtle */}
           <Link
             href="/settings"
             suppressHydrationWarning
-            className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-[var(--radius-sm)] transition-all ${
-              isConfigured
-                ? 'bg-[var(--success-muted)] text-[var(--success)]'
-                : 'bg-[var(--error-muted)] text-[var(--error)]'
-            }`}
+            className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-[var(--radius-sm)] hover:bg-[var(--bg-hover)] transition-all group"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 min-w-0">
               {isConfigured ? (
-                <CheckCircle2 size={18} />
+                <CheckCircle2 size={14} className="text-[var(--success)] shrink-0" />
               ) : (
-                <XCircle size={18} />
+                <XCircle size={14} className="text-[var(--error)] shrink-0" />
               )}
-              <span className="text-sm font-medium">
+              <span className="text-xs text-[var(--text-tertiary)] truncate">
                 {isConfigured ? 'Connected' : 'Not Connected'}
               </span>
             </div>
-            <ChevronRight size={16} />
+            <Settings size={14} className="text-[var(--text-tertiary)] shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
           </Link>
+
+          {/* Divider */}
+          <div className="h-px bg-[var(--border-default)]" />
+
+          {/* User Profile */}
+          <div className="px-1">
+            <UserProfile />
+          </div>
         </div>
       </aside>
     </>
