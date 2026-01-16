@@ -86,11 +86,11 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 
   const getIconColor = (variant?: ModalConfig['variant']) => {
     switch (variant) {
-      case 'danger': return 'text-(--error) bg-(--error-muted)';
-      case 'warning': return 'text-(--warning) bg-(--warning-muted)';
-      case 'success': return 'text-(--success) bg-(--success-muted)';
+      case 'danger': return 'text-[var(--error)] bg-[var(--error-muted)]';
+      case 'warning': return 'text-[var(--warning)] bg-[var(--warning-muted)]';
+      case 'success': return 'text-[var(--success)] bg-[var(--success-muted)]';
       case 'info':
-      default: return 'text-(--accent) bg-(--accent-muted)';
+      default: return 'text-[var(--accent)] bg-[var(--accent-muted)]';
     }
   };
 
@@ -118,22 +118,22 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       
       {/* Modal Overlay */}
       {modal && (
-        <div className="fixed inset-0 z-(--z-overlay) flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div 
+          <div
             className="modal-backdrop"
             onClick={handleCancel}
           />
-          
+
           {/* Modal */}
           <div className="modal-content w-full max-w-md p-6">
             {/* Close Button */}
             <button
               onClick={handleCancel}
-              className="absolute top-4 right-4 p-1.5 rounded-(--radius-sm) hover:bg-(--bg-subtle) transition-colors"
+              className="absolute top-4 right-4 p-1.5 rounded-[var(--radius-sm)] hover:bg-[var(--bg-subtle)] transition-colors"
               aria-label="Close modal"
             >
-              <X className="w-5 h-5 text-(--text-tertiary)" />
+              <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
 
             {/* Icon */}
@@ -147,10 +147,10 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             })()}
 
             {/* Content */}
-            <h2 className="text-xl font-semibold text-center text-(--text-primary) mb-2">
+            <h2 className="text-xl font-semibold text-center text-[var(--text-primary)] mb-2">
               {modal.title}
             </h2>
-            <p className="text-(--text-secondary) text-center mb-6">
+            <p className="text-[var(--text-secondary)] text-center mb-6">
               {modal.message}
             </p>
             
@@ -181,14 +181,14 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 export function DialogModal({ isOpen, onClose, title, children, footer }: { isOpen: boolean; onClose: () => void; title?: string; children?: React.ReactNode; footer?: React.ReactNode }) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-(--z-overlay) flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center p-4">
       <div className="modal-backdrop" onClick={onClose} />
       <div className="modal-content w-full max-w-md p-6">
-        <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-(--radius-sm) hover:bg-(--bg-subtle) transition-colors" aria-label="Close dialog">
-          <X className="w-5 h-5 text-(--text-tertiary)" />
+        <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-[var(--radius-sm)] hover:bg-[var(--bg-subtle)] transition-colors" aria-label="Close dialog">
+          <X className="w-5 h-5 text-[var(--text-tertiary)]" />
         </button>
-        {title && <h2 className="text-xl font-semibold text-center text-(--text-primary) mb-2">{title}</h2>}
-        <div className="text-(--text-secondary) text-center mb-6">{children}</div>
+        {title && <h2 className="text-xl font-semibold text-center text-[var(--text-primary)] mb-2">{title}</h2>}
+        <div className="text-[var(--text-secondary)] text-center mb-6">{children}</div>
         {footer && <div className="flex gap-3">{footer}</div>}
       </div>
     </div>
