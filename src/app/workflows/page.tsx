@@ -29,6 +29,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { LoadingPage } from '@/components/ui/Spinner';
 import { Pagination } from '@/components/ui/Pagination';
 import { FloatingActionBar, type FloatingAction } from '@/components/ui/FloatingActionBar';
+import { SkeletonTable } from '@/components/ui/Skeleton';
 
 interface Workflow {
   id: string;
@@ -318,7 +319,7 @@ export default function WorkflowsPage() {
 
       {/* Workflow List */}
       {loading ? (
-        <LoadingPage />
+        <SkeletonTable rows={pageSize} columns={4} />
       ) : filteredWorkflows.length === 0 ? (
         <Card>
           <EmptyState
@@ -335,7 +336,7 @@ export default function WorkflowsPage() {
         <>
           <Card padding="none">
             {/* Grid Header */}
-            <div className="grid grid-cols-[40px_1fr_100px_120px] gap-4 px-4 py-3 border-b border-[var(--border-primary)] text-sm text-[var(--text-tertiary)] font-medium bg-[var(--bg-subtle)]">
+            <div className="grid grid-cols-[40px_1fr_100px] md:grid-cols-[40px_1fr_100px_120px] gap-4 px-4 py-3 border-b border-[var(--border-primary)] text-sm text-[var(--text-tertiary)] font-medium bg-[var(--bg-subtle)]">
               <div>
                 <input
                   type="checkbox"
@@ -346,14 +347,14 @@ export default function WorkflowsPage() {
               </div>
               <div>Name</div>
               <div>Status</div>
-              <div>Updated</div>
+              <div className="hidden md:block">Updated</div>
             </div>
 
             {/* Grid Body */}
             {paginatedWorkflows.map((workflow) => (
               <div
                 key={workflow.id}
-                className={`grid grid-cols-[40px_1fr_100px_120px] gap-4 px-4 py-3 border-b border-[var(--border-default)] hover:bg-[var(--bg-hover)] transition-colors cursor-pointer ${
+                className={`grid grid-cols-[40px_1fr_100px] md:grid-cols-[40px_1fr_100px_120px] gap-4 px-4 py-3 border-b border-[var(--border-default)] hover:bg-[var(--bg-hover)] transition-colors cursor-pointer ${
                   selectedIds.has(workflow.id) ? 'bg-[var(--accent-indigo-muted)]' : ''
                 }`}
                 onClick={(e) => {
@@ -372,7 +373,7 @@ export default function WorkflowsPage() {
                   />
                 </div>
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-medium text-(--text-primary) truncate">{workflow.name}</span>
+                  <span className="font-medium text-[var(--text-primary)] truncate">{workflow.name}</span>
                   {workflow.tags && workflow.tags.length > 0 && (
                     <div className="flex gap-1 shrink-0">
                       {workflow.tags.slice(0, 2).map((t) => (
@@ -393,7 +394,7 @@ export default function WorkflowsPage() {
                     <Badge variant="neutral" dot>Inactive</Badge>
                   )}
                 </div>
-                <div className="flex items-center text-sm text-(--text-tertiary)">
+                <div className="hidden md:flex items-center text-sm text-[var(--text-tertiary)]">
                   {new Date(workflow.updatedAt).toLocaleDateString()}
                 </div>
               </div>
@@ -401,7 +402,7 @@ export default function WorkflowsPage() {
 
             {/* Pagination */}
             {(totalPages > 1 || pageSize === -1 || filteredWorkflows.length > 10) && (
-              <div className="border-t border-(--border-primary)">
+              <div className="border-t border-[var(--border-primary)]">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
