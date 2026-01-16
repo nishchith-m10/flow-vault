@@ -220,12 +220,12 @@ export default function ImportPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-(--info-muted) rounded-lg">
-          <Upload className="w-6 h-6 text-(--info)" />
+        <div className="p-2 bg-[var(--info-muted)] rounded-lg">
+          <Upload className="w-6 h-6 text-[var(--info)]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold">Import Workflows</h1>
-          <p className="text-sm text-(--text-tertiary)">Upload JSON or ZIP files to import workflows</p>
+          <p className="text-sm text-[var(--text-tertiary)]">Upload JSON or ZIP files to import workflows</p>
         </div>
       </div>
 
@@ -238,20 +238,20 @@ export default function ImportPage() {
             onDragLeave={() => setIsDragOver(false)}
             onClick={() => document.getElementById('fileInput')?.click()}
             className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
-              isDragOver ? 'border-(--accent) bg-(--accent-muted)' : 'border-(--border-default) hover:border-(--accent)'
+              isDragOver ? 'border-[var(--accent)] bg-[var(--accent-muted)]' : 'border-[var(--border-default)] hover:border-[var(--accent)]'
             }`}
           >
             <div className="flex justify-center mb-4">
               {isExtracting ? (
-                <Loader2 className="w-12 h-12 text-(--accent) animate-spin" />
+                <Loader2 className="w-12 h-12 text-[var(--accent)] animate-spin" />
               ) : (
-                <FolderOpen className="w-12 h-12 text-(--text-tertiary)" />
+                <FolderOpen className="w-12 h-12 text-[var(--text-tertiary)]" />
               )}
             </div>
-            <div className="text-(--text-secondary)">
+            <div className="text-[var(--text-secondary)]">
               {isExtracting ? 'Extracting files...' : 'Drag & drop JSON or ZIP files here'}
             </div>
-            <div className="text-sm text-(--text-tertiary) mt-2">or click to browse</div>
+            <div className="text-sm text-[var(--text-tertiary)] mt-2">or click to browse</div>
             <input id="fileInput" type="file" accept=".json,.zip" multiple onChange={(e) => e.target.files && handleFiles(e.target.files)} className="hidden" />
           </div>
         </div>
@@ -266,9 +266,9 @@ export default function ImportPage() {
             exit={{ opacity: 0, y: -20 }}
           >
             <Card padding="none">
-              <div className="p-4 border-b border-(--border-default) flex items-center justify-between">
+              <div className="p-4 border-b border-[var(--border-default)] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileJson className="w-5 h-5 text-(--text-tertiary)" />
+                  <FileJson className="w-5 h-5 text-[var(--text-tertiary)]" />
                   <span className="font-medium">{files.length} file(s) ready to import</span>
                 </div>
                 <Button variant="ghost" size="sm" onClick={() => setFiles([])}>
@@ -276,14 +276,14 @@ export default function ImportPage() {
                   Clear All
                 </Button>
               </div>
-              
-              <div className="divide-y divide-(--border-default)">
+
+              <div className="divide-y divide-[var(--border-default)]">
                 {files.map((file) => (
-                  <div key={file.id} className="p-4 hover:bg-(--bg-hover) transition-colors">
+                  <div key={file.id} className="p-4 hover:bg-[var(--bg-hover)] transition-colors">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <FileJson className="w-4 h-4 text-(--info) shrink-0" />
+                          <FileJson className="w-4 h-4 text-[var(--info)] shrink-0" />
                           <span className="font-mono text-sm truncate">{file.name}</span>
                         </div>
                         
@@ -294,7 +294,7 @@ export default function ImportPage() {
                               {tag}
                               <button
                                 onClick={() => removeTagFromFile(file.id, tag)}
-                                className="ml-1.5 hover:text-(--error) transition-colors"
+                                className="ml-1.5 hover:text-[var(--error)] transition-colors"
                               >
                                 <X className="w-3 h-3" />
                               </button>
