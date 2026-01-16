@@ -116,7 +116,7 @@ export default function BackupsPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">Backup History</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-[var(--text-tertiary)] mt-1">
             {backups.length} total backups
           </p>
         </div>
@@ -141,7 +141,7 @@ export default function BackupsPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Filter by workflow name..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+                className="input w-full"
               />
             </div>
             <div>
@@ -152,7 +152,7 @@ export default function BackupsPage() {
                 id="type"
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+                className="input w-full"
               >
                 <option value="all">All types</option>
                 <option value="scheduled">Scheduled</option>
@@ -166,7 +166,7 @@ export default function BackupsPage() {
       {/* Backup List */}
       {paginatedBackups.length === 0 ? (
         <Card>
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-[var(--text-tertiary)]">
             {backups.length === 0 ? 'No backups yet. Run a manual backup to get started!' : 'No backups match your filters'}
           </div>
         </Card>
@@ -179,10 +179,10 @@ export default function BackupsPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold text-lg">{backup.workflow_name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-[var(--text-tertiary)] mt-1">
                         Version {backup.version} • {backup.backup_type}
                         {backup.is_active && (
-                          <span className="ml-2 px-2 py-0.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded">
+                          <span className="ml-2 px-2 py-0.5 bg-[var(--success-muted)] text-[var(--success)] text-xs rounded-[var(--radius-sm)]">
                             Active
                           </span>
                         )}
@@ -192,7 +192,7 @@ export default function BackupsPage() {
                           {backup.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-xs rounded"
+                              className="badge badge-neutral"
                             >
                               {tag}
                             </span>
@@ -201,7 +201,7 @@ export default function BackupsPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="text-right text-sm text-gray-500">
+                      <div className="text-right text-sm text-[var(--text-tertiary)]">
                         {new Date(backup.created_at).toLocaleString()}
                       </div>
                       <Button
@@ -236,13 +236,13 @@ export default function BackupsPage() {
       {toast && (
         <div
           className={`fixed bottom-4 right-4 p-4 rounded-md shadow-lg ${
-            toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            toast.type === 'success' ? 'bg-[var(--success)]' : 'bg-[var(--error)]'
           } text-white`}
         >
           {toast.message}
           <button
             onClick={() => setToast(null)}
-            className="ml-4 text-white hover:text-gray-200"
+            className="ml-4 text-white hover:opacity-80 transition-opacity"
           >
             ×
           </button>
