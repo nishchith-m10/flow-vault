@@ -210,7 +210,7 @@ export default function TagsPage() {
                     </div>
                   </div>
                   <Button variant="ghost" size="sm" onClick={() => deleteTag(tag)}>
-                    <Trash2 className="w-4 h-4 text-red-500" />
+                    <Trash2 className="w-4 h-4 text-[var(--error)]" />
                   </Button>
                 </div>
               </CardContent>
