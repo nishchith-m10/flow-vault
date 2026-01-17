@@ -1,3 +1,183 @@
+
+/* ============================================
+   Clerk Sign-In Modal Pixel-Perfect Overrides
+   ============================================ */
+
+.cl-signIn-root, .cl-signIn {
+  border-radius: 20px !important;
+  box-shadow: 0 0 0 1px #27272a, 0 8px 40px 0 rgba(0,0,0,0.6) !important;
+  background: #121212 !important;
+  padding: 2rem !important;
+  max-width: 440px !important;
+  min-width: 400px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Remove glow effect for cleaner look */
+.cl-signIn-root::before, .cl-signIn::before {
+  display: none !important;
+}
+
+.cl-headerTitle {
+  font-family: var(--font-sans) !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #ededed !important;
+  margin-bottom: 0.5rem !important;
+  text-align: center !important;
+  letter-spacing: -0.01em !important;
+}
+
+.cl-headerSubtitle {
+  color: #a1a1aa !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  font-weight: 400 !important;
+  margin-bottom: 2rem !important;
+}
+
+body .cl-socialButtonsBlockButton {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.7rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 0 !important;
+  margin-bottom: 0.7rem !important;
+  border: none !important;
+  transition: all 0.2s !important;
+  position: relative !important;
+  z-index: 1 !important;
+  /* Default to Orange for all social buttons as seen in design */
+  background: linear-gradient(90deg, #F97316 0%, #EA580C 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.2) !important;
+  overflow: visible !important; /* Allow badge to overlap if needed */
+}
+
+/* Specific Google override just in case, but base class handles it */
+body .cl-socialButtonsBlockButton:hover {
+  background: linear-gradient(90deg, #FB923C 0%, #F97316 100%) !important;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3) !important;
+}
+
+.cl-socialButtonsBlockButton .cl-icon,
+.cl-socialButtonsBlockButton .cl-providerIcon {
+  width: 2.1rem !important;
+  height: 2.1rem !important;
+  margin-right: 0.7rem !important;
+}
+
+body .cl-socialButtonsBlockButton .cl-providerLastUsed {
+  font-size: 0.5rem !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  color: #fff !important; /* White text */
+  font-weight: 600 !important;
+  background: #000 !important;
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+  position: absolute !important;
+  right: -4px !important; /* Overhang slightly */
+  top: -6px !important;   /* Overhang top */
+  transform: none !important;
+  margin-left: 0 !important;
+  border: 1px solid #333 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+  z-index: 10 !important;
+}
+
+/* Adjust button padding to make room if needed, but absolute is fine */
+
+.cl-formFieldInput {
+  border-radius: 8px !important;
+  border: 1px solid #333 !important;
+  background: #1a1a1a !important;
+  color: #fff !important;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 1rem !important;
+  margin-bottom: 0.5rem !important;
+  box-shadow: none !important;
+  transition: border 0.2s !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: #555 !important;
+  box-shadow: none !important;
+}
+
+body .cl-formFieldLabel {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important; /* Align by text baseline */
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  color: #a1a1aa !important;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  margin-bottom: 0.6rem !important;
+}
+
+/* Target the "Use phone" link explicitly if it's an action link inside label or near it */
+body .cl-formFieldAction {
+    color: #F97316 !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    margin-left: 8px !important;
+    transition: color 0.2s !important;
+}
+
+body .cl-formFieldAction:hover {
+    color: #ff9100 !important;
+    text-decoration: underline !important;
+}
+
+.cl-footer { 
+    background: none !important;
+    padding-top: 1.5rem !important;
+}
+
+.cl-footerActionText {
+    color: #71717a !important;
+}
+
+.cl-footerActionLink {
+    color: #fff !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+}
+
+body .cl-formButtonPrimary {
+  background: linear-gradient(90deg, #F97316 0%, #EA580C 100%) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 0 !important;
+  margin-top: 1rem !important;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25) !important;
+  border: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body .cl-formButtonPrimary:hover {
+  background: linear-gradient(90deg, #ffb347 0%, #ff9100 100%) !important;
+  box-shadow: 0 4px 22px 0 rgba(255, 140, 0, 0.22), 0 0 0 4px rgba(255, 140, 0, 0.09) !important;
+}
+
+.cl-dividerText {
+  color: var(--text-tertiary) !important;
+  font-size: 1.01rem !important;
+  font-weight: 500 !important;
+  margin: 1.2rem 0 1.2rem 0 !important;
+  z-index: 1 !important;
+}
 @import "tailwindcss";
 
 /* ============================================
@@ -11,11 +191,11 @@
 
 :root {
   /* Background Colors - Warm undertone black */
-  --bg-base: #0A0A0B;
-  --bg-elevated: #141416;
+  --bg-base: #050505;
+  --bg-elevated: #121212;
   --bg-subtle: #1C1C1F;
-  --bg-hover: #232326;
-  --bg-tertiary: #232326;
+  --bg-hover: #27272a;
+  --bg-tertiary: #27272a;
 
   /* Foreground/Text Colors */
   --text-primary: #FAFAFA;
